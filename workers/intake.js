@@ -139,8 +139,34 @@ async function handleIntake(request, env) {
   }
 }
 
+// ── Site-wide password gate (staging lockdown) ──
+// NOTE: password lives in source. Fine for a private staging gate; move it to a
+// Worker secret (`wrangler secret put SITE_PASSWORD`) before this repo is public.
+const SITE_PASSWORD = 'ass';
+
+function requireAuth(request) {
+  const header = request.headers.get('Authorization') || '';
+  if (header.startsWith('Basic ')) {
+    let decoded = '';
+    try { decoded = atob(header.slice(6)); } catch { decoded = ''; }
+    const pass = decoded.slice(decoded.indexOf(':') + 1);
+    if (pass === SITE_PASSWORD) return null; // authorized
+  }
+  return new Response('Authentication required.', {
+    status: 401,
+    headers: {
+      'WWW-Authenticate': 'Basic realm="Rear Ended — private", charset="UTF-8"',
+      'Cache-Control': 'no-store',
+    },
+  });
+}
+
 export default {
   async fetch(request, env) {
+    // Password-gate every request (runs before assets because run_worker_first=true).
+    const gate = requireAuth(request);
+    if (gate) return gate;
+
     const url = new URL(request.url);
     const origin = request.headers.get('Origin') || '';
 
@@ -154,6 +180,11 @@ export default {
       return new Response('Method not allowed', { status: 405 });
     }
 
-    return env.ASSETS.fetch(request);
+    // Serve static assets, but never let the CDN cache gated responses —
+    // an edge cache hit could otherwise be served without re-checking the password.
+    const assetRes = await env.ASSETS.fetch(request);
+    const res = new Response(assetRes.body, assetRes);
+    res.headers.set('Cache-Control', 'private, no-store');
+    return res;
   },
 };
