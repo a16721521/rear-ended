@@ -1,7 +1,7 @@
 /* ─── RESET ────────────────────────────────────────────────────────────── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* ─── TOKENS (Rear Ended brand) ──────────────────────────────────────────── */
+/* ─── TOKENS (FLM Law brand) ─────────────────────────────────────────────── */
 :root {
   --black:     #080808;
   --gray-900:  #111111;
@@ -19,7 +19,7 @@
   --warn-bg:   #05100b;
 
   --sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
-  --wordmark: 'Oswald', 'Helvetica Neue', Arial, sans-serif;
+  --wordmark: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
 
   --rule:       1px solid var(--gray-200);
   --rule-heavy: 1px solid var(--gray-200);

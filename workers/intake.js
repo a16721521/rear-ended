@@ -198,10 +198,10 @@ function loginHTML(next, error) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Rear Ended — Private</title>
+<title>FLM Law — Private</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   body{min-height:100vh;display:grid;place-items:center;padding:24px;color:#fff;
@@ -212,7 +212,7 @@ function loginHTML(next, error) {
       radial-gradient(70% 92% at 96% 4%, rgba(6,61,48,.55) 0%, transparent 66%),
       linear-gradient(135deg,#0b0d0c 0%,#080808 60%);}
   .card{width:100%;max-width:380px;text-align:center}
-  .wordmark{font-family:'Oswald',sans-serif;font-weight:300;font-size:44px;line-height:1;letter-spacing:.06em;text-transform:lowercase;margin-bottom:16px}
+  .wordmark{font-family:'Montserrat',sans-serif;font-weight:500;font-size:38px;line-height:1;letter-spacing:.005em;text-transform:none;margin-bottom:16px}
   .tag{font-size:13px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase;margin-bottom:34px}
   form{display:flex;flex-direction:column;gap:12px}
   input[type=password]{width:100%;padding:15px 16px;border-radius:12px;font:inherit;font-size:15px;color:#fff;outline:none;
@@ -226,7 +226,7 @@ function loginHTML(next, error) {
 </style></head>
 <body>
   <main class="card">
-    <div class="wordmark">rear ended</div>
+    <div class="wordmark">FLM Law</div>
     <div class="tag">Private preview</div>
     <form method="POST" action="/__login">
       <input type="password" name="password" placeholder="Enter password" autofocus autocomplete="current-password" aria-label="Password">
