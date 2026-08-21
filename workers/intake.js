@@ -139,36 +139,115 @@ async function handleIntake(request, env) {
   }
 }
 
-// ── Site-wide password gate (staging lockdown) ──
+// ── Site-wide password gate: custom login page + auth cookie ──
 // NOTE: password lives in source. Fine for a private staging gate; move it to a
 // Worker secret (`wrangler secret put SITE_PASSWORD`) before this repo is public.
 const SITE_PASSWORD = 'ass';
+const COOKIE_NAME = 're_gate';
+const AUTH_VALUE = 'reargate.9f3c1b7a2d'; // shared-secret cookie value (NOT the password)
+const SET_COOKIE = `${COOKIE_NAME}=${AUTH_VALUE}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=604800`;
+const CLEAR_COOKIE = `${COOKIE_NAME}=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0`;
 
-function requireAuth(request) {
-  const header = request.headers.get('Authorization') || '';
-  if (header.startsWith('Basic ')) {
-    let decoded = '';
-    try { decoded = atob(header.slice(6)); } catch { decoded = ''; }
-    const pass = decoded.slice(decoded.indexOf(':') + 1);
-    if (pass === SITE_PASSWORD) return null; // authorized
+function readCookie(request, name) {
+  const raw = request.headers.get('Cookie') || '';
+  for (const part of raw.split(';')) {
+    const eq = part.indexOf('=');
+    if (eq > -1 && part.slice(0, eq).trim() === name) return part.slice(eq + 1).trim();
   }
-  return new Response('Authentication required.', {
-    status: 401,
-    headers: {
-      'WWW-Authenticate': 'Basic realm="Rear Ended — private", charset="UTF-8"',
-      'Cache-Control': 'no-store',
-    },
+  return '';
+}
+
+function isAuthed(request) {
+  return readCookie(request, COOKIE_NAME) === AUTH_VALUE;
+}
+
+function safeNext(value) {
+  return (typeof value === 'string' && value.startsWith('/') && !value.startsWith('//')) ? value : '/';
+}
+
+async function handleLogin(request) {
+  const form = await request.formData().catch(() => null);
+  const password = form ? (form.get('password') || '') : '';
+  const next = safeNext(form ? form.get('next') : '/');
+  if (password === SITE_PASSWORD) {
+    return new Response(null, {
+      status: 303,
+      headers: { 'Location': next, 'Set-Cookie': SET_COOKIE, 'Cache-Control': 'no-store' },
+    });
+  }
+  return loginResponse(401, next, 'Incorrect password. Try again.');
+}
+
+function logoutResponse() {
+  return new Response(null, {
+    status: 303,
+    headers: { 'Location': '/', 'Set-Cookie': CLEAR_COOKIE, 'Cache-Control': 'no-store' },
   });
+}
+
+function loginResponse(status, next, error) {
+  return new Response(loginHTML(next, error), {
+    status,
+    headers: { 'Content-Type': 'text/html; charset=UTF-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex' },
+  });
+}
+
+function loginHTML(next, error) {
+  return `<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Rear Ended — Private</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{min-height:100vh;display:grid;place-items:center;padding:24px;color:#fff;
+    font-family:'Space Grotesk',system-ui,-apple-system,sans-serif;background-color:#080808;
+    background-image:
+      radial-gradient(60% 80% at 8% 100%, rgba(152,251,152,.20) 0%, transparent 70%),
+      radial-gradient(52% 72% at 30% 88%, rgba(52,211,153,.16) 0%, transparent 72%),
+      radial-gradient(70% 92% at 96% 4%, rgba(6,61,48,.55) 0%, transparent 66%),
+      linear-gradient(135deg,#0b0d0c 0%,#080808 60%);}
+  .card{width:100%;max-width:380px;text-align:center}
+  .wordmark{font-family:'Oswald',sans-serif;font-weight:300;font-size:44px;line-height:1;letter-spacing:.06em;text-transform:lowercase;margin-bottom:16px}
+  .tag{font-size:13px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase;margin-bottom:34px}
+  form{display:flex;flex-direction:column;gap:12px}
+  input[type=password]{width:100%;padding:15px 16px;border-radius:12px;font:inherit;font-size:15px;color:#fff;outline:none;
+    border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04);transition:border-color .2s,background .2s}
+  input[type=password]::placeholder{color:rgba(255,255,255,.4)}
+  input[type=password]:focus{border-color:rgba(52,211,153,.75);background:rgba(255,255,255,.06)}
+  button{width:100%;padding:15px 16px;border:none;border-radius:12px;cursor:pointer;font:inherit;font-weight:700;font-size:15px;color:#08110c;
+    background:linear-gradient(110deg,#0E9F6E 0%,#34D399 45%,#98FB98 100%);transition:filter .2s,transform .2s}
+  button:hover{filter:brightness(1.06);transform:translateY(-1px)}
+  .err{min-height:18px;font-size:13px;color:#ff9a9a;margin-top:2px}
+</style></head>
+<body>
+  <main class="card">
+    <div class="wordmark">rear ended</div>
+    <div class="tag">Private preview</div>
+    <form method="POST" action="/__login">
+      <input type="password" name="password" placeholder="Enter password" autofocus autocomplete="current-password" aria-label="Password">
+      <input type="hidden" name="next" value="${esc(next)}">
+      <button type="submit">Enter &rarr;</button>
+      <div class="err">${error ? esc(error) : ''}</div>
+    </form>
+  </main>
+</body></html>`;
 }
 
 export default {
   async fetch(request, env) {
-    // Password-gate every request (runs before assets because run_worker_first=true).
-    const gate = requireAuth(request);
-    if (gate) return gate;
-
     const url = new URL(request.url);
     const origin = request.headers.get('Origin') || '';
+
+    // ── Password gate: branded login page + auth cookie (runs before assets
+    //    because run_worker_first=true, so it covers every path). ──
+    if (url.pathname === '/__logout') return logoutResponse();
+    if (url.pathname === '/__login' && request.method === 'POST') return handleLogin(request);
+    if (!isAuthed(request)) return loginResponse(200, safeNext(url.pathname + url.search), '');
 
     if (url.pathname === '/api/intake') {
       if (request.method === 'OPTIONS') {
