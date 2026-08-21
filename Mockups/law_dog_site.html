@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Law Dog — Los Angeles Injury &amp; Employment Trial Firm</title>
+<meta name="description" content="Law Dog is a Los Angeles trial firm representing people hurt in accidents, injured at work, or wronged by employers. Free consultation. No fee unless we win.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Editorial+New:ital,wght@0,400;0,700;1,400&family=Suisse+Int%27l:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ─── RESET & ROOT ─────────────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ink:    #0f0e0c;
+  --paper:  #ece8de;
+  --bone:   #dcd6c6;
+  --warm:   #c8c0ae;
+  --mute:   #7a7569;
+  --acid:   #d4f500;
+  --rust:   #b84c2a;
+  --gold:   #c49a3c;
+  --cream:  #f4f0e8;
+
+  --serif:  'Playfair Display', Georgia, serif;
+  --cond:   'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --mono:   'IBM Plex Mono', 'Courier New', monospace;
+  --sans:   -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+
+  --rule:   1px solid rgba(15,14,12,.18);
+  --rule-heavy: 2px solid var(--ink);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ─── GRAIN OVERLAY ─────────────────────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 9999;
+  opacity: .028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px;
+}
+
+/* ─── UTILITIES ─────────────────────────────────────────────────────── */
+.wrap        { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+.wrap--wide  { max-width: 1400px; margin: 0 auto; padding: 0 40px; }
+.mono        { font-family: var(--mono); }
+.serif       { font-family: var(--serif); }
+.cond        { font-family: var(--cond); }
+.label       { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--mute); }
+.rule-t      { border-top: var(--rule); }
+.rule-b      { border-bottom: var(--rule); }
+
+/* scroll reveal */
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+
+/* ─── NAV ───────────────────────────────────────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--paper);
+  border-bottom: var(--rule-heavy);
+  display: flex; align-items: stretch;
+}
+
+.nav__brand {
+  display: flex; align-items: center;
+  padding: 0 40px;
+  min-height: 72px;
+  border-right: var(--rule-heavy);
+  font-family: var(--cond);
+  font-size: 22px; font-weight: 800;
+  letter-spacing: .06em; text-transform: uppercase;
+  text-decoration: none; color: var(--ink);
+  white-space: nowrap;
+}
+
+.nav__brand span {
+  display: inline-block;
+  width: 8px; height: 8px;
+  background: var(--acid);
+  border-radius: 50%;
+  margin-left: 8px;
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.5); opacity: .6; }
+}
+
+.nav__links {
+  display: flex; align-items: center;
+  gap: 0; list-style: none; padding: 0 28px;
+}
+
+.nav__links a {
+  font-size: 10.5px; font-weight: 500;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--ink); text-decoration: none;
+  opacity: .55; padding: 6px 0;
+  transition: opacity .2s;
+}
+.nav__links a:hover { opacity: 1; }
+.nav__links li + li { margin-left: 30px; }
+
+.nav__cta {
+  margin-left: auto;
+  display: flex; align-items: center;
+  padding: 0 40px;
+  border-left: var(--rule-heavy);
+  font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+  font-weight: 600; text-decoration: none; color: var(--ink);
+  transition: background .2s, color .2s;
+}
+.nav__cta:hover { background: var(--ink); color: var(--paper); }
+
+/* ─── HERO ──────────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 96vh;
+  display: flex; flex-direction: column;
+  border-bottom: var(--rule-heavy);
+  overflow: hidden;
+  background-color: var(--ink);
+}
+
+.hero__photo {
+  position: absolute; inset: 0;
+  background-image: url('Law Dog/616ca7172e2442d08efaaf7b75ab99a9.jpeg');
+  background-size: cover;
+  background-position: center 30%;
+  transform-origin: center;
+  animation: hero-slow-zoom 18s ease-out forwards;
+}
+
+@keyframes hero-slow-zoom {
+  from { transform: scale(1.06); }
+  to   { transform: scale(1); }
+}
+
+/* two-layer gradient: left-to-right dark veil + bottom-up ink ground */
+.hero__photo::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to right,  rgba(10,9,8,.78) 0%, rgba(10,9,8,.42) 50%, rgba(10,9,8,.08) 100%),
+    linear-gradient(to top,    rgba(10,9,8,.92) 0%, rgba(10,9,8,.45) 28%, transparent 55%);
+}
+
+.hero__content {
+  position: relative; z-index: 2;
+  flex: 1;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 0 40px 64px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.hero__eyebrow {
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: .22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.45);
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 28px;
+}
+
+.hero__eyebrow::before {
+  content: '';
+  width: 28px; height: 1px;
+  background: var(--acid); flex-shrink: 0;
+}
+
+.hero__headline {
+  font-family: var(--serif);
+  font-size: clamp(54px, 8vw, 118px);
+  font-weight: 900;
+  line-height: .92;
+  letter-spacing: -.03em;
+  color: var(--paper);
+  max-width: 14ch;
+}
+
+.hero__headline em {
+  font-style: italic;
+  font-weight: 700;
+  color: var(--acid);
+}
+
+.hero__bottom {
+  margin-top: 44px;
+  display: flex; align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px; flex-wrap: wrap;
+}
+
+.hero__sub {
+  max-width: 46ch;
+  font-size: 16px;
+  line-height: 1.65;
+  color: rgba(255,255,255,.65);
+}
+
+.hero__actions {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap; flex-shrink: 0;
+}
+
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  text-decoration: none; font-weight: 600;
+  font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+  padding: 16px 28px; border-radius: 0;
+  transition: background .2s, color .2s, border-color .2s;
+  cursor: pointer; border: 2px solid transparent;
+  font-family: var(--sans);
+}
+
+.btn--solid {
+  background: var(--acid); color: var(--ink);
+  border-color: var(--acid);
+}
+.btn--solid:hover { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+
+.btn--ghost {
+  background: transparent; color: var(--paper);
+  border-color: rgba(255,255,255,.45);
+}
+.btn--ghost:hover { background: rgba(255,255,255,.12); border-color: var(--paper); }
+
+.hero__phone {
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+  color: rgba(255,255,255,.35);
+  margin-top: 10px;
+}
+
+.hero__phone b { color: rgba(255,255,255,.7); }
+
+/* Hero bottom bar */
+.hero__bar {
+  position: relative; z-index: 2;
+  border-top: 1px solid rgba(255,255,255,.12);
+  display: flex;
+  background: rgba(10,9,8,.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.hero__bar-item {
+  flex: 1;
+  padding: 20px 40px;
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(255,255,255,.4);
+  border-right: 1px solid rgba(255,255,255,.1);
+}
+
+.hero__bar-item:last-child { border-right: none; }
+.hero__bar-item b { color: rgba(255,255,255,.85); display: block; font-size: 13px; margin-bottom: 3px; }
+
+/* ─── TICKER ────────────────────────────────────────────────────────── */
+.ticker {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 14px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  border-bottom: var(--rule-heavy);
+}
+
+.ticker__run {
+  display: inline-flex;
+  animation: ticker-scroll 50s linear infinite;
+}
+
+.ticker__run:hover { animation-play-state: paused; }
+
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.ticker__item {
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+  margin: 0 40px;
+  opacity: .7;
+}
+
+.ticker__item .dot {
+  display: inline-block;
+  width: 5px; height: 5px;
+  background: var(--acid);
+  border-radius: 50%;
+  margin: 0 16px;
+  vertical-align: middle;
+  opacity: 1;
+}
+
+/* ─── SECTION LABELS ────────────────────────────────────────────────── */
+.section-label {
+  display: flex; align-items: center; gap: 16px;
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--mute);
+  margin-bottom: 48px;
+}
+
+.section-label::before {
+  content: attr(data-n);
+  font-size: 10px;
+  opacity: .5;
+}
+
+.section-label::after {
+  content: '';
+  flex: 1; height: 1px;
+  background: var(--warm);
+}
+
+/* ─── PRACTICE AREAS ────────────────────────────────────────────────── */
+.practice {
+  padding: 100px 0;
+  border-bottom: var(--rule-heavy);
+}
+
+.practice__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: var(--rule-heavy);
+  margin-top: 0;
+}
+
+.practice__col {
+  padding: 60px 52px;
+}
+
+.practice__col:first-child {
+  border-right: var(--rule-heavy);
+}
+
+.practice__col-title {
+  font-family: var(--cond);
+  font-size: 44px; font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .01em;
+  margin-bottom: 32px;
+  line-height: 1;
+}
+
+.practice__item {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 16px;
+  padding: 20px 0;
+  border-top: var(--rule);
+  align-items: baseline;
+  cursor: default;
+  transition: padding-left .2s;
+}
+
+.practice__item:hover { padding-left: 8px; }
+
+.practice__item-n {
+  font-family: var(--mono);
+  font-size: 10px; color: var(--mute);
+}
+
+.practice__item-name {
+  font-size: 19px; font-weight: 600;
+  letter-spacing: -.01em;
+}
+
+.practice__item-desc {
+  font-size: 13px; color: var(--mute);
+  margin-top: 4px; line-height: 1.4;
+}
+
+/* ─── RESULTS ───────────────────────────────────────────────────────── */
+.results {
+  padding: 100px 0;
+  background: var(--ink);
+  color: var(--paper);
+  border-bottom: var(--rule-heavy);
+}
+
+.results__label { color: rgba(255,255,255,.35); }
+.results__label::after { background: rgba(255,255,255,.12); }
+
+.results__intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  margin-bottom: 80px;
+  align-items: end;
+}
+
+.results__headline {
+  font-family: var(--serif);
+  font-size: clamp(38px, 5.5vw, 72px);
+  font-weight: 900;
+  line-height: .95;
+  letter-spacing: -.03em;
+}
+
+.results__headline em {
+  font-style: italic;
+  color: var(--acid);
+}
+
+.results__note {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255,255,255,.55);
+  max-width: 38ch;
+  align-self: end;
+}
+
+.results__table {
+  border-top: 1px solid rgba(255,255,255,.15);
+}
+
+.result-row {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  align-items: baseline;
+  gap: 24px;
+  padding: 28px 0;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  transition: padding-left .25s ease;
+  cursor: default;
+}
+
+.result-row:hover { padding-left: 16px; }
+
+.result-row__type {
+  font-family: var(--mono);
+  font-size: 9px; letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.35);
+}
+
+.result-row__name {
+  font-size: clamp(20px, 3vw, 36px);
+  font-weight: 700; letter-spacing: -.02em;
+  color: var(--paper);
+}
+
+.result-row__amount {
+  font-family: var(--serif);
+  font-size: clamp(24px, 3.5vw, 44px);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--acid);
+}
+
+.results__disclaimer {
+  margin-top: 28px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .08em;
+  color: rgba(255,255,255,.25);
+  line-height: 1.6;
+}
+
+/* ─── FIRM / ATTORNEY ───────────────────────────────────────────────── */
+.firm {
+  padding: 100px 0;
+  border-bottom: var(--rule-heavy);
+}
+
+.firm__grid {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.firm__portrait {
+  position: sticky;
+  top: 80px;
+}
+
+.firm__portrait-frame {
+  background: var(--bone);
+  border: var(--rule-heavy);
+  aspect-ratio: 4/5;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.firm__portrait-frame::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(15,14,12,.5));
+  pointer-events: none; z-index: 1;
+}
+
+.firm__portrait-placeholder {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 8px;
+  color: var(--warm);
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.firm__portrait-placeholder svg {
+  opacity: .3; margin-bottom: 8px;
+}
+
+.firm__portrait-name {
+  position: relative; z-index: 2;
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: .14em;
+  text-transform: uppercase; color: rgba(255,255,255,.6);
+}
+
+.firm__bio-label { margin-bottom: 32px; }
+
+.firm__name {
+  font-family: var(--serif);
+  font-size: clamp(40px, 5.5vw, 68px);
+  font-weight: 900; letter-spacing: -.03em;
+  line-height: .95;
+}
+
+.firm__title {
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--mute);
+  margin-top: 16px;
+}
+
+.firm__body {
+  margin-top: 28px;
+  font-size: 16px; line-height: 1.7;
+  color: #3a3730;
+  max-width: 52ch;
+}
+
+.firm__body + .firm__body { margin-top: 18px; }
+
+.firm__stats {
+  display: flex; gap: 0;
+  margin-top: 48px;
+  border: var(--rule-heavy);
+}
+
+.firm__stat {
+  flex: 1; padding: 28px 24px;
+  border-right: var(--rule-heavy);
+}
+.firm__stat:last-child { border-right: none; }
+
+.firm__stat-fig {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 46px);
+  font-weight: 900; letter-spacing: -.03em;
+  display: block;
+}
+
+.firm__stat-lab {
+  font-family: var(--mono);
+  font-size: 9px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--mute);
+  margin-top: 6px; display: block;
+}
+
+.firm__badges {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  margin-top: 32px;
+}
+
+.badge {
+  font-family: var(--mono);
+  font-size: 9px; letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 7px 12px;
+  border: 1px solid var(--warm);
+  color: var(--mute);
+}
+
+/* ─── APPROACH ──────────────────────────────────────────────────────── */
+.approach {
+  padding: 100px 0;
+  border-bottom: var(--rule-heavy);
+}
+
+.approach__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin-top: 0;
+  border: var(--rule-heavy);
+}
+
+.approach__step {
+  padding: 52px 44px;
+  border-right: var(--rule-heavy);
+  position: relative;
+}
+.approach__step:last-child { border-right: none; }
+
+.approach__step-n {
+  font-family: var(--cond);
+  font-size: 100px; font-weight: 800;
+  letter-spacing: -.04em;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--bone);
+  line-height: 1;
+  margin-bottom: 32px;
+  display: block;
+}
+
+.approach__step-k {
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--mute);
+  margin-bottom: 12px;
+}
+
+.approach__step-h {
+  font-size: 26px; font-weight: 700;
+  letter-spacing: -.02em; margin-bottom: 14px;
+}
+
+.approach__step-p {
+  font-size: 14px; line-height: 1.65;
+  color: #46433b;
+}
+
+/* ─── BAND ──────────────────────────────────────────────────────────── */
+.band {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 120px 0;
+  border-bottom: var(--rule-heavy);
+  overflow: hidden;
+  position: relative;
+}
+
+.band__bg {
+  position: absolute; inset: 0;
+  display: flex; align-items: center;
+  overflow: hidden; pointer-events: none;
+  opacity: .04;
+}
+
+.band__bg-text {
+  font-family: var(--cond);
+  font-size: 280px; font-weight: 800;
+  text-transform: uppercase;
+  white-space: nowrap;
+  letter-spacing: -.02em;
+  color: var(--paper);
+  line-height: 1;
+  transform: rotate(-8deg) translateY(20px);
+}
+
+.band__statement {
+  position: relative; z-index: 2;
+  font-family: var(--serif);
+  font-size: clamp(34px, 5.5vw, 72px);
+  font-weight: 900; line-height: 1.02;
+  letter-spacing: -.03em;
+  max-width: 22ch;
+}
+
+.band__statement em {
+  font-style: italic;
+  color: var(--acid);
+}
+
+/* ─── WHY US (TRUST SIGNALS) ────────────────────────────────────────── */
+.why {
+  padding: 100px 0;
+  border-bottom: var(--rule-heavy);
+}
+
+.why__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border: var(--rule-heavy);
+  margin-top: 0;
+}
+
+.why__item {
+  padding: 44px 36px;
+  border-right: var(--rule-heavy);
+}
+.why__item:last-child { border-right: none; }
+
+.why__icon {
+  width: 36px; height: 36px;
+  border: 1px solid var(--warm);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 24px;
+  font-size: 16px;
+}
+
+.why__item-h {
+  font-size: 18px; font-weight: 700;
+  letter-spacing: -.01em; margin-bottom: 10px;
+}
+
+.why__item-p {
+  font-size: 13px; line-height: 1.6;
+  color: #46433b;
+}
+
+/* ─── FAQ ───────────────────────────────────────────────────────────── */
+.faq {
+  padding: 100px 0;
+  border-bottom: var(--rule-heavy);
+}
+
+.faq__grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 80px;
+}
+
+.faq__aside {
+  padding-top: 4px;
+}
+
+.faq__aside-h {
+  font-family: var(--serif);
+  font-size: clamp(28px, 3.5vw, 42px);
+  font-weight: 900; letter-spacing: -.03em;
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
+.faq__aside-sub {
+  font-size: 14px; line-height: 1.6;
+  color: #46433b;
+}
+
+.faq__aside-cta {
+  margin-top: 36px;
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--mute);
+}
+
+.faq__list { list-style: none; }
+
+.faq__item {
+  border-top: var(--rule);
+  overflow: hidden;
+}
+
+.faq__q {
+  width: 100%; background: none; border: none;
+  text-align: left; cursor: pointer;
+  display: grid; grid-template-columns: 1fr 28px;
+  gap: 16px; align-items: center;
+  padding: 24px 0;
+  font-family: inherit; font-size: 16px; font-weight: 600;
+  letter-spacing: -.01em; color: var(--ink);
+}
+
+.faq__q-icon {
+  width: 28px; height: 28px;
+  border: 1px solid var(--warm);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 300;
+  color: var(--mute); flex-shrink: 0;
+  transition: transform .3s ease, background .2s, color .2s;
+}
+
+.faq__q[aria-expanded="true"] .faq__q-icon {
+  transform: rotate(45deg);
+  background: var(--ink); color: var(--paper);
+  border-color: var(--ink);
+}
+
+.faq__a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .4s ease;
+}
+
+.faq__a-inner {
+  padding: 0 0 24px;
+  font-size: 15px; line-height: 1.7;
+  color: #46433b;
+}
+
+.faq__item.open .faq__a { max-height: 400px; }
+
+/* ─── INTAKE ────────────────────────────────────────────────────────── */
+.intake {
+  padding: 100px 0;
+  border-bottom: var(--rule-heavy);
+}
+
+.intake__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: var(--rule-heavy);
+}
+
+.intake__left {
+  padding: 72px 60px;
+  background: var(--ink);
+  color: var(--paper);
+  border-right: var(--rule-heavy);
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+
+.intake__right {
+  padding: 72px 60px;
+}
+
+.intake__h {
+  font-family: var(--serif);
+  font-size: clamp(36px, 5.5vw, 66px);
+  font-weight: 900; letter-spacing: -.03em;
+  line-height: .95;
+  margin-bottom: 24px;
+}
+
+.intake__h em { font-style: italic; color: var(--acid); }
+
+.intake__sub {
+  font-size: 15px; line-height: 1.65;
+  color: rgba(255,255,255,.6);
+  max-width: 36ch;
+}
+
+.intake__promises {
+  list-style: none;
+  margin-top: 48px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+
+.intake__promise {
+  display: flex; align-items: baseline; gap: 12px;
+  font-size: 13px; color: rgba(255,255,255,.7);
+}
+
+.intake__promise::before {
+  content: '—';
+  font-family: var(--mono);
+  color: var(--acid);
+  flex-shrink: 0;
+}
+
+/* Form */
+.form-field {
+  display: block; margin-bottom: 0;
+  border-bottom: 1px solid var(--bone);
+}
+
+.form-field:first-child { border-top: 1px solid var(--bone); }
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  font-family: var(--sans);
+  font-size: 15px;
+  padding: 20px 2px;
+  border: none; outline: none;
+  background: transparent;
+  color: var(--ink);
+  transition: background .2s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.form-field input::placeholder,
+.form-field textarea::placeholder { color: var(--mute); }
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  background: rgba(15,14,12,.03);
+}
+
+.form-field textarea { resize: none; height: 80px; }
+
+.form-submit {
+  margin-top: 28px;
+  width: 100%;
+  background: var(--ink); color: var(--paper);
+  border: 2px solid var(--ink);
+  font-family: var(--sans);
+  font-size: 12px; letter-spacing: .16em;
+  text-transform: uppercase; font-weight: 600;
+  padding: 20px; cursor: pointer;
+  transition: background .2s, color .2s;
+}
+
+.form-submit:hover { background: var(--acid); color: var(--ink); border-color: var(--acid); }
+
+.form-ph {
+  margin-top: 16px;
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: .06em;
+  color: var(--mute); line-height: 1.6;
+}
+
+/* ─── FOOTER ────────────────────────────────────────────────────────── */
+footer {
+  padding: 80px 0 56px;
+}
+
+.footer__top {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: end;
+  padding-bottom: 40px;
+  border-bottom: var(--rule-heavy);
+}
+
+.footer__wordmark {
+  font-family: var(--cond);
+  font-size: clamp(70px, 16vw, 200px);
+  font-weight: 800;
+  letter-spacing: -.04em;
+  line-height: .82;
+  text-transform: uppercase;
+}
+
+.footer__contact {
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--mute);
+  text-align: right;
+  line-height: 2;
+}
+
+.footer__meta {
+  display: flex; justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 40px;
+  flex-wrap: wrap; gap: 24px;
+}
+
+.footer__disc {
+  font-size: 11px; color: var(--mute);
+  max-width: 72ch; line-height: 1.7;
+}
+
+.footer__nav {
+  display: flex; gap: 24px;
+  list-style: none;
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.footer__nav a { color: var(--mute); text-decoration: none; }
+.footer__nav a:hover { color: var(--ink); }
+
+.footer__flag {
+  margin-top: 28px;
+  font-family: var(--mono);
+  font-size: 9px; letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border: 1px solid var(--warm);
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 12px;
+}
+
+/* ─── RESPONSIVE ────────────────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .wrap, .wrap--wide { padding: 0 24px; }
+
+  .hero__content { padding: 0 24px 48px; }
+  .hero__bottom { flex-direction: column; align-items: flex-start; gap: 28px; }
+
+  .firm__grid { grid-template-columns: 1fr; }
+  .firm__portrait { position: static; }
+
+  .practice__grid { grid-template-columns: 1fr; }
+  .practice__col:first-child { border-right: none; border-bottom: var(--rule-heavy); }
+
+  .results__intro { grid-template-columns: 1fr; gap: 24px; }
+  .result-row { grid-template-columns: 1fr auto; }
+  .result-row__type { display: none; }
+
+  .approach__grid { grid-template-columns: 1fr; }
+  .approach__step { border-right: none; border-bottom: var(--rule-heavy); }
+  .approach__step:last-child { border-bottom: none; }
+
+  .why__grid { grid-template-columns: 1fr 1fr; }
+  .why__item:nth-child(2) { border-right: none; }
+  .why__item:nth-child(3) { border-right: var(--rule-heavy); border-top: var(--rule-heavy); }
+  .why__item:nth-child(4) { border-right: none; border-top: var(--rule-heavy); }
+
+  .faq__grid { grid-template-columns: 1fr; gap: 40px; }
+
+  .intake__grid { grid-template-columns: 1fr; }
+  .intake__left { border-right: none; border-bottom: var(--rule-heavy); }
+  .intake__left, .intake__right { padding: 48px 32px; }
+
+  .nav__links { display: none; }
+  .nav__cta { padding: 0 24px; }
+
+  .footer__top { grid-template-columns: 1fr; }
+  .footer__contact { text-align: left; }
+
+  .hero__bar-item:nth-child(3),
+  .hero__bar-item:nth-child(4) { display: none; }
+}
+
+@media (max-width: 640px) {
+  .hero__headline { font-size: clamp(44px, 12vw, 72px); }
+  .hero__actions { flex-direction: column; align-items: flex-start; }
+  .why__grid { grid-template-columns: 1fr; }
+  .why__item { border-right: none !important; border-top: var(--rule-heavy) !important; }
+  .why__item:first-child { border-top: none !important; }
+  .firm__stats { flex-direction: column; }
+  .firm__stat { border-right: none; border-bottom: var(--rule-heavy); }
+  .firm__stat:last-child { border-bottom: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav__brand" href="/">LAW DOG<span></span></a>
+  <ul class="nav__links">
+    <li><a href="#firm">The Firm</a></li>
+    <li><a href="#practice">Practice</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#how">How We Work</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a class="nav__cta" href="#intake">Free Consultation</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" aria-label="Hero">
+  <div class="hero__photo" aria-hidden="true"></div>
+  <div class="hero__content">
+    <div class="hero__eyebrow">Law Dog &mdash; A Los Angeles Trial Firm</div>
+    <h1 class="hero__headline">
+      Somebody owes you.<br>
+      <em>We make them pay it.</em>
+    </h1>
+    <div class="hero__bottom">
+      <div>
+        <p class="hero__sub">
+          Law Dog represents people across Los Angeles who were hurt in a wreck,
+          hurt on the job, or pushed out by an employer betting they wouldn't fight
+          back. We try cases other firms settle cheap. The consultation is free,
+          and you owe nothing unless we win.
+        </p>
+        <p class="hero__phone mono" style="margin-top:16px;">or call <b>1-800-XXX-XXXX</b> &mdash; available 24 / 7</p>
+      </div>
+      <div class="hero__actions">
+        <a class="btn btn--solid" href="#intake">Free consultation</a>
+        <a class="btn btn--ghost" href="#firm">About the firm</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero__bar">
+    <div class="hero__bar-item"><b>No fee</b>unless we win</div>
+    <div class="hero__bar-item"><b>Free</b>consultation</div>
+    <div class="hero__bar-item"><b>Hablamos</b>Español</div>
+    <div class="hero__bar-item"><b>24 / 7</b>Los Angeles</div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__run">
+    <span class="ticker__item">No win · no fee</span><span class="ticker__item dot-sep"><span class="dot"></span></span>
+    <span class="ticker__item">Free consultation</span><span class="ticker__item dot-sep"><span class="dot"></span></span>
+    <span class="ticker__item">Hablamos Español</span><span class="ticker__item dot-sep"><span class="dot"></span></span>
+    <span class="ticker__item">Available 24 / 7</span><span class="ticker__item dot-sep"><span class="dot"></span></span>
+    <span class="ticker__item">Los Angeles County</span><span class="ticker__item dot-sep"><span class="dot"></span></span>
+    <span class="ticker__item">Injury &amp; Employment</span><span class="ticker__item dot-sep"><span class="dot"></span></span>
+    <span class="ticker__item">We try cases others settle cheap</span><span class="ticker__item dot-sep"><span class="dot"></span></span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker__item">No win · no fee</span><span class="ticker__item dot-sep"><span class="dot"></span></span>
+    <span class="ticker__item">Free consultation</span><span class="ticker__item dot-sep"><span class="dot"></span></span>
+    <span class="ticker__item">Hablamos Español</span><span class="ticker__item dot-sep"><span class="dot"></span></span>
+    <span class="ticker__item">Available 24 / 7</span><span class="ticker__item dot-sep"><span class="dot"></span></span>
+    <span class="ticker__item">Los Angeles County</span><span class="ticker__item dot-sep"><span class="dot"></span></span>
+    <span class="ticker__item">Injury &amp; Employment</span><span class="ticker__item dot-sep"><span class="dot"></span></span>
+    <span class="ticker__item">We try cases others settle cheap</span><span class="ticker__item dot-sep"><span class="dot"></span></span>
+  </div>
+</div>
+
+<!-- PRACTICE AREAS -->
+<section class="practice" id="practice">
+  <div class="wrap">
+    <div class="section-label" data-n="01">Practice areas</div>
+    <div class="practice__grid reveal">
+      <div class="practice__col">
+        <div class="practice__col-title">Personal<br>Injury</div>
+        <div class="practice__item">
+          <span class="practice__item-n mono">01</span>
+          <div>
+            <div class="practice__item-name">Vehicle accidents</div>
+            <div class="practice__item-desc">Car, truck, motorcycle, rideshare, pedestrian, bicycle.</div>
+          </div>
+        </div>
+        <div class="practice__item">
+          <span class="practice__item-n mono">02</span>
+          <div>
+            <div class="practice__item-name">Injured at work</div>
+            <div class="practice__item-desc">On-the-job injuries, third-party liability, workers' comp denials.</div>
+          </div>
+        </div>
+        <div class="practice__item">
+          <span class="practice__item-n mono">03</span>
+          <div>
+            <div class="practice__item-name">Premises liability</div>
+            <div class="practice__item-desc">Slip and fall, inadequate security, dangerous conditions.</div>
+          </div>
+        </div>
+        <div class="practice__item">
+          <span class="practice__item-n mono">04</span>
+          <div>
+            <div class="practice__item-name">Catastrophic injury</div>
+            <div class="practice__item-desc">Brain injury, spinal cord injury, amputation, wrongful death.</div>
+          </div>
+        </div>
+      </div>
+      <div class="practice__col">
+        <div class="practice__col-title">Employment<br>Law</div>
+        <div class="practice__item">
+          <span class="practice__item-n mono">05</span>
+          <div>
+            <div class="practice__item-name">Wage &amp; hour</div>
+            <div class="practice__item-desc">Unpaid wages, missed meal and rest breaks, off-the-clock work, misclassification.</div>
+          </div>
+        </div>
+        <div class="practice__item">
+          <span class="practice__item-n mono">06</span>
+          <div>
+            <div class="practice__item-name">Wrongful termination</div>
+            <div class="practice__item-desc">Fired for an illegal reason. Constructive discharge. Retaliation for reporting.</div>
+          </div>
+        </div>
+        <div class="practice__item">
+          <span class="practice__item-n mono">07</span>
+          <div>
+            <div class="practice__item-name">Workplace discrimination</div>
+            <div class="practice__item-desc">Race, gender, age, disability, national origin. FEHA and Title VII claims.</div>
+          </div>
+        </div>
+        <div class="practice__item">
+          <span class="practice__item-n mono">08</span>
+          <div>
+            <div class="practice__item-name">Harassment</div>
+            <div class="practice__item-desc">Sexual harassment, hostile work environment, failure to investigate.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="results" id="results">
+  <div class="wrap">
+    <div class="section-label results__label" data-n="02">Results</div>
+    <div class="results__intro reveal">
+      <h2 class="results__headline">
+        Cases tried.<br>
+        Verdicts that <em>move</em><br>
+        the other side.
+      </h2>
+      <p class="results__note">
+        A selection of recoveries for clients. Every case is different.
+        These results do not guarantee a similar outcome in your matter —
+        but they do tell you something about how we fight.
+      </p>
+    </div>
+    <div class="results__table reveal">
+      <div class="result-row">
+        <span class="result-row__type mono">Verdict</span>
+        <span class="result-row__name">Rideshare pedestrian accident</span>
+        <span class="result-row__amount">$0.0M</span>
+      </div>
+      <div class="result-row">
+        <span class="result-row__type mono">Settlement</span>
+        <span class="result-row__name">Wrongful termination — retaliation</span>
+        <span class="result-row__amount">$000,000</span>
+      </div>
+      <div class="result-row">
+        <span class="result-row__type mono">Verdict</span>
+        <span class="result-row__name">Commercial truck collision</span>
+        <span class="result-row__amount">$0.0M</span>
+      </div>
+      <div class="result-row">
+        <span class="result-row__type mono">Settlement</span>
+        <span class="result-row__name">Wage theft — class action</span>
+        <span class="result-row__amount">$000,000</span>
+      </div>
+      <div class="result-row">
+        <span class="result-row__type mono">Verdict</span>
+        <span class="result-row__name">Construction site catastrophic injury</span>
+        <span class="result-row__amount">$0.0M</span>
+      </div>
+      <div class="result-row">
+        <span class="result-row__type mono">Settlement</span>
+        <span class="result-row__name">Sexual harassment — failure to investigate</span>
+        <span class="result-row__amount">$000,000</span>
+      </div>
+    </div>
+    <p class="results__disclaimer mono reveal">
+      &#9888;&nbsp; All figures are placeholders. Results shown are representative examples pending attorney review and compliance approval. Prior results do not guarantee a similar outcome.
+    </p>
+  </div>
+</section>
+
+<!-- FIRM / ATTORNEY -->
+<section class="firm" id="firm">
+  <div class="wrap">
+    <div class="section-label" data-n="03">The firm</div>
+    <div class="firm__grid reveal">
+      <div class="firm__portrait">
+        <div class="firm__portrait-frame">
+          <div class="firm__portrait-placeholder" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="18" r="10" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M4 44c0-11.046 8.954-20 20-20s20 8.954 20 20" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            Attorney portrait
+          </div>
+          <span class="firm__portrait-name mono">[Attorney Name] &mdash; SBN [000000]</span>
+        </div>
+      </div>
+      <div>
+        <div class="firm__bio-label section-label" data-n="">&nbsp;</div>
+        <h2 class="firm__name">[Attorney<br>Name]</h2>
+        <div class="firm__title mono">Founder &middot; Trial Attorney &middot; State Bar of California</div>
+        <p class="firm__body">
+          A Los Angeles trial lawyer who built Law Dog on a simple idea: the people insurers
+          and employers count on to walk away are the ones who deserve to be fought for hardest.
+          Every case is handled here, by this firm. Not packaged off, not passed down to a clerk.
+        </p>
+        <p class="firm__body">
+          [Placeholder.] Before founding Law Dog, [Attorney Name] [practice background, notable
+          results, court admissions]. Admitted to practice in the State of California and the
+          United States District Courts for the Central and Eastern Districts. Member,
+          State Bar of California, Consumer Attorneys of California.
+        </p>
+        <div class="firm__stats">
+          <div class="firm__stat">
+            <span class="firm__stat-fig">$00M+</span>
+            <span class="firm__stat-lab mono">Recovered</span>
+          </div>
+          <div class="firm__stat">
+            <span class="firm__stat-fig">000+</span>
+            <span class="firm__stat-lab mono">Cases handled</span>
+          </div>
+          <div class="firm__stat">
+            <span class="firm__stat-fig">00 yrs</span>
+            <span class="firm__stat-lab mono">Trying cases</span>
+          </div>
+        </div>
+        <div class="firm__badges">
+          <span class="badge">State Bar of California</span>
+          <span class="badge">C.D. Cal.</span>
+          <span class="badge">E.D. Cal.</span>
+          <span class="badge">Consumer Attorneys of CA</span>
+          <span class="badge">CAALA</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPROACH -->
+<section class="approach" id="how">
+  <div class="wrap">
+    <div class="section-label" data-n="04">How we work</div>
+    <div class="approach__grid reveal">
+      <div class="approach__step">
+        <span class="approach__step-n" aria-hidden="true">01</span>
+        <div class="approach__step-k mono">Tell us</div>
+        <h3 class="approach__step-h">Say what happened</h3>
+        <p class="approach__step-p">A short call or a few lines online. No legal vocabulary required,
+          no cost, no obligation. We listen first and let you tell it your way.</p>
+      </div>
+      <div class="approach__step">
+        <span class="approach__step-n" aria-hidden="true">02</span>
+        <div class="approach__step-k mono">We assess</div>
+        <h3 class="approach__step-h">Straight answer</h3>
+        <p class="approach__step-p">We tell you what your case is worth and what it takes to win it.
+          If we don't think you have one, we'll tell you that too. No runaround,
+          no inflated promises.</p>
+      </div>
+      <div class="approach__step">
+        <span class="approach__step-n" aria-hidden="true">03</span>
+        <div class="approach__step-k mono">We fight</div>
+        <h3 class="approach__step-h">You stay home</h3>
+        <p class="approach__step-p">We handle the insurers, the paperwork, the depositions, the court dates.
+          You pay nothing unless we win. That's the deal — no asterisk.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BAND STATEMENT -->
+<section class="band">
+  <div class="band__bg" aria-hidden="true">
+    <span class="band__bg-text">Don't walk away</span>
+  </div>
+  <div class="wrap">
+    <p class="band__statement reveal">
+      They're counting on you<br>
+      to walk away.<br>
+      <em>Don't.</em>
+    </p>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="why">
+  <div class="wrap">
+    <div class="section-label" data-n="05">Why Law Dog</div>
+    <div class="why__grid reveal">
+      <div class="why__item">
+        <div class="why__icon" aria-hidden="true">⚖</div>
+        <h3 class="why__item-h">We actually try cases</h3>
+        <p class="why__item-p">Most PI firms settle every case early at whatever the insurer offers.
+          We prepare every case to go to trial, which is why we get better results —
+          and why insurers take us seriously.</p>
+      </div>
+      <div class="why__item">
+        <div class="why__icon" aria-hidden="true">→</div>
+        <h3 class="why__item-h">One attorney, your case</h3>
+        <p class="why__item-p">Your case is handled by [Attorney Name] — not passed to a paralegal,
+          not bundled with a hundred others. You have a direct line to the person
+          responsible for your outcome.</p>
+      </div>
+      <div class="why__item">
+        <div class="why__icon" aria-hidden="true">$</div>
+        <h3 class="why__item-h">Zero unless we win</h3>
+        <p class="why__item-p">No retainer. No upfront costs. No hidden fees. Our contingency
+          means we only get paid when you do, so our incentives are completely
+          aligned with yours.</p>
+      </div>
+      <div class="why__item">
+        <div class="why__icon" aria-hidden="true">◎</div>
+        <h3 class="why__item-h">Injury &amp; employment only</h3>
+        <p class="why__item-p">We don't do divorces, DUIs, or estate plans.
+          Personal injury and employment law is all we do — which means it's
+          all we think about.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="section-label" data-n="06">Common questions</div>
+    <div class="faq__grid">
+      <div class="faq__aside reveal">
+        <h2 class="faq__aside-h">Questions you should ask any lawyer you hire.</h2>
+        <p class="faq__aside-sub">We'd rather answer them now than have you find out later. If you don't see what you need here, ask us directly.</p>
+        <p class="faq__aside-cta mono">Free consultation &rarr; <a href="#intake" style="color:var(--ink);text-decoration:none;">lawdog.xx</a></p>
+      </div>
+      <ul class="faq__list reveal">
+        <li class="faq__item">
+          <button class="faq__q" aria-expanded="false">
+            How does the "no fee unless you win" arrangement actually work?
+            <span class="faq__q-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq__a" role="region">
+            <div class="faq__a-inner">
+              We take a contingency fee — a percentage of whatever we recover for you.
+              If we don't win, you owe us nothing. We also advance the costs of litigation
+              (filing fees, expert witnesses, medical records, depositions) and recover
+              those only if we prevail. The percentage and terms are set out in a plain-English
+              fee agreement you'll review and sign at the outset.
+            </div>
+          </div>
+        </li>
+        <li class="faq__item">
+          <button class="faq__q" aria-expanded="false">
+            I already gave a statement to the insurance company. Does that hurt my case?
+            <span class="faq__q-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq__a" role="region">
+            <div class="faq__a-inner">
+              It depends on what you said and how. Adjusters are trained to ask questions
+              designed to minimize your claim. A statement isn't necessarily fatal, but
+              it's information we need to know about. Stop all communication with any
+              insurer — theirs or yours — and let us review what was said before
+              you say anything else.
+            </div>
+          </div>
+        </li>
+        <li class="faq__item">
+          <button class="faq__q" aria-expanded="false">
+            How long do I have to file a personal injury claim in California?
+            <span class="faq__q-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq__a" role="region">
+            <div class="faq__a-inner">
+              Generally two years from the date of injury under California's statute of
+              limitations. But the clock can run faster — claims against government entities
+              require a claim filed within six months. Some exceptions toll the deadline;
+              others shrink it. Don't rely on a general answer here: call us and we'll tell
+              you exactly where you stand for your specific situation.
+            </div>
+          </div>
+        </li>
+        <li class="faq__item">
+          <button class="faq__q" aria-expanded="false">
+            My employer says I was fired "at-will." Does that mean I can't do anything?
+            <span class="faq__q-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq__a" role="region">
+            <div class="faq__a-inner">
+              No. "At-will" means an employer can fire you for any reason — or no reason —
+              but not an <em>illegal</em> reason. You can't be fired for reporting wage theft,
+              for taking protected medical leave, for whistleblowing on safety violations,
+              or because of your race, gender, age, disability, national origin, or other
+              protected characteristics. The word "at-will" is often used to discourage
+              people from asking questions. Don't let it.
+            </div>
+          </div>
+        </li>
+        <li class="faq__item">
+          <button class="faq__q" aria-expanded="false">
+            What does a free consultation actually involve?
+            <span class="faq__q-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq__a" role="region">
+            <div class="faq__a-inner">
+              We talk through what happened. We ask questions — about the incident,
+              your injuries or damages, any documentation you have, and whether you've
+              spoken with the other side. At the end we give you a straight read:
+              whether we think you have a viable claim, what it would take to pursue it,
+              and what we think it's worth. There's no pressure and no commitment on
+              your end.
+            </div>
+          </div>
+        </li>
+        <li class="faq__item">
+          <button class="faq__q" aria-expanded="false">
+            Can I afford to hire a trial lawyer?
+            <span class="faq__q-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq__a" role="region">
+            <div class="faq__a-inner">
+              Yes. That's the whole point of the contingency arrangement. You don't
+              need money to start. You don't pay as the case goes on. The fee comes
+              out of the recovery at the end — and only if there is one. The firms
+              that advertise on bus benches are not doing you a favor; they're betting
+              you'll take whatever they can settle quickly. You deserve someone who
+              actually fights.
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- INTAKE / CONTACT -->
+<section class="intake" id="intake">
+  <div class="wrap">
+    <div class="section-label" data-n="07">Free consultation</div>
+    <div class="intake__grid reveal">
+      <div class="intake__left">
+        <div>
+          <h2 class="intake__h">Tell us<br><em>what happened.</em></h2>
+          <p class="intake__sub">We'll review it and call you back within one business day. Takes two minutes to start. No cost, no obligation, no legalese.</p>
+          <ul class="intake__promises">
+            <li class="intake__promise">Confidential — protected by attorney-client privilege from the moment you reach out</li>
+            <li class="intake__promise">No fee unless we win your case</li>
+            <li class="intake__promise">We'll tell you straight if we don't think you have a case</li>
+            <li class="intake__promise">Hablamos Español</li>
+          </ul>
+        </div>
+        <div style="margin-top:40px; font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.35);">
+          Or call directly:<br>
+          <span style="color:var(--acid); font-size:16px; display:block; margin-top:8px;">1-800-XXX-XXXX</span>
+        </div>
+      </div>
+      <div class="intake__right">
+        <form novalidate>
+          <label class="form-field"><input type="text" placeholder="Full name" autocomplete="name"></label>
+          <label class="form-field"><input type="tel" placeholder="Phone number" autocomplete="tel"></label>
+          <label class="form-field"><input type="email" placeholder="Email address (optional)" autocomplete="email"></label>
+          <label class="form-field">
+            <select aria-label="What happened?">
+              <option value="">What happened?</option>
+              <option>Vehicle accident</option>
+              <option>Injured at work</option>
+              <option>Wage or hour issue</option>
+              <option>Wrongful termination</option>
+              <option>Discrimination or harassment</option>
+              <option>Something else</option>
+            </select>
+          </label>
+          <label class="form-field"><input type="text" placeholder="Roughly when did it happen?"></label>
+          <label class="form-field"><textarea placeholder="Anything else you want us to know (optional)"></textarea></label>
+          <button type="submit" class="form-submit">Request free consultation</button>
+          <p class="form-ph mono">Submitting this form does not create an attorney-client relationship.
+            All information is confidential. Real intake routing and compliance handling
+            pending attorney review and setup.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="footer__top">
+      <div class="footer__wordmark" aria-label="Law Dog">LAW DOG</div>
+      <div class="footer__contact mono">
+        Los Angeles, CA<br>
+        1-800-XXX-XXXX<br>
+        hello@lawdog.xx
+      </div>
+    </div>
+    <div class="footer__meta">
+      <p class="footer__disc">
+        [PLACEHOLDER] Law Dog is the trade name of [Firm Legal Name], a California law firm.
+        [Attorney Name], SBN [000000], responsible attorney. This website is attorney advertising.
+        The information on this site is for general informational purposes and is not legal advice;
+        viewing it or submitting a form does not create an attorney-client relationship.
+        Prior results do not guarantee a similar outcome. Firm address, full attorney roster,
+        fee disclosures, and all required California advertising disclosures to appear here
+        pending compliance review.
+      </p>
+      <ul class="footer__nav">
+        <li><a href="#firm">Firm</a></li>
+        <li><a href="#practice">Practice</a></li>
+        <li><a href="#intake">Contact</a></li>
+        <li><a href="#">Privacy</a></li>
+      </ul>
+    </div>
+    <span class="footer__flag mono">&#9888; Firm name, attorney, bar number, results &amp; compliance copy all placeholder — attorney review required before launch</span>
+  </div>
+</footer>
+
+<script>
+// ─── SCROLL REVEAL ──────────────────────────────────────────────────────────
+(function () {
+  const els = document.querySelectorAll('.reveal');
+  if (!window.IntersectionObserver) {
+    els.forEach(el => el.classList.add('in'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(el => io.observe(el));
+})();
+
+// ─── FAQ ACCORDION ──────────────────────────────────────────────────────────
+document.querySelectorAll('.faq__q').forEach(btn => {
+  btn.addEventListener('click', function () {
+    const item = this.closest('.faq__item');
+    const isOpen = item.classList.contains('open');
+
+    // close all
+    document.querySelectorAll('.faq__item.open').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.faq__q').setAttribute('aria-expanded', 'false');
+    });
+
+    if (!isOpen) {
+      item.classList.add('open');
+      this.setAttribute('aria-expanded', 'true');
+    }
+  });
+});
+
+// ─── NAV ACTIVE STATE ───────────────────────────────────────────────────────
+(function () {
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const links = document.querySelectorAll('.nav__links a');
+  if (!window.IntersectionObserver || !links.length) return;
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        links.forEach(a => {
+          a.style.opacity = a.getAttribute('href') === `#${id}` ? '1' : '';
+        });
+      }
+    });
+  }, { threshold: 0.4 });
+
+  sections.forEach(s => io.observe(s));
+})();
+
+// ─── FORM SUBMIT (PLACEHOLDER) ──────────────────────────────────────────────
+document.querySelector('.intake__right form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const btn = this.querySelector('.form-submit');
+  btn.textContent = 'Received — we\'ll call you back.';
+  btn.style.background = '#1a3a1a';
+  btn.style.borderColor = '#1a3a1a';
+  btn.disabled = true;
+});
+</script>
+
+</body>
+</html>

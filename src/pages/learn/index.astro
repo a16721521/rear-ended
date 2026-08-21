@@ -1,0 +1,82 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('learn'))
+  .filter(p => !p.data.draft)
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+---
+
+<PageLayout
+  title="Personal Injury & Employment Law Guide | Law Dog"
+  description="Free legal guides on California personal injury law, workers' compensation, and employment rights. Written by Law Dog trial attorneys."
+>
+  <section class="learn-index">
+    <div class="wrap">
+      <div class="section-header" style="margin-bottom:0;">
+        <span class="section-header__label">Legal Guides</span>
+        <span class="label">{posts.length} Articles</span>
+      </div>
+
+      {posts.length === 0 ? (
+        <div class="learn-index__empty">
+          <p>Articles coming soon.</p>
+        </div>
+      ) : (
+        <ul class="learn-index__list">
+          {posts.map(post => (
+            <li class="learn-index__item">
+              <a href={`/learn/${post.slug}/`} class="learn-index__link">
+                <span class="learn-index__cat label">{post.data.category.replace(/-/g, ' ')}</span>
+                <h2 class="learn-index__title">{post.data.title}</h2>
+                <p class="learn-index__desc">{post.data.description}</p>
+                <span class="learn-index__date mono">
+                  {post.data.publishDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+</PageLayout>
+
+<style>
+.learn-index { padding: 0 0 100px; border-bottom: var(--rule-heavy); }
+.learn-index__empty { padding: 80px 0; text-align: center; color: var(--gray-400); }
+.learn-index__list { list-style: none; border: var(--rule-heavy); border-top: none; }
+.learn-index__item { border-bottom: var(--rule); }
+.learn-index__item:last-child { border-bottom: none; }
+.learn-index__link {
+  display: grid;
+  grid-template-columns: 140px 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 4px 24px;
+  align-items: start;
+  padding: 28px 32px;
+  text-decoration: none; color: var(--black);
+  transition: background .15s;
+}
+.learn-index__link:hover { background: var(--gray-100); }
+.learn-index__cat { grid-column: 1; grid-row: 1; }
+.learn-index__title {
+  grid-column: 2; grid-row: 1;
+  font-size: 18px; font-weight: 700; letter-spacing: -.01em;
+}
+.learn-index__desc {
+  grid-column: 2; grid-row: 2;
+  font-size: 13px; color: var(--gray-700); line-height: 1.5;
+}
+.learn-index__date {
+  grid-column: 3; grid-row: 1;
+  font-size: 10px; color: var(--gray-400); white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .learn-index__link { grid-template-columns: 1fr; }
+  .learn-index__cat, .learn-index__title, .learn-index__desc, .learn-index__date {
+    grid-column: 1; grid-row: auto;
+  }
+}
+</style>

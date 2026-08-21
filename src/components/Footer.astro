@@ -1,0 +1,64 @@
+---
+import practiceAreas from '../data/practice-areas.json';
+const year = new Date().getFullYear();
+---
+
+<div class="footer-wrap">
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo"><span class="footer-wordmark">rear ended</span></div>
+        <p class="footer-brand-desc">Auto-collision injury attorneys — rear-end, car, truck, motorcycle and rideshare crashes. No fee unless we win.</p>
+      </div>
+
+      <div class="footer-col">
+        <h5>Practice Areas</h5>
+        <ul>
+          {practiceAreas.map(p => (
+            <li><a href={`/${p.slug}/`}>{p.shortTitle}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="tel:+18005550199">(800) 555-0199</a></li>
+          <li><a href="mailto:hello@gotrearended.com">hello@gotrearended.com</a></li>
+          <li><a href="/get-started/">Free Case Review</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-copy">© {year} Rear Ended. All rights reserved.</p>
+      <p class="footer-disc">
+        Attorney advertising. Prior results do not guarantee a similar outcome. The information on this website is for general informational purposes only and does not constitute legal advice or create an attorney-client relationship.
+      </p>
+    </div>
+  </footer>
+</div>
+
+<style>
+.footer-wrap { background: var(--black); border-top: 1px solid rgba(255,255,255,.07); }
+footer { max-width: 1360px; margin: 0 auto; padding: 72px 52px 52px; }
+.footer-grid { display: grid; grid-template-columns: 1.8fr 1fr 1.2fr; gap: 56px; margin-bottom: 56px; }
+.footer-logo { margin-bottom: 16px; }
+.footer-wordmark { font-family: var(--wordmark); font-weight: 300; font-size: 30px; line-height: 1; letter-spacing: .06em; text-transform: lowercase; color: var(--white); }
+.footer-brand-desc { font-size: 13px; color: rgba(255,255,255,.35); line-height: 1.65; max-width: 220px; }
+.footer-col h5 { font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 18px; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+.footer-col ul li a { font-size: 13.5px; color: rgba(255,255,255,.55); text-decoration: none; letter-spacing: -.01em; transition: color .2s; }
+.footer-col ul li a:hover { color: rgba(255,255,255,.9); }
+.footer-bottom { padding-top: 36px; border-top: 1px solid rgba(255,255,255,.07); display: flex; flex-direction: column; gap: 12px; }
+.footer-copy { font-size: 12px; color: rgba(255,255,255,.3); letter-spacing: -.01em; }
+.footer-disc { font-size: 11.5px; color: rgba(255,255,255,.2); line-height: 1.62; max-width: 760px; }
+
+@media (max-width: 768px) {
+  footer { padding: 52px 20px 36px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+}
+@media (max-width: 480px) {
+  .footer-grid { grid-template-columns: 1fr; }
+}
+</style>

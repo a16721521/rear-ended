@@ -1,0 +1,295 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import practiceAreas from '../../data/practice-areas.json';
+import cities from '../../data/cities.json';
+
+export function getStaticPaths() {
+  return practiceAreas.map(practice => ({
+    params: { practice: practice.slug },
+    props: { practice },
+  }));
+}
+
+const { practice } = Astro.props;
+
+// Top cities to feature on the hub page (high population first)
+const featuredCities = [...cities]
+  .sort((a, b) => b.population - a.population)
+  .slice(0, 12);
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: practice.faqs.map(faq => ({
+    '@type': 'Question',
+    name: faq.q.replace('{city}', 'Los Angeles'),
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.a.replace(/{city}/g, 'Los Angeles'),
+    },
+  })),
+};
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'LegalService',
+  name: `Law Dog — ${practice.title}`,
+  description: practice.description,
+  url: `https://lawdogla.com/${practice.slug}/`,
+  provider: { '@id': 'https://lawdogla.com/#organization' },
+  areaServed: {
+    '@type': 'State',
+    name: 'California',
+  },
+};
+---
+
+<PageLayout
+  title={`${practice.title} in Los Angeles | Law Dog`}
+  description={practice.description}
+  schemas={[faqSchema, serviceSchema]}
+>
+
+  <!-- ── HERO ─────────────────────────────────────────────────────── -->
+  <section class="pa-hero">
+    <div class="wrap">
+      <p class="label">Practice Area</p>
+      <h1 class="pa-hero__h reveal">{practice.title}</h1>
+      <p class="pa-hero__sub reveal">{practice.heroLine}</p>
+      <div class="pa-hero__actions reveal">
+        <a href="/#contact" class="btn btn--primary">Free Case Evaluation</a>
+        <a href="tel:+18334529364" class="btn">(833) 4LAWDOG</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ─────────────────────────────────────────────────────── -->
+  <section class="pa-about">
+    <div class="wrap">
+      <div class="pa-about__grid">
+        <div class="pa-about__body">
+          <p class="label" style="margin-bottom:24px;">Why It Matters</p>
+          <p class="pa-about__p">{practice.description}</p>
+          <div class="pa-about__details">
+            <div>
+              <span class="label">Statute of Limitations</span>
+              <p class="pa-about__detail-val">{practice.statute_of_limitations}</p>
+            </div>
+            <div>
+              <span class="label">Practice Code</span>
+              <p class="pa-about__detail-val mono">{practice.practice_code}</p>
+            </div>
+          </div>
+        </div>
+        <div class="pa-about__injuries">
+          <p class="label" style="margin-bottom:20px;">Common Injuries</p>
+          <ul>
+            {practice.common_injuries.map(injury => (
+              <li>{injury}</li>
+            ))}
+          </ul>
+          <a href="/#contact" class="btn btn--primary" style="margin-top:40px;">Get a Free Consultation</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CITIES ─────────────────────────────────────────────────────── -->
+  <section class="pa-cities">
+    <div class="wrap">
+      <div class="section-header">
+        <span class="section-header__label">Serving Southern California</span>
+        <a href="#all-cities" class="label" style="color:var(--black);text-decoration:none;">All cities ↓</a>
+      </div>
+      <div class="pa-cities__grid">
+        {featuredCities.map(city => (
+          <a href={`/${practice.slug}/${city.slug}/`} class="city-card">
+            <span class="city-card__county">{city.county} County</span>
+            <span class="city-card__name">{city.name}</span>
+            <span class="city-card__pop mono">Pop. {city.population.toLocaleString()}</span>
+          </a>
+        ))}
+      </div>
+      <div id="all-cities" class="pa-cities__all">
+        <p class="label" style="margin-bottom:16px;">All Served Cities</p>
+        <ul class="pa-cities__list">
+          {cities.map(city => (
+            <li>
+              <a href={`/${practice.slug}/${city.slug}/`}>{city.name}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ───────────────────────────────────────────────────────── -->
+  <section class="pa-faq">
+    <div class="wrap">
+      <div class="pa-faq__grid">
+        <div class="pa-faq__aside">
+          <p class="label" style="margin-bottom:20px;">Common Questions</p>
+          <h2 class="pa-faq__h">What do you need to know?</h2>
+          <p class="pa-faq__sub">California law. Plain language.</p>
+        </div>
+        <ul class="faq__list">
+          {practice.faqs.map(faq => (
+            <li class="faq__item">
+              <button class="faq__q" aria-expanded="false">
+                <span>{faq.q.replace(/{city}/g, 'Los Angeles')}</span>
+                <span class="faq__q-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq__a">
+                <p class="faq__a-inner">{faq.a.replace(/{city}/g, 'Los Angeles')}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ───────────────────────────────────────────────────────── -->
+  <section class="pa-cta">
+    <div class="wrap">
+      <p class="label" style="margin-bottom:24px;">No fee unless we win</p>
+      <h2 class="pa-cta__h reveal">Ready to fight for<br><em>what you're owed?</em></h2>
+      <a href="/#contact" class="btn btn--primary reveal" style="margin-top:40px;">Start Your Free Case Review</a>
+    </div>
+  </section>
+
+</PageLayout>
+
+<style>
+.pa-hero {
+  padding: 100px 0;
+  border-bottom: var(--rule-heavy);
+}
+.pa-hero__h {
+font-size: clamp(44px, 7vw, 90px);
+  font-weight: 900; letter-spacing: -.04em; line-height: .92;
+  margin: 16px 0 24px;
+}
+.pa-hero__sub {
+  font-size: 16px; color: var(--gray-400);
+letter-spacing: .04em;
+  max-width: 52ch; margin-bottom: 40px;
+}
+.pa-hero__actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+.pa-about { padding: 80px 0; border-bottom: var(--rule-heavy); }
+.pa-about__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+.pa-about__p { font-size: 16px; line-height: 1.75; color: var(--gray-700); margin-bottom: 40px; }
+.pa-about__details { display: flex; gap: 40px; }
+.pa-about__detail-val { font-size: 15px; margin-top: 8px; }
+.pa-about__injuries ul {
+  list-style: none; display: flex; flex-direction: column; gap: 8px;
+}
+.pa-about__injuries li {
+  font-size: 14px; color: var(--gray-700);
+  padding-left: 16px; position: relative;
+}
+.pa-about__injuries li::before {
+  content: '–'; position: absolute; left: 0;
+color: var(--accent);
+}
+
+.pa-cities { padding: 80px 0; border-bottom: var(--rule-heavy); }
+.pa-cities__grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border: var(--rule-heavy); border-top: none;
+}
+.city-card {
+  padding: 28px 24px;
+  border-right: var(--rule-heavy); border-bottom: var(--rule-heavy);
+  text-decoration: none; color: var(--black);
+  display: flex; flex-direction: column; gap: 6px;
+  transition: background .15s;
+}
+.city-card:hover { background: var(--gray-100); }
+.city-card:nth-child(4n) { border-right: none; }
+.city-card__county { font-size: 9px; letter-spacing: .14em; text-transform: uppercase;
+color: var(--gray-400); }
+.city-card__name { font-size: 18px; font-weight: 700; letter-spacing: -.01em; }
+.city-card__pop { font-size: 10px; color: var(--gray-400); margin-top: 4px; }
+
+.pa-cities__all { margin-top: 48px; }
+.pa-cities__list {
+  list-style: none;
+  display: flex; flex-wrap: wrap; gap: 4px 0;
+  column-count: 4;
+}
+.pa-cities__list a {
+  font-size: 13px; color: var(--gray-700);
+  text-decoration: none; padding: 5px 16px 5px 0;
+  display: block;
+  transition: color .15s;
+}
+.pa-cities__list a:hover { color: var(--black); text-decoration: underline; }
+
+.pa-faq { padding: 100px 0; border-bottom: var(--rule-heavy); }
+.pa-faq__grid { display: grid; grid-template-columns: 280px 1fr; gap: 80px; }
+.pa-faq__h {
+font-size: clamp(24px, 3vw, 36px);
+  font-weight: 900; letter-spacing: -.03em; line-height: 1;
+  margin-bottom: 12px;
+}
+.pa-faq__sub { font-size: 14px; line-height: 1.6; color: var(--gray-400); }
+
+.faq__list { list-style: none; }
+.faq__item { border-top: var(--rule); overflow: hidden; }
+.faq__q {
+  width: 100%; background: none; border: none; text-align: left; cursor: pointer;
+  display: grid; grid-template-columns: 1fr 28px; gap: 16px; align-items: center;
+  padding: 22px 0; font-family: inherit; font-size: 15px; font-weight: 600;
+  letter-spacing: -.01em; color: var(--black);
+}
+.faq__q-icon {
+  width: 28px; height: 28px; border: 1px solid var(--gray-200); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 300; color: var(--gray-400); flex-shrink: 0;
+  transition: transform .3s, background .2s, color .2s;
+}
+.faq__q[aria-expanded="true"] .faq__q-icon {
+  transform: rotate(45deg); background: var(--black); color: var(--white); border-color: var(--black);
+}
+.faq__a { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+.faq__a-inner { padding: 0 0 20px; font-size: 14px; line-height: 1.7; color: var(--gray-700); }
+.faq__item.open .faq__a { max-height: 500px; }
+
+.pa-cta {
+  padding: 120px 0; text-align: center;
+  border-bottom: var(--rule-heavy);
+}
+.pa-cta__h {
+font-size: clamp(36px, 5.5vw, 70px);
+  font-weight: 900; letter-spacing: -.03em; line-height: 1;
+}
+.pa-cta__h em { font-style: italic; color: var(--accent); }
+
+@media (max-width: 900px) {
+  .pa-about__grid, .pa-faq__grid { grid-template-columns: 1fr; gap: 40px; }
+  .pa-cities__grid { grid-template-columns: repeat(3, 1fr); }
+  .pa-cities__list { column-count: 2; }
+}
+@media (max-width: 600px) {
+  .pa-cities__grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+
+<script>
+document.querySelectorAll('.faq__q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq__item') as HTMLElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq__item').forEach(i => {
+      i.classList.remove('open');
+      (i.querySelector('.faq__q') as HTMLElement)?.setAttribute('aria-expanded', 'false');
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  });
+});
+</script>

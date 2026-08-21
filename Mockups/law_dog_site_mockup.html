@@ -1,0 +1,263 @@
+<div id="page">
+<style>
+  #page * { margin:0; padding:0; box-sizing:border-box; }
+  #page {
+    --ink:#111110;
+    --paper:#ebe7dd;
+    --bone:#dcd6c8;
+    --acid:#d9fb06;
+    --mute:#8a857a;
+    font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.3;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  #page .wrap { max-width:1180px; margin:0 auto; padding:0 32px; }
+  #page .mono { font-family:'SFMono-Regular',Menlo,Consolas,monospace; }
+
+  /* nav */
+  #page nav {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:22px 32px; position:sticky; top:0; z-index:40;
+    background:var(--paper); border-bottom:1px solid var(--ink);
+  }
+  #page nav .brand { font-weight:700; font-size:15px; letter-spacing:.28em; text-transform:uppercase; }
+  #page nav .links { display:flex; gap:30px; font-size:11px; letter-spacing:.14em; text-transform:uppercase; }
+  #page nav .links a { color:var(--ink); text-decoration:none; opacity:.7; }
+  #page nav .links a:hover { opacity:1; }
+  #page nav .links a.live { opacity:1; border-bottom:1px solid var(--acid); padding-bottom:2px; }
+
+  /* hero */
+  #page .hero { padding:120px 0 90px; border-bottom:1px solid var(--ink); }
+  #page .hero .idx { font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--mute); margin-bottom:40px; }
+  #page .hero h1 {
+    font-size:clamp(48px,8.5vw,118px); font-weight:700; line-height:.95;
+    letter-spacing:-.03em; max-width:14ch;
+  }
+  #page .hero h1 em { font-style:normal; color:var(--mute); }
+  #page .hero .lede { margin-top:44px; max-width:50ch; font-size:18px; line-height:1.5; color:#39362f; }
+  #page .hero .actions { margin-top:46px; display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  #page .pill {
+    text-decoration:none; font-size:13px; letter-spacing:.04em;
+    padding:15px 26px; border-radius:40px; display:inline-block; font-weight:500;
+  }
+  #page .pill.solid { background:var(--ink); color:var(--paper); }
+  #page .pill.solid:hover { background:var(--acid); color:var(--ink); }
+  #page .pill.line { border:1px solid var(--ink); color:var(--ink); }
+  #page .pill.line:hover { background:var(--ink); color:var(--paper); }
+  #page .hero .call { font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:var(--mute); }
+  #page .hero .call b { color:var(--ink); font-weight:600; }
+
+  /* ticker */
+  #page .ticker { border-bottom:1px solid var(--ink); padding:16px 0; overflow:hidden; white-space:nowrap; background:var(--ink); color:var(--paper); }
+  #page .ticker .run { display:inline-block; animation:slide 40s linear infinite; }
+  #page .ticker span { font-size:12px; letter-spacing:.22em; text-transform:uppercase; margin:0 28px; opacity:.85; }
+  #page .ticker span b { color:var(--acid); }
+  @keyframes slide { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* roster */
+  #page .roster { padding:90px 0; border-bottom:1px solid var(--ink); }
+  #page .roster .head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:50px; }
+  #page .roster .head h2 { font-size:13px; letter-spacing:.18em; text-transform:uppercase; font-weight:600; }
+  #page .roster .head .ct { font-size:13px; color:var(--mute); }
+  #page .row { display:grid; grid-template-columns:60px 1fr auto; gap:24px; align-items:center; padding:26px 0; border-top:1px solid #c9c3b4; transition:padding-left .25s ease; }
+  #page .row:hover { padding-left:14px; }
+  #page .row .rn { font-size:13px; color:var(--mute); }
+  #page .row .rt { font-size:clamp(24px,4vw,42px); font-weight:700; letter-spacing:-.02em; }
+  #page .row .rd { font-size:14px; color:#46433b; max-width:34ch; text-align:right; }
+  #page .row:hover .rt { color:#000; }
+  #page .row:hover .rn { color:var(--ink); }
+
+  /* attorney / firm */
+  #page .firm { padding:90px 0; border-bottom:1px solid var(--ink); }
+  #page .firm .grid { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start; }
+  #page .firm .k { font-size:13px; letter-spacing:.18em; text-transform:uppercase; font-weight:600; margin-bottom:30px; }
+  #page .firm .portrait { background:var(--bone); border:1px solid var(--ink); aspect-ratio:4/5; display:flex; align-items:flex-end; padding:24px; }
+  #page .firm .portrait span { font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); }
+  #page .firm h3 { font-size:clamp(30px,4.5vw,52px); font-weight:700; letter-spacing:-.02em; line-height:1; }
+  #page .firm .role { font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:var(--mute); margin-top:14px; }
+  #page .firm p { font-size:16px; line-height:1.6; color:#39362f; margin-top:26px; }
+  #page .firm .stats { display:flex; gap:40px; margin-top:36px; }
+  #page .firm .stat .fig { font-size:clamp(30px,4vw,46px); font-weight:700; letter-spacing:-.02em; }
+  #page .firm .stat .lab { font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--mute); margin-top:6px; }
+
+  /* approach */
+  #page .approach { padding:90px 0; border-bottom:1px solid var(--ink); }
+  #page .approach h2 { font-size:13px; letter-spacing:.18em; text-transform:uppercase; font-weight:600; margin-bottom:50px; }
+  #page .cols { display:grid; grid-template-columns:repeat(3,1fr); gap:48px; }
+  #page .col .k { font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--mute); margin-bottom:16px; }
+  #page .col h3 { font-size:26px; font-weight:700; letter-spacing:-.01em; margin-bottom:14px; }
+  #page .col p { font-size:15px; line-height:1.6; color:#46433b; }
+
+  /* statement band */
+  #page .band { padding:110px 0; background:var(--ink); color:var(--paper); border-bottom:1px solid var(--ink); }
+  #page .band p { font-size:clamp(28px,4.5vw,52px); font-weight:700; line-height:1.05; letter-spacing:-.02em; max-width:20ch; }
+  #page .band p em { font-style:normal; color:var(--acid); }
+
+  /* intake */
+  #page .intake { padding:90px 0; border-bottom:1px solid var(--ink); }
+  #page .intake .grid { display:grid; grid-template-columns:1fr 1fr; gap:60px; }
+  #page .intake h2 { font-size:clamp(34px,5vw,58px); font-weight:700; letter-spacing:-.02em; line-height:1; }
+  #page .intake .sub { margin-top:18px; font-size:16px; color:#46433b; max-width:38ch; line-height:1.5; }
+  #page .form { display:grid; gap:0; border-top:1px solid var(--ink); }
+  #page .form input, #page .form select { width:100%; font-family:inherit; font-size:16px; padding:20px 4px; border:none; border-bottom:1px solid #c9c3b4; background:transparent; color:var(--ink); }
+  #page .form input::placeholder { color:var(--mute); }
+  #page .form input:focus, #page .form select:focus { outline:none; border-bottom-color:var(--ink); }
+  #page .form .submit { margin-top:26px; background:var(--ink); color:var(--paper); border:none; font-family:inherit; font-size:14px; letter-spacing:.1em; text-transform:uppercase; padding:18px; cursor:pointer; border-radius:40px; }
+  #page .form .submit:hover { background:var(--acid); color:var(--ink); }
+  #page .ph { margin-top:14px; font-size:11px; color:var(--mute); letter-spacing:.04em; line-height:1.5; }
+
+  /* footer */
+  #page footer { padding:80px 0 60px; }
+  #page footer .mark { font-size:clamp(60px,15vw,200px); font-weight:700; letter-spacing:-.04em; line-height:.8; }
+  #page footer .meta { display:flex; justify-content:space-between; margin-top:50px; flex-wrap:wrap; gap:24px; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--mute); }
+  #page footer .disc { margin-top:40px; font-size:11px; color:var(--mute); max-width:78ch; line-height:1.6; }
+  #page footer .flag { display:inline-block; margin-top:12px; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink); border:1px solid var(--mute); padding:5px 9px; border-radius:3px; }
+
+  @media(max-width:820px){
+    #page .cols{grid-template-columns:1fr; gap:36px}
+    #page .firm .grid{grid-template-columns:1fr; gap:36px}
+    #page .intake .grid{grid-template-columns:1fr; gap:40px}
+    #page nav .links{display:none}
+    #page .row{grid-template-columns:36px 1fr;}
+    #page .row .rd{display:none}
+  }
+</style>
+
+<nav>
+  <span class="brand">Law Dog</span>
+  <span class="links">
+    <a href="#firm" class="live">The Firm</a>
+    <a href="#work">Practice</a>
+    <a href="#how">Approach</a>
+    <a href="#intake">Consultation</a>
+    <a href="#">1-800-XXX-XXXX</a>
+  </span>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="idx mono">Law Dog — A Los Angeles Trial Firm — Injury & Employment</div>
+    <h1>Somebody owes you. <em>We make them pay it.</em></h1>
+    <p class="lede">Law Dog represents people across Los Angeles who were hurt in a wreck, hurt on the job, or pushed out by an employer betting they wouldn't fight back. We try cases other firms settle cheap. The consultation is free, and you owe nothing unless we win.</p>
+    <div class="actions">
+      <a class="pill solid" href="#intake">Request a consultation</a>
+      <a class="pill line" href="#firm">About the firm</a>
+      <span class="call mono">or call <b>1-800-XXX-XXXX</b></span>
+    </div>
+  </div>
+</section>
+
+<div class="ticker">
+  <div class="run mono">
+    <span>No win <b>·</b> no fee</span><span>Free consultation</span><span>Hablamos Español</span><span>Available 24/7</span><span>Los Angeles County</span>
+    <span>No win <b>·</b> no fee</span><span>Free consultation</span><span>Hablamos Español</span><span>Available 24/7</span><span>Los Angeles County</span>
+  </div>
+</div>
+
+<section class="firm" id="firm">
+  <div class="wrap">
+    <div class="grid">
+      <div class="portrait"><span>[ Attorney portrait ]</span></div>
+      <div>
+        <div class="k">The firm</div>
+        <h3>[Attorney Name]</h3>
+        <div class="role mono">Founder · Trial Attorney · SBN [000000]</div>
+        <p>[Placeholder bio.] A Los Angeles trial lawyer who built Law Dog on a simple idea: the people insurers and employers count on to walk away are the ones who deserve to be fought for hardest. Every case is handled here, by this firm. Not packaged off, not passed down to a clerk.</p>
+        <p>[Placeholder.] Before founding Law Dog, [Attorney Name] [practice background, notable results, admissions]. Member, State Bar of California.</p>
+        <div class="stats">
+          <div class="stat"><div class="fig">$00M+</div><div class="lab mono">Recovered</div></div>
+          <div class="stat"><div class="fig">000+</div><div class="lab mono">Cases handled</div></div>
+          <div class="stat"><div class="fig">00 yrs</div><div class="lab mono">Trying cases</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="roster" id="work">
+  <div class="wrap">
+    <div class="head">
+      <h2>What we handle</h2>
+      <span class="ct mono">05 categories</span>
+    </div>
+    <div class="row"><span class="rn mono">01</span><span class="rt">Vehicle accidents</span><span class="rd">Car, truck, motorcycle, rideshare, pedestrian.</span></div>
+    <div class="row"><span class="rn mono">02</span><span class="rt">Injured at work</span><span class="rd">On-the-job injuries and workers' comp denials.</span></div>
+    <div class="row"><span class="rn mono">03</span><span class="rt">Wage & hour</span><span class="rd">Unpaid wages, missed breaks, off-the-clock work.</span></div>
+    <div class="row"><span class="rn mono">04</span><span class="rt">Wrongful termination</span><span class="rd">Fired for the wrong reasons. Retaliation.</span></div>
+    <div class="row"><span class="rn mono">05</span><span class="rt">Discrimination</span><span class="rd">Harassment and bias on the job.</span></div>
+  </div>
+</section>
+
+<section class="approach" id="how">
+  <div class="wrap">
+    <h2>How we work</h2>
+    <div class="cols">
+      <div class="col">
+        <div class="k mono">01 — Tell us</div>
+        <h3>Say what happened</h3>
+        <p>A short call or a few lines online. No legal vocabulary required, no cost, no obligation. We listen first.</p>
+      </div>
+      <div class="col">
+        <div class="k mono">02 — We assess</div>
+        <h3>Straight answer</h3>
+        <p>We tell you what your case is worth and what it takes to win it. If we don't think you have one, we'll tell you that too.</p>
+      </div>
+      <div class="col">
+        <div class="k mono">03 — We fight</div>
+        <h3>You stay home</h3>
+        <p>We handle the insurers, the paperwork, the court. You pay nothing unless we win. That's the deal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <p>They're counting on you to walk away. <em>Don't.</em></p>
+  </div>
+</section>
+
+<section class="intake" id="intake">
+  <div class="wrap">
+    <div class="grid">
+      <div>
+        <h2>Free consultation.</h2>
+        <p class="sub">Tell us what happened. We'll review it and call you back. Two minutes to start.</p>
+      </div>
+      <div class="form">
+        <label><input type="text" placeholder="Full name"></label>
+        <label><input type="tel" placeholder="Phone number"></label>
+        <label><select>
+          <option>What happened?</option>
+          <option>Vehicle accident</option>
+          <option>Injured at work</option>
+          <option>Wage or hour issue</option>
+          <option>Wrongful termination</option>
+          <option>Discrimination or harassment</option>
+          <option>Something else</option>
+        </select></label>
+        <label><input type="text" placeholder="Roughly when did it happen?"></label>
+        <button class="submit">Request consultation</button>
+        <p class="ph mono">Placeholder form — non-functional. Submitting an intake form does not create an attorney-client relationship. Real fields, routing, and intake handling pending setup and compliance review.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="mark">LAW DOG</div>
+    <div class="meta mono">
+      <span>Los Angeles, CA</span>
+      <span>1-800-XXX-XXXX</span>
+      <span>hello@lawdog.xx</span>
+      <span>© 2026</span>
+    </div>
+    <p class="disc">[PLACEHOLDER] Law Dog is the trade name of [Firm Legal Name], a California law firm. [Attorney Name], SBN [000000], responsible attorney. This website is an advertisement. The information here is for general purposes and is not legal advice; viewing it or submitting a form does not create an attorney-client relationship. Prior results do not guarantee a similar outcome. Firm address, full attorney roster, and all required California advertising disclosures to appear here pending compliance review.</p>
+    <span class="flag mono">⚠ Firm name, attorney, bar number, results figures & compliance copy all placeholder — attorney review required before launch</span>
+  </div>
+</footer>
+</div>

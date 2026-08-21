@@ -1,0 +1,598 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Free Case Review | Law Dog"
+  description="Start your free personal injury case review with Law Dog. Tell us what happened — takes less than 2 minutes. No fee unless we win, no upfront cost."
+>
+
+<style>
+:root {
+  --surface:  #111111;
+  --border:   rgba(255,255,255,0.08);
+  --border-h: rgba(255,255,255,0.14);
+  --muted:    rgba(255,255,255,0.38);
+  --muted2:   rgba(255,255,255,0.55);
+  --sel-bg:   rgba(244,38,89,0.12);
+  --sel-border: #F42659;
+}
+
+html, body {
+  height: 100%;
+  background: var(--black);
+  color: var(--white);
+  overflow: hidden;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-track {
+  position: fixed; top: 0; left: 0; right: 0; height: 2px;
+  background: rgba(255,255,255,0.06); z-index: 100;
+}
+.progress-fill {
+  height: 100%; background: var(--gradient);
+  transition: width 0.55s cubic-bezier(.65,0,.35,1); width: 0%;
+}
+
+/* ── TOP BAR ── */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+.top-bar {
+  position: fixed; top: 0; left: 0; right: 0; height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px; z-index: 50;
+}
+.top-logo { height: 50px; width: auto; display: block; }
+.step-counter { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0.04em; transition: opacity 0.3s; }
+.step-counter.hidden { opacity: 0; pointer-events: none; }
+
+/* ── STAGE ── */
+.stage { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 80px 24px 40px; overflow: hidden; }
+
+/* ── STEP PANEL ── */
+:global(.step) {
+  position: absolute; width: 100%; max-width: 520px;
+  display: flex; flex-direction: column; gap: 0;
+  will-change: transform, opacity;
+}
+:global(.step.active) { animation: stepIn 0.38s cubic-bezier(.2,.8,.2,1) forwards; }
+:global(.step.exit-left) { animation: stepOutLeft 0.3s cubic-bezier(.4,0,1,1) forwards; pointer-events: none; }
+:global(.step.exit-right) { animation: stepOutRight 0.3s cubic-bezier(.4,0,1,1) forwards; pointer-events: none; }
+
+@keyframes stepIn { from { opacity: 0; transform: translateX(48px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes stepOutLeft { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-48px); } }
+@keyframes stepOutRight { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(48px); } }
+
+/* ── QUESTION ── */
+:global(.q-eyebrow) { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+:global(.q-text) { font-size: clamp(26px, 6vw, 38px); font-weight: 800; letter-spacing: -0.032em; line-height: 1.1; color: var(--white); margin-bottom: 10px; }
+:global(.q-sub) { font-size: 15px; color: var(--muted); line-height: 1.55; letter-spacing: -0.01em; margin-bottom: 36px; }
+
+/* ── OPTION CARDS ── */
+:global(.options) { display: flex; flex-direction: column; gap: 10px; }
+:global(.opt) {
+  display: flex; align-items: center; gap: 16px; padding: 16px 20px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 14px;
+  cursor: pointer; transition: background 0.18s, border-color 0.18s, transform 0.18s cubic-bezier(.2,.8,.2,1);
+  user-select: none; -webkit-tap-highlight-color: transparent; position: relative; overflow: hidden;
+}
+:global(.opt:hover) { background: rgba(255,255,255,0.07); border-color: var(--border-h); }
+:global(.opt.selected) { background: var(--sel-bg); border-color: var(--sel-border); }
+:global(.opt.confirmed) { background: var(--sel-bg); border-color: var(--sel-border); transform: scale(0.98); }
+:global(.opt-icon) {
+  width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  color: var(--muted2); transition: background 0.18s, color 0.18s;
+}
+:global(.opt.selected .opt-icon) { background: rgba(244,38,89,0.2); color: #F42659; }
+:global(.opt-icon svg) { width: 18px; height: 18px; }
+:global(.opt-label) { font-size: 16px; font-weight: 600; color: var(--white); letter-spacing: -0.02em; flex: 1; }
+:global(.opt-check) {
+  width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.15);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  transition: background 0.18s, border-color 0.18s;
+}
+:global(.opt.selected .opt-check) { background: var(--sel-border); border-color: var(--sel-border); }
+:global(.opt-check svg) { width: 11px; height: 11px; opacity: 0; transition: opacity 0.15s; }
+:global(.opt.selected .opt-check svg) { opacity: 1; }
+
+/* ── FORM STEP ── */
+:global(.form-fields) { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+:global(.field-row) { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+:global(.field-wrap) { display: flex; flex-direction: column; gap: 6px; }
+:global(.field-label) { font-size: 11.5px; font-weight: 600; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+:global(.field-input) {
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px 16px; font-family: var(--sans); font-size: 16px; font-weight: 500;
+  color: var(--white); outline: none; transition: border-color 0.18s, background 0.18s;
+  -webkit-appearance: none; width: 100%;
+}
+:global(.field-input::placeholder) { color: rgba(255,255,255,0.2); }
+:global(.field-input:focus) { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.07); }
+:global(.field-input.error) { border-color: var(--accent); }
+:global(.field-optional) { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.22); margin-left: 6px; }
+
+/* ── SUBMIT BUTTON ── */
+:global(.btn-submit) {
+  width: 100%; padding: 17px; background: var(--gradient); color: var(--white);
+  font-family: var(--sans); font-size: 16px; font-weight: 700; letter-spacing: -0.02em;
+  border: none; border-radius: 14px; cursor: pointer;
+  transition: filter 0.2s, transform 0.2s cubic-bezier(.2,.8,.2,1);
+  position: relative; overflow: hidden;
+}
+:global(.btn-submit:hover) { filter: brightness(1.1); transform: translateY(-1px); }
+:global(.btn-submit:active) { transform: scale(0.98); }
+:global(.btn-submit:disabled) { opacity: 0.4; cursor: not-allowed; transform: none; filter: none; }
+:global(.form-trust) { text-align: center; font-size: 12px; color: rgba(255,255,255,0.22); margin-top: 14px; letter-spacing: -0.01em; }
+
+/* ── BACK BUTTON ── */
+.btn-back {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+  background: none; border: none; font-family: var(--sans); font-size: 13px; font-weight: 600;
+  color: rgba(255,255,255,0.25); cursor: pointer; padding: 10px 20px;
+  transition: color 0.2s; letter-spacing: -0.01em; white-space: nowrap; z-index: 50;
+}
+.btn-back:hover { color: rgba(255,255,255,0.55); }
+.btn-back.hidden { opacity: 0; pointer-events: none; }
+
+/* ── CONFIRMATION ── */
+:global(.confirm-wrap) { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0; }
+:global(.confirm-ring) {
+  width: 80px; height: 80px; border-radius: 50%; background: rgba(244,38,89,0.12);
+  border: 1.5px solid rgba(244,38,89,0.35); display: flex; align-items: center; justify-content: center;
+  margin-bottom: 32px; animation: ringPop 0.5s cubic-bezier(.2,.8,.2,1) 0.1s both;
+}
+@keyframes ringPop { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+:global(.confirm-ring svg) { width: 32px; height: 32px; color: #F42659; animation: checkDraw 0.4s cubic-bezier(.2,.8,.2,1) 0.35s both; }
+@keyframes checkDraw { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
+:global(.confirm-title) { font-size: 30px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 14px; }
+:global(.confirm-sub) { font-size: 16px; color: var(--muted); line-height: 1.6; max-width: 360px; margin-bottom: 40px; }
+:global(.confirm-details) {
+  width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 16px;
+  padding: 24px; display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; text-align: left;
+}
+:global(.confirm-detail) { display: flex; align-items: center; gap: 14px; }
+:global(.confirm-detail-icon) {
+  width: 36px; height: 36px; border-radius: 9px; background: rgba(255,255,255,0.05);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--muted2);
+}
+:global(.confirm-detail-icon svg) { width: 16px; height: 16px; }
+:global(.confirm-detail-text) { font-size: 14px; color: var(--muted2); line-height: 1.45; letter-spacing: -0.01em; }
+:global(.btn-home) {
+  display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.07);
+  border: 1px solid var(--border); color: var(--white); font-family: var(--sans); font-size: 14px;
+  font-weight: 600; padding: 13px 24px; border-radius: 12px; text-decoration: none;
+  letter-spacing: -0.02em; transition: background 0.18s, border-color 0.18s;
+}
+:global(.btn-home:hover) { background: rgba(255,255,255,0.1); border-color: var(--border-h); }
+
+/* ── MOBILE TWEAKS ── */
+@media (max-width: 480px) {
+  .stage { padding: 72px 16px 56px; }
+  :global(.q-text) { font-size: clamp(22px, 7vw, 30px); }
+  :global(.field-row) { grid-template-columns: 1fr; }
+  .top-bar { padding: 0 18px; }
+  .btn-back { bottom: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :global(.step.active), :global(.step.exit-left), :global(.step.exit-right) { animation: none; }
+}
+
+/* Sticky mobile call bar */
+.call-bar {
+  display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 180;
+  background: var(--black); border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); gap: 10px;
+}
+.call-bar a {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  font-family: var(--sans); font-size: 14px; font-weight: 700; padding: 13px;
+  border-radius: 9px; text-decoration: none; letter-spacing: -0.02em;
+}
+.call-bar .cb-call { background: var(--gradient); color: var(--white); }
+.call-bar .cb-back { background: rgba(255,255,255,0.1); color: var(--white); }
+
+@media (max-width: 768px) {
+  .call-bar { display: flex; }
+  body { padding-bottom: 70px; }
+}
+</style>
+
+<!-- Progress bar -->
+<div class="progress-track">
+  <div class="progress-fill" id="progressFill"></div>
+</div>
+
+<!-- Top bar -->
+<div class="top-bar">
+  <a href="/">
+    <img class="top-logo" src="/logo_white.png" alt="Law Dog" />
+  </a>
+  <span class="step-counter" id="stepCounter">Step 1 of 5</span>
+</div>
+
+<h1 class="sr-only">Start Your Free Personal Injury Case Review</h1>
+
+<!-- Stage -->
+<div class="stage" id="stage"></div>
+
+<!-- Back button -->
+<button class="btn-back hidden" id="btnBack" aria-label="Go back">← Back</button>
+
+<div class="call-bar">
+  <a href="tel:+18334529364" class="cb-call">Call (833) 4LAWDOG</a>
+  <a href="/" class="cb-back">← Back to home</a>
+</div>
+
+<script>
+(function () {
+
+  // ── DATA ────────────────────────────────────────────────
+
+  const steps = [
+    {
+      id: 'case-type',
+      eyebrow: 'Step 1 of 5',
+      question: 'What happened to you?',
+      sub: 'Select the option that best describes your situation.',
+      type: 'select',
+      options: [
+        { value: 'car-accident',   label: 'Car accident',            icon: carIcon() },
+        { value: 'slip-fall',      label: 'Slip & fall',             icon: slipIcon() },
+        { value: 'motorcycle',     label: 'Motorcycle accident',      icon: motoIcon() },
+        { value: 'truck',          label: 'Truck or commercial vehicle', icon: truckIcon() },
+        { value: 'other',          label: 'Other injury',            icon: otherIcon() },
+      ]
+    },
+    {
+      id: 'timeline',
+      eyebrow: 'Step 2 of 5',
+      question: 'When did it happen?',
+      sub: 'California has a 2-year statute of limitations for most injury claims.',
+      type: 'select',
+      options: [
+        { value: 'week',    label: 'Within the last week' },
+        { value: 'month',   label: '1–4 weeks ago' },
+        { value: 'months',  label: '1–6 months ago' },
+        { value: 'longer',  label: 'More than 6 months ago' },
+      ]
+    },
+    {
+      id: 'doctor',
+      eyebrow: 'Step 3 of 5',
+      question: 'Have you seen a doctor?',
+      sub: 'Medical documentation is the foundation of every injury claim.',
+      type: 'select',
+      options: [
+        { value: 'yes',     label: "Yes — I've been treated" },
+        { value: 'er',      label: 'I went to the ER' },
+        { value: 'not-yet', label: 'Not yet, but I need to' },
+        { value: 'no',      label: 'No, I feel okay for now' },
+      ]
+    },
+    {
+      id: 'symptoms',
+      eyebrow: 'Step 4 of 5',
+      question: 'Are you still in pain?',
+      sub: 'Ongoing symptoms directly affect your compensation.',
+      type: 'select',
+      options: [
+        { value: 'yes',       label: 'Yes — still hurting' },
+        { value: 'sometimes', label: 'On and off' },
+        { value: 'recovered', label: "I've mostly recovered" },
+      ]
+    },
+    {
+      id: 'contact',
+      eyebrow: 'Step 5 of 5',
+      question: 'How can we reach you?',
+      sub: "We'll review your request and reach out as soon as possible. Free, no obligation.",
+      type: 'form',
+    }
+  ];
+
+  // ── STATE ────────────────────────────────────────────────
+
+  let current = 0;
+  let answers: Record<string, string> = {};
+  const stage = document.getElementById('stage')!;
+  const progressFill = document.getElementById('progressFill') as HTMLElement;
+  const stepCounter = document.getElementById('stepCounter')!;
+  const btnBack = document.getElementById('btnBack')!;
+
+  // ── ICONS ────────────────────────────────────────────────
+
+  function carIcon() {
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="1" y="9" width="22" height="10" rx="2"/><path d="M5 9V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3"/>
+      <circle cx="7" cy="19" r="2"/><circle cx="17" cy="19" r="2"/>
+    </svg>`;
+  }
+  function slipIcon() {
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+      <line x1="17" y1="11" x2="17" y2="17"/><line x1="14" y1="14" x2="20" y2="14"/>
+    </svg>`;
+  }
+  function motoIcon() {
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/>
+      <path d="M15 6a1 1 0 0 0 0-2 7 7 0 0 0-7 7"/><path d="M9 17.5V11l3-3 3-1 1.5 3.5 2 1"/>
+    </svg>`;
+  }
+  function truckIcon() {
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11v14H5z"/>
+      <rect x="14" y="9" width="9" height="8" rx="1"/><path d="M14 13h9"/>
+      <circle cx="7" cy="17" r="2"/><circle cx="19" cy="17" r="2"/>
+    </svg>`;
+  }
+  function otherIcon() {
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+    </svg>`;
+  }
+  function checkIcon() {
+    return `<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="2,6 5,9 10,3"/>
+    </svg>`;
+  }
+
+  // ── RENDER ────────────────────────────────────────────────
+
+  function renderSelectStep(step: any) {
+    const opts = step.options.map((o: any) => `
+      <button class="opt" data-value="${o.value}" role="radio" aria-checked="false">
+        ${o.icon ? `<span class="opt-icon">${o.icon}</span>` : ''}
+        <span class="opt-label">${o.label}</span>
+        <span class="opt-check">${checkIcon()}</span>
+      </button>
+    `).join('');
+
+    return `
+      <div class="q-eyebrow">${step.eyebrow}</div>
+      <div class="q-text">${step.question}</div>
+      <p class="q-sub">${step.sub}</p>
+      <div class="options" role="radiogroup">${opts}</div>
+    `;
+  }
+
+  function renderFormStep(step: any) {
+    return `
+      <div class="q-eyebrow">${step.eyebrow}</div>
+      <div class="q-text">${step.question}</div>
+      <p class="q-sub">${step.sub}</p>
+      <div class="form-fields">
+        <div class="field-row">
+          <div class="field-wrap">
+            <label class="field-label" for="f-first">First name</label>
+            <input class="field-input" id="f-first" type="text" autocomplete="given-name" placeholder="Jane" inputmode="text">
+          </div>
+          <div class="field-wrap">
+            <label class="field-label" for="f-last">Last name</label>
+            <input class="field-input" id="f-last" type="text" autocomplete="family-name" placeholder="Smith" inputmode="text">
+          </div>
+        </div>
+        <div class="field-wrap">
+          <label class="field-label" for="f-phone">Phone number</label>
+          <input class="field-input" id="f-phone" type="tel" autocomplete="tel" placeholder="(310) 555-0100" inputmode="tel">
+        </div>
+        <div class="field-wrap">
+          <label class="field-label" for="f-email">Email <span class="field-optional">optional</span></label>
+          <input class="field-input" id="f-email" type="email" autocomplete="email" placeholder="jane@example.com" inputmode="email">
+        </div>
+      </div>
+      <button class="btn-submit" id="btnSubmit" type="button">Get my free case review →</button>
+      <p class="form-trust">No fee unless we win · 100% confidential · No spam</p>
+    `;
+  }
+
+  function renderConfirm() {
+    return `
+      <div class="confirm-wrap step active">
+        <div class="confirm-ring">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6,17 13,24 26,10"/>
+          </svg>
+        </div>
+        <div class="confirm-title">You're all set.</div>
+        <p class="confirm-sub">We've received your request. Here's what happens next:</p>
+        <div class="confirm-details">
+          <div class="confirm-detail">
+            <div class="confirm-detail-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.87a16 16 0 0 0 6 6l.95-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.72 16.92z"/>
+              </svg>
+            </div>
+            <div class="confirm-detail-text">We'll review what you shared and reach out to discuss your case — no pressure.</div>
+          </div>
+          <div class="confirm-detail">
+            <div class="confirm-detail-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <div class="confirm-detail-text">Everything you share is 100% confidential and protected by attorney-client privilege.</div>
+          </div>
+          <div class="confirm-detail">
+            <div class="confirm-detail-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+            </div>
+            <div class="confirm-detail-text">No upfront cost. No fee unless we win your case.</div>
+          </div>
+        </div>
+        <a href="/" class="btn-home">← Back to home</a>
+      </div>
+    `;
+  }
+
+  // ── NAVIGATION ────────────────────────────────────────────
+
+  function updateProgress(idx: number) {
+    const pct = idx >= steps.length ? 100 : Math.round((idx / steps.length) * 100);
+    progressFill.style.width = pct + '%';
+    if (idx >= steps.length) {
+      stepCounter.classList.add('hidden');
+      btnBack.classList.add('hidden');
+    } else {
+      stepCounter.textContent = `Step ${idx + 1} of ${steps.length}`;
+      btnBack.classList.toggle('hidden', idx === 0);
+    }
+  }
+
+  function showStep(idx: number, direction: 'forward' | 'back' = 'forward') {
+    const existing = stage.querySelector('.step');
+    if (existing) {
+      existing.classList.remove('active');
+      existing.classList.add(direction === 'forward' ? 'exit-left' : 'exit-right');
+      setTimeout(() => existing.remove(), 350);
+    }
+
+    if (idx >= steps.length) {
+      updateProgress(idx);
+      setTimeout(() => {
+        const tmp = document.createElement('div');
+        tmp.innerHTML = renderConfirm();
+        stage.appendChild(tmp.firstElementChild!);
+      }, existing ? 260 : 0);
+      return;
+    }
+
+    const step = steps[idx];
+    const el = document.createElement('div');
+    el.className = 'step';
+
+    if (step.type === 'select') {
+      el.innerHTML = renderSelectStep(step);
+    } else {
+      el.innerHTML = renderFormStep(step);
+    }
+
+    updateProgress(idx);
+
+    setTimeout(() => {
+      el.classList.add('active');
+      stage.appendChild(el);
+      bindStepEvents(el, step, idx);
+    }, existing ? 180 : 0);
+  }
+
+  function bindStepEvents(el: HTMLElement, step: any, idx: number) {
+    if (step.type === 'select') {
+      el.querySelectorAll('.opt').forEach(btn => {
+        btn.addEventListener('click', () => {
+          el.querySelectorAll('.opt').forEach(b => {
+            b.classList.remove('selected');
+            b.setAttribute('aria-checked', 'false');
+          });
+          btn.classList.add('selected', 'confirmed');
+          btn.setAttribute('aria-checked', 'true');
+          answers[step.id] = (btn as HTMLElement).dataset.value ?? '';
+          setTimeout(() => {
+            current = idx + 1;
+            showStep(current, 'forward');
+          }, 320);
+        });
+      });
+    }
+
+    if (step.type === 'form') {
+      const submitBtn = el.querySelector('#btnSubmit') as HTMLButtonElement;
+      const phoneInput = el.querySelector('#f-phone') as HTMLInputElement;
+
+      if (phoneInput) {
+        phoneInput.addEventListener('input', () => {
+          let v = phoneInput.value.replace(/\D/g, '').slice(0, 10);
+          if (v.length >= 7) v = `(${v.slice(0,3)}) ${v.slice(3,6)}-${v.slice(6)}`;
+          else if (v.length >= 4) v = `(${v.slice(0,3)}) ${v.slice(3)}`;
+          else if (v.length > 0) v = `(${v}`;
+          phoneInput.value = v;
+          phoneInput.classList.remove('error');
+        });
+      }
+
+      submitBtn.addEventListener('click', () => {
+        const first = (el.querySelector('#f-first') as HTMLInputElement).value.trim();
+        const last  = (el.querySelector('#f-last') as HTMLInputElement).value.trim();
+        const phone = (el.querySelector('#f-phone') as HTMLInputElement).value.trim();
+
+        let valid = true;
+        if (!first) { el.querySelector('#f-first')!.classList.add('error'); valid = false; }
+        if (!last)  { el.querySelector('#f-last')!.classList.add('error'); valid = false; }
+        if (phone.replace(/\D/g,'').length < 10) {
+          el.querySelector('#f-phone')!.classList.add('error');
+          valid = false;
+        }
+        if (!valid) {
+          (el.querySelector('.error') as HTMLElement)?.focus();
+          return;
+        }
+
+        answers.firstName = first;
+        answers.lastName  = last;
+        answers.phone     = phone;
+        answers.email     = (el.querySelector('#f-email') as HTMLInputElement).value.trim();
+
+        if (typeof (window as any).gtag === 'function') {
+          (window as any).gtag('event', 'intake_form_submit', {
+            case_type: answers['case-type'] || '',
+            timeline:  answers['timeline']  || '',
+          });
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending…';
+
+        fetch('/api/intake', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            firstName:  answers.firstName,
+            lastName:   answers.lastName,
+            phone:      answers.phone,
+            email:      answers.email,
+            caseType:   answers['case-type']  || '',
+            timeline:   answers['timeline']   || '',
+            doctor:     answers['doctor']     || '',
+            symptoms:   answers['symptoms']   || '',
+          }),
+        })
+        .then(r => r.json())
+        .then(() => {
+          current = steps.length;
+          showStep(current, 'forward');
+        })
+        .catch(() => {
+          current = steps.length;
+          showStep(current, 'forward');
+        });
+      });
+
+      el.querySelectorAll('.field-input').forEach(inp => {
+        inp.addEventListener('focus', () => inp.classList.remove('error'));
+      });
+    }
+  }
+
+  // ── BACK ────────────────────────────────────────────────
+
+  btnBack.addEventListener('click', () => {
+    if (current > 0) {
+      current--;
+      showStep(current, 'back');
+    }
+  });
+
+  // ── INIT ────────────────────────────────────────────────
+
+  showStep(0);
+
+})();
+</script>
+
+</BaseLayout>

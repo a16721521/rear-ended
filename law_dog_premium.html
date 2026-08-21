@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Law Dog — Legal Infrastructure for California</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black:     #080808;
+  --gray-900:  #111111;
+  --gray-700:  #2d2d2d;
+  --gray-500:  #6b6b6b;
+  --gray-400:  #9b9b9b;
+  --gray-300:  #c4c4c4;
+  --gray-200:  #e8e8e8;
+  --gray-100:  #f4f4f4;
+  --off-white: #fafafa;
+  --white:     #ffffff;
+  --accent:    #c1455a;
+  --accent-2:  #d4607a;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--white);
+  color: var(--black);
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  height: 110px;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 1px solid transparent;
+  transition:
+    height       0.65s cubic-bezier(.16,1,.3,1),
+    background   0.65s cubic-bezier(.16,1,.3,1),
+    border-color 0.65s cubic-bezier(.16,1,.3,1);
+}
+
+nav.scrolled {
+  height: 62px;
+  background: rgba(255,255,255,0.94);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(0,0,0,0.055);
+}
+
+.nav-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 52px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.nav-logo-wrap {
+  position: relative;
+  height: 99px;
+  transition: height 0.65s cubic-bezier(.16,1,.3,1);
+}
+
+.logo-white,
+.logo-black {
+  height: 100%;
+  width: auto;
+  display: block;
+  transition: opacity 0.55s cubic-bezier(.16,1,.3,1);
+}
+
+.logo-black {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+nav.scrolled .nav-logo-wrap { height: 50px; }
+nav.scrolled .logo-white    { opacity: 0; }
+nav.scrolled .logo-black    { opacity: 1; }
+
+.nav-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s cubic-bezier(.16,1,.3,1);
+}
+
+nav.scrolled .nav-links {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.nav-links a {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--gray-500);
+  text-decoration: none;
+  letter-spacing: -0.015em;
+  transition: color 0.15s;
+}
+.nav-links a:hover { color: var(--black); }
+
+.nav-cta {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: -0.02em;
+  transition: background 0.15s, transform 0.2s cubic-bezier(.2,.8,.2,1);
+}
+.nav-cta:hover { background: #222; transform: translateY(-1px); }
+
+/* ── HERO ── */
+.hero-bg {
+  min-height: 100vh;
+  background: url('hero3.jpeg') center / cover no-repeat;
+}
+
+.hero {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 210px 52px 80px;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 30px;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: var(--accent);
+  display: block;
+  flex-shrink: 0;
+}
+
+.hero-headline {
+  font-size: clamp(52px, 7.2vw, 112px);
+  line-height: 0.91;
+  letter-spacing: -0.056em;
+  font-weight: 800;
+  color: var(--black);
+  margin-bottom: 32px;
+}
+
+.hero-headline .dim { color: var(--gray-400); }
+
+.hero-sub {
+  font-size: 16.5px;
+  color: var(--gray-500);
+  line-height: 1.62;
+  letter-spacing: -0.015em;
+  font-weight: 400;
+  max-width: 430px;
+  margin-bottom: 48px;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 14px 26px;
+  border-radius: 9px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: -0.025em;
+  transition: background 0.15s, transform 0.2s cubic-bezier(.2,.8,.2,1), box-shadow 0.2s;
+}
+.btn-primary:hover {
+  background: #1a1a1a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  color: var(--gray-500);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 14px 22px;
+  border-radius: 9px;
+  border: 1px solid var(--gray-200);
+  cursor: pointer;
+  letter-spacing: -0.02em;
+  transition: all 0.2s cubic-bezier(.2,.8,.2,1);
+}
+.btn-secondary:hover {
+  border-color: var(--gray-400);
+  color: var(--black);
+  transform: translateY(-2px);
+}
+
+/* ── HERO TEXT (dark bg overrides) ── */
+.hero-bg .hero-eyebrow {
+  color: rgba(255,255,255,0.75);
+}
+.hero-bg .hero-eyebrow::before {
+  background: rgba(255,255,255,0.75);
+}
+.hero-bg .hero-headline {
+  color: var(--white);
+}
+.hero-bg .hero-headline .dim {
+  color: rgba(255,255,255,0.45);
+}
+.hero-bg .hero-sub {
+  color: rgba(255,255,255,0.68);
+}
+.hero-bg .btn-secondary {
+  color: rgba(255,255,255,0.85);
+  border-color: rgba(255,255,255,0.32);
+  background: transparent;
+}
+.hero-bg .btn-secondary:hover {
+  color: var(--white);
+  border-color: rgba(255,255,255,0.65);
+  background: transparent;
+  transform: translateY(-2px);
+}
+
+/* ── TRUST STRIP ── */
+.trust-strip {
+  border-top: 1px solid var(--gray-200);
+  border-bottom: 1px solid var(--gray-200);
+  padding: 22px 52px;
+  display: flex;
+  align-items: center;
+  gap: 56px;
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+.trust-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gray-300);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.trust-item {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-400);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.trust-item::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+/* ── METRICS ── */
+.metrics-section {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 96px 52px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.metric {
+  padding: 0 56px;
+  border-right: 1px solid var(--gray-200);
+}
+.metric:first-child { padding-left: 0; }
+.metric:last-child { border-right: none; }
+
+.metric-value {
+  font-size: clamp(56px, 6.5vw, 92px);
+  font-weight: 800;
+  letter-spacing: -0.065em;
+  color: var(--black);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.metric-value .accent { color: var(--accent); }
+
+.metric-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--black);
+  letter-spacing: -0.025em;
+  margin-bottom: 4px;
+}
+
+.metric-sub {
+  font-size: 13px;
+  color: var(--gray-400);
+  letter-spacing: -0.01em;
+}
+
+/* ── SECTION SHARED ── */
+.section {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 112px 52px;
+}
+
+.section-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-300);
+  margin-bottom: 56px;
+}
+
+/* ── PRACTICE AREAS ── */
+.section-heading {
+  font-size: clamp(32px, 3.8vw, 56px);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 0.98;
+  color: var(--black);
+  margin-bottom: 24px;
+}
+
+.section-body {
+  font-size: 15.5px;
+  color: var(--gray-500);
+  line-height: 1.66;
+  letter-spacing: -0.015em;
+  max-width: 400px;
+}
+
+.practice-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 56px;
+}
+
+.case-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--gray-200);
+  border: 1px solid var(--gray-200);
+}
+
+.case-item {
+  background: var(--white);
+  padding: 38px 36px 34px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  display: block;
+  transition: background 0.25s ease;
+}
+
+.case-item::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.5s cubic-bezier(.16,1,.3,1);
+}
+
+.case-item:hover { background: var(--gray-100); }
+.case-item:hover::after { width: 100%; }
+
+.case-icon {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 22px;
+  color: var(--gray-300);
+  display: block;
+  transition: color 0.3s ease;
+}
+.case-item:hover .case-icon { color: var(--accent); }
+
+.case-title {
+  font-size: 16.5px;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  color: var(--black);
+  margin-bottom: 9px;
+  line-height: 1.2;
+  transition: color 0.25s ease;
+}
+.case-item:hover .case-title { color: var(--accent); }
+
+.case-desc {
+  font-size: 13px;
+  color: var(--gray-400);
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+}
+
+/* ── RESULTS (DARK) ── */
+.results-bg {
+  background: var(--black);
+}
+
+.results-section {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 112px 52px;
+}
+
+.results-section .section-eyebrow { color: rgba(255,255,255,0.22); }
+
+.results-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 96px;
+  margin-bottom: 72px;
+  align-items: end;
+}
+
+.results-heading {
+  font-size: clamp(36px, 4vw, 58px);
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+  color: var(--white);
+}
+
+.results-sub {
+  font-size: 15.5px;
+  color: rgba(255,255,255,0.38);
+  line-height: 1.66;
+  letter-spacing: -0.015em;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.07);
+}
+
+.result-item {
+  background: var(--black);
+  padding: 44px 40px;
+  transition: background 0.2s;
+}
+.result-item:hover { background: #0f0f0f; }
+
+.result-type {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  margin-bottom: 20px;
+}
+
+.result-amount {
+  font-size: 46px;
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 14px;
+}
+
+.result-desc {
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.42);
+  line-height: 1.58;
+  letter-spacing: -0.01em;
+}
+
+/* ── DIFFERENTIATORS ── */
+.diff-layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 96px;
+  align-items: start;
+}
+
+.diff-sticky {
+  position: sticky;
+  top: 96px;
+}
+
+.diff-items { }
+
+.diff-item {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 24px;
+  padding: 36px 0;
+  border-bottom: 1px solid var(--gray-200);
+  align-items: start;
+}
+.diff-item:first-child { border-top: 1px solid var(--gray-200); }
+
+.diff-num {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--gray-300);
+  letter-spacing: 0.04em;
+  padding-top: 5px;
+}
+
+.diff-title {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--black);
+  margin-bottom: 10px;
+  line-height: 1.1;
+}
+
+.diff-body {
+  font-size: 14.5px;
+  color: var(--gray-500);
+  line-height: 1.66;
+  letter-spacing: -0.015em;
+  max-width: 520px;
+}
+
+/* ── CTA ── */
+.cta-wrap {
+  border-top: 1px solid var(--gray-200);
+}
+
+.cta-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 136px 52px;
+  text-align: center;
+}
+
+.cta-heading {
+  font-size: clamp(40px, 5.5vw, 80px);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 0.93;
+  color: var(--black);
+  margin-bottom: 28px;
+}
+
+.cta-sub {
+  font-size: 16.5px;
+  color: var(--gray-400);
+  line-height: 1.6;
+  letter-spacing: -0.015em;
+  margin-bottom: 48px;
+}
+
+.cta-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* ── FOOTER ── */
+.footer-wrap {
+  background: var(--black);
+  border-top: none;
+}
+
+footer {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 72px 52px 52px;
+}
+
+.footer-logo img {
+  height: 50px;
+  width: auto;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr repeat(4, auto);
+  gap: 80px;
+  margin-bottom: 60px;
+  align-items: start;
+}
+
+.footer-brand-desc {
+  font-size: 13px;
+  color: rgba(255,255,255,0.38);
+  line-height: 1.62;
+  letter-spacing: -0.01em;
+  max-width: 200px;
+}
+
+.footer-col h5 {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.footer-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-col ul li a {
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.52);
+  text-decoration: none;
+  letter-spacing: -0.015em;
+  transition: color 0.15s;
+}
+.footer-col ul li a:hover { color: var(--white); }
+
+.footer-bottom {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-top: 28px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  gap: 60px;
+}
+
+.footer-copy {
+  font-size: 12px;
+  color: rgba(255,255,255,0.28);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.footer-disc {
+  font-size: 11px;
+  color: rgba(255,255,255,0.2);
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  max-width: 560px;
+  text-align: right;
+}
+
+/* ── REVEAL ANIMATIONS ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition:
+    opacity  800ms cubic-bezier(.2,.8,.2,1),
+    transform 800ms cubic-bezier(.2,.8,.2,1);
+}
+
+.reveal.visible { opacity: 1; transform: none; }
+
+.d1 { transition-delay: 80ms; }
+.d2 { transition-delay: 160ms; }
+.d3 { transition-delay: 240ms; }
+.d4 { transition-delay: 320ms; }
+.d5 { transition-delay: 400ms; }
+</style>
+</head>
+<body>
+
+<!-- ══════ NAV ══════ -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-wrap">
+        <img class="logo-white" src="logo_white.png" alt="Law Dog">
+        <img class="logo-black" src="logo_black.png" alt="">
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">Practice Areas</a></li>
+      <li><a href="#">Results</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <button class="nav-cta">Free case review →</button>
+  </div>
+</nav>
+
+<!-- ══════ HERO ══════ -->
+<div class="hero-bg">
+  <div class="hero">
+
+    <div class="hero-left">
+      <div class="hero-eyebrow">Personal injury law · Los Angeles</div>
+      <h1 class="hero-headline">
+        Injured?<br>
+        <span class="dim">Bite back.</span>
+      </h1>
+      <p class="hero-sub">
+        No fee unless we win. No upfront cost. Just results.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary">Start your case <span style="opacity:.55">→</span></button>
+        <button class="btn-secondary">View results</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════ TRUST STRIP ══════ -->
+<div style="border-top:1px solid var(--gray-200);border-bottom:1px solid var(--gray-200);">
+  <div class="trust-strip">
+    <span class="trust-label">As seen in</span>
+    <span class="trust-item">Los Angeles Times</span>
+    <span class="trust-item">KCRW</span>
+    <span class="trust-item">Daily Journal</span>
+    <span class="trust-item">NBC Los Angeles</span>
+    <span class="trust-item">LAW360</span>
+  </div>
+</div>
+
+<!-- ══════ METRICS ══════ -->
+<div class="metrics-section">
+  <div class="metric reveal">
+    <div class="metric-value">$250<span class="accent">M</span>+</div>
+    <div class="metric-label">Value protected</div>
+    <div class="metric-sub">Across all practice areas</div>
+  </div>
+  <div class="metric reveal d1">
+    <div class="metric-value">98<span class="accent">%</span></div>
+    <div class="metric-label">Success rate</div>
+    <div class="metric-sub">Favorable client outcomes</div>
+  </div>
+  <div class="metric reveal d2">
+    <div class="metric-value">24<span class="accent">/</span>7</div>
+    <div class="metric-label">Case portal access</div>
+    <div class="metric-sub">Always on, always transparent</div>
+  </div>
+</div>
+
+<!-- ══════ PRACTICE AREAS ══════ -->
+<div class="section">
+  <p class="section-eyebrow reveal">Practice areas</p>
+  <div class="practice-header">
+    <h2 class="section-heading reveal">Every case,<br>fought to win.</h2>
+    <p class="section-body reveal d1">We handle the most consequential personal injury cases in California. No case is too complex. No opponent is too large.</p>
+  </div>
+  <div class="case-grid">
+
+    <a href="law_dog_personal_injury.html" class="case-item reveal">
+      <svg class="case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="1" y="9" width="22" height="10" rx="2"/><path d="M5 9V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3"/><circle cx="7" cy="19" r="2"/><circle cx="17" cy="19" r="2"/>
+      </svg>
+      <div class="case-title">Car Accidents</div>
+      <div class="case-desc">Collisions, rear-ends, T-bones, and hit-and-run. Full recovery for all auto liability claims.</div>
+    </a>
+
+    <a href="#" class="case-item reveal d1">
+      <svg class="case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11v14H5z"/><rect x="14" y="9" width="9" height="8" rx="1"/><path d="M14 13h9"/><circle cx="7" cy="17" r="2"/><circle cx="19" cy="17" r="2"/>
+      </svg>
+      <div class="case-title">Truck & Commercial Vehicle</div>
+      <div class="case-desc">18-wheelers, delivery fleets, and semi-trucks. Complex multi-party liability handled in full.</div>
+    </a>
+
+    <a href="#" class="case-item reveal d2">
+      <svg class="case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      </svg>
+      <div class="case-title">Rideshare Accidents</div>
+      <div class="case-desc">Uber, Lyft, and on-demand transport. We cut through layered insurance disputes fast.</div>
+    </a>
+
+    <a href="#" class="case-item reveal">
+      <svg class="case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" y1="11" x2="17" y2="17"/><line x1="14" y1="14" x2="20" y2="14"/>
+      </svg>
+      <div class="case-title">Slip & Fall</div>
+      <div class="case-desc">Wet floors, uneven surfaces, dark stairwells. Premises liability cases on full contingency.</div>
+    </a>
+
+    <a href="#" class="case-item reveal d1">
+      <svg class="case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </svg>
+      <div class="case-title">Catastrophic Injury</div>
+      <div class="case-desc">Spinal cord, traumatic brain injury, and amputation. Lifetime damages, fully analyzed.</div>
+    </a>
+
+    <a href="#" class="case-item reveal d2">
+      <svg class="case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0 0-2 7 7 0 0 0-7 7"/><path d="M9 17.5V11l3-3 3-1 1.5 3.5 2 1"/>
+      </svg>
+      <div class="case-title">Motorcycle Accidents</div>
+      <div class="case-desc">Severe injuries, lane-splitting disputes, helmet defense. We fight hard for riders.</div>
+    </a>
+
+    <a href="#" class="case-item reveal">
+      <svg class="case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="5" r="2"/><path d="m9 20 1-6-3 1 2-7 6 1-2 1 1 5-3 5z"/>
+      </svg>
+      <div class="case-title">Pedestrian Accidents</div>
+      <div class="case-desc">Crosswalk and sidewalk collisions. Often catastrophic — we pursue every dollar.</div>
+    </a>
+
+    <a href="#" class="case-item reveal d1">
+      <svg class="case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      <div class="case-title">Wrongful Death</div>
+      <div class="case-desc">Justice and financial recovery for families who've lost someone to negligence.</div>
+    </a>
+
+    <a href="#" class="case-item reveal d2">
+      <svg class="case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+      <div class="case-title">Premises Liability</div>
+      <div class="case-desc">Unsafe properties, inadequate security, negligent maintenance. Owners are accountable.</div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ══════ RESULTS (DARK) ══════ -->
+<div class="results-bg">
+  <div class="results-section">
+    <p class="section-eyebrow reveal">Results</p>
+    <div class="results-header">
+      <h2 class="results-heading reveal">The record speaks<br>for itself.</h2>
+      <p class="results-sub reveal d1">We measure success the only way that matters — outcomes. Selected recent results across practice areas. Past results do not guarantee similar outcomes.</p>
+    </div>
+    <div class="results-grid">
+      <div class="result-item reveal">
+        <div class="result-type">Personal Injury</div>
+        <div class="result-amount">$4.2M</div>
+        <div class="result-desc">Settlement — motor vehicle accident, traumatic brain injury</div>
+      </div>
+      <div class="result-item reveal d1">
+        <div class="result-type">Wrongful Termination</div>
+        <div class="result-amount">$1.8M</div>
+        <div class="result-desc">Verdict — retaliation following protected whistleblower disclosure</div>
+      </div>
+      <div class="result-item reveal d2">
+        <div class="result-type">Wage &amp; Hour Class</div>
+        <div class="result-amount">$3.5M</div>
+        <div class="result-desc">Settlement — PAGA class action, statewide meal &amp; rest violations</div>
+      </div>
+      <div class="result-item reveal d3">
+        <div class="result-type">Personal Injury</div>
+        <div class="result-amount">$6.1M</div>
+        <div class="result-desc">Verdict — premises liability, severe spinal cord injury</div>
+      </div>
+      <div class="result-item reveal d4">
+        <div class="result-type">Discrimination</div>
+        <div class="result-amount">$2.3M</div>
+        <div class="result-desc">Settlement — race and gender discrimination, hostile work environment</div>
+      </div>
+      <div class="result-item reveal d5">
+        <div class="result-type">Car Accident</div>
+        <div class="result-amount">$1.1M</div>
+        <div class="result-desc">Settlement — rideshare accident, multiple fractures, surgery required</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ DIFFERENTIATORS ══════ -->
+<div class="section">
+  <p class="section-eyebrow reveal">Why Law Dog</p>
+  <div class="diff-layout">
+
+    <div class="diff-sticky">
+      <h2 class="section-heading reveal">A different<br>kind of firm.</h2>
+    </div>
+
+    <div class="diff-items">
+      <div class="diff-item reveal">
+        <span class="diff-num">01</span>
+        <div>
+          <div class="diff-title">Transparent by design</div>
+          <div class="diff-body">Real-time case tracking, document access, and direct attorney communication — all through a single portal. No more waiting for a callback to know where you stand.</div>
+        </div>
+      </div>
+      <div class="diff-item reveal d1">
+        <span class="diff-num">02</span>
+        <div>
+          <div class="diff-title">No fee unless you win</div>
+          <div class="diff-body">Pure contingency. We absorb all upfront costs and litigation expenses. Our interests are completely aligned with yours — we only collect when you do.</div>
+        </div>
+      </div>
+      <div class="diff-item reveal d2">
+        <span class="diff-num">03</span>
+        <div>
+          <div class="diff-title">Technology-driven process</div>
+          <div class="diff-body">We use modern tooling at every stage — from intake and discovery to case preparation and settlement negotiation. The result is faster timelines and better outcomes.</div>
+        </div>
+      </div>
+      <div class="diff-item reveal d3">
+        <span class="diff-num">04</span>
+        <div>
+          <div class="diff-title">We don't take every case</div>
+          <div class="diff-body">Our selectivity is a feature. When we accept your case, we've done the due diligence. Every client receives the full force of our resources — not a fraction of our attention.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════ CTA ══════ -->
+<div class="cta-wrap">
+  <div class="cta-inner">
+    <h2 class="cta-heading reveal">Ready to<br>fight back?</h2>
+    <p class="cta-sub reveal d1">Free consultation. No obligation. No fee unless we win.</p>
+    <div class="cta-actions reveal d2">
+      <button class="btn-primary" style="padding:15px 34px;font-size:15px;">Start your case →</button>
+      <button class="btn-secondary" style="padding:15px 26px;font-size:14px;">(833) 4LAWDOG</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ FOOTER ══════ -->
+<div class="footer-wrap">
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <img src="logo_white.png" alt="Law Dog">
+        </div>
+        <p class="footer-brand-desc">Personal injury trial attorneys serving Los Angeles and Orange County. No fee unless we win.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Practice Areas</h5>
+        <ul>
+          <li><a href="#">Personal Injury</a></li>
+          <li><a href="#">Employment Law</a></li>
+          <li><a href="#">Car Accidents</a></li>
+          <li><a href="#">Wrongful Termination</a></li>
+          <li><a href="#">Wage &amp; Hour</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Team</a></li>
+          <li><a href="#">Results</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Resources</h5>
+        <ul>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Client Portal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="#">(833) 4LAWDOG</a></li>
+          <li><a href="#">hello@lawdog.com</a></li>
+          <li><a href="#">Los Angeles</a></li>
+          <li><a href="#">Orange County</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Law Dog Legal Group, APC. All rights reserved.</span>
+      <p class="footer-disc">Past results do not guarantee similar outcomes. Attorney advertising. Licensed to practice law in California. No fee if no recovery. Contingency fee applies to portion collected.</p>
+    </div>
+  </footer>
+</div>
+
+<script>
+// ── Nav scroll behavior ──
+(function() {
+  const nav = document.querySelector('nav');
+
+  function onScroll() {
+    if (window.scrollY > 40) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+
+// ── Scroll Reveal ──
+(function() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+})();
+</script>
+</body>
+</html>

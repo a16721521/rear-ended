@@ -1,0 +1,157 @@
+---
+import Schema from '../components/Schema.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  schemas?: Record<string, unknown>[];
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogImage = '/og-default.jpg',
+  schemas = [],
+  noindex = false,
+} = Astro.props;
+
+const canonicalURL = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
+const siteOrigin = Astro.site?.origin ?? 'https://gotrearended.com';
+
+// Org schema present on every page.
+// TODO(NAP): telephone/address are placeholders — replace with the firm's real
+// contact details before launch. (555)-0199 is a reserved fictional number.
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': ['LegalService', 'Organization'],
+  '@id': `${siteOrigin}/#organization`,
+  name: 'Rear Ended',
+  url: siteOrigin,
+  logo: `${siteOrigin}/favicon-180.png`,
+  telephone: '+18005550199',
+  email: 'hello@gotrearended.com',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Los Angeles',
+    addressRegion: 'CA',
+    addressCountry: 'US',
+  },
+  areaServed: {
+    '@type': 'State',
+    name: 'California',
+  },
+  priceRange: 'Contingency — no fee unless we win',
+};
+
+const breadcrumbItems = Astro.url.pathname
+  .split('/')
+  .filter(Boolean)
+  .reduce<{ name: string; url: string }[]>((acc, segment, i, arr) => {
+    const url = `${siteOrigin}/${arr.slice(0, i + 1).join('/')}/`;
+    const name = segment
+      .split('-')
+      .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ');
+    acc.push({ name, url });
+    return acc;
+  }, []);
+
+const breadcrumbSchema = breadcrumbItems.length > 0
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: siteOrigin },
+        ...breadcrumbItems.map((item, i) => ({
+          '@type': 'ListItem',
+          position: i + 2,
+          name: item.name,
+          item: item.url,
+        })),
+      ],
+    }
+  : null;
+
+const allSchemas = [
+  orgSchema,
+  ...(breadcrumbSchema ? [breadcrumbSchema] : []),
+  ...schemas,
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={ogImage.startsWith('http') ? ogImage : `${siteOrigin}${ogImage}`} />
+    <meta property="og:site_name" content="Rear Ended" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage.startsWith('http') ? ogImage : `${siteOrigin}${ogImage}`} />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png" />
+
+    <!-- Schema.org JSON-LD -->
+    <Schema schemas={allSchemas} />
+
+    <!-- Google tag (gtag.js) — TODO: add Rear Ended's own GA4 measurement ID.
+         Removed Law Dog's ID (G-J5LER585NS) so this site does not report into their property. -->
+
+  </head>
+  <body>
+    <slot />
+
+    <!-- Scroll reveal -->
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => entries.forEach(e => e.target.classList.toggle('in', e.isIntersecting)),
+        { threshold: 0.1 }
+      );
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+
+    <!-- GA4 — phone click tracking (matches static site's Phase 2 instrumentation) -->
+    <script>
+      document.querySelectorAll('a[href^="tel:"]').forEach((el) => {
+        el.addEventListener('click', () => {
+          if (typeof (window as any).gtag !== 'undefined') {
+            (window as any).gtag('event', 'phone_click', { page_path: window.location.pathname });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

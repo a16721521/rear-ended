@@ -1,0 +1,26 @@
+---
+---
+
+<div class="call-bar" role="navigation" aria-label="Mobile contact">
+  <a href="tel:+18005550199" class="cb-call">Call (800) 555-0199</a>
+  <a href="/get-started/" class="cb-start">Free case review →</a>
+</div>
+
+<style>
+.call-bar {
+  display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 180;
+  background: var(--black); border-top: 1px solid rgba(255,255,255,.1);
+  padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); gap: 10px;
+}
+.call-bar a {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+  font-size: 14px; font-weight: 700; padding: 13px; border-radius: 9px;
+  text-decoration: none; letter-spacing: -.02em;
+}
+.call-bar .cb-call { background: var(--gradient); color: var(--black); }
+.call-bar .cb-start { background: rgba(255,255,255,.1); color: var(--white); }
+
+@media (max-width: 768px) {
+  .call-bar { display: flex; }
+}
+</style>

@@ -1,0 +1,309 @@
+[
+  {
+    "slug": "car-accident-lawyer",
+    "title": "Car Accident Lawyer",
+    "shortTitle": "Car Accidents",
+    "type": "car accident",
+    "heroLine": "Hit by a careless driver. We take it personally.",
+    "description": "California roads are dangerous. When another driver's negligence puts you in the hospital, Law Dog fights for maximum compensation \u2014 medical bills, lost wages, pain and suffering.",
+    "metaTitle": "Car Accident Lawyer in {city} | Law Dog",
+    "metaDescription": "Injured in a car accident in {city}? Law Dog's trial attorneys fight for maximum compensation. Free consultation. No fee unless we win.",
+    "schema_type": "LegalService",
+    "practice_code": "PI-AUTO",
+    "statute_of_limitations": "2 years (CA CCP \u00a7 335.1)",
+    "common_injuries": [
+      "whiplash",
+      "traumatic brain injury",
+      "spinal cord injury",
+      "broken bones",
+      "internal injuries"
+    ],
+    "faqs": [
+      {
+        "q": "What should I do immediately after a car accident in {city}?",
+        "a": "Call 911, document the scene with photos, exchange insurance information, and seek medical attention even if you feel fine. Do not admit fault. Then call Law Dog \u2014 we offer free consultations and can advise you before you speak to any insurance adjuster."
+      },
+      {
+        "q": "How long do I have to file a car accident claim in California?",
+        "a": "California's statute of limitations for car accident injury claims is 2 years from the date of the accident (CCP \u00a7 335.1). Claims against government entities must be filed within 6 months. Do not wait \u2014 evidence disappears and witnesses forget."
+      },
+      {
+        "q": "What is my car accident case worth in {city}?",
+        "a": "Every case is different. Compensation may include medical expenses (past and future), lost wages, loss of earning capacity, pain and suffering, and property damage. Cases in Los Angeles County frequently reach six or seven figures when injuries are serious."
+      },
+      {
+        "q": "Do I need a lawyer if the other driver was clearly at fault?",
+        "a": "Yes. Insurance companies \u2014 even the at-fault driver's \u2014 are in the business of minimizing payouts. An experienced trial attorney ensures you don't accept a lowball settlement that fails to cover your future medical needs."
+      }
+    ]
+  },
+  {
+    "slug": "truck-accident-lawyer",
+    "title": "Truck Accident Lawyer",
+    "shortTitle": "Truck Accidents",
+    "type": "truck accident",
+    "heroLine": "Commercial carriers have legal teams on standby. You need one too.",
+    "description": "18-wheeler and commercial truck accidents cause catastrophic injuries. Multiple parties may be liable \u2014 the driver, the carrier, the shipper, the truck manufacturer. Law Dog investigates all of them.",
+    "metaTitle": "Truck Accident Lawyer in {city} | Law Dog",
+    "metaDescription": "Seriously injured in a truck accident in {city}? Law Dog's attorneys pursue carriers, drivers, and shippers. Free consultation. No fee unless we win.",
+    "schema_type": "LegalService",
+    "practice_code": "PI-TRUCK",
+    "statute_of_limitations": "2 years (CA CCP \u00a7 335.1)",
+    "common_injuries": [
+      "traumatic brain injury",
+      "spinal cord injury",
+      "internal organ damage",
+      "crush injuries",
+      "wrongful death"
+    ],
+    "faqs": [
+      {
+        "q": "Who can be held liable in a truck accident in {city}?",
+        "a": "In commercial truck accidents, liability can extend to the truck driver, the trucking company, the cargo loader, the truck manufacturer (if a defect contributed), and even the company that leased the vehicle. Law Dog's investigators identify every responsible party."
+      },
+      {
+        "q": "How is a truck accident case different from a car accident case?",
+        "a": "Truck accident cases involve federal FMCSA regulations, complex insurance policies (often $1M+ in coverage), black box data that must be preserved immediately, and multiple defendants. Speed of action matters \u2014 trucking companies deploy investigators within hours of a serious crash."
+      },
+      {
+        "q": "What damages can I recover after a truck accident?",
+        "a": "Medical expenses, future care costs, lost income, diminished earning capacity, pain and suffering, emotional distress, and in cases of gross negligence, punitive damages. Truck accident verdicts in California frequently exceed seven figures."
+      }
+    ]
+  },
+  {
+    "slug": "motorcycle-accident-lawyer",
+    "title": "Motorcycle Accident Lawyer",
+    "shortTitle": "Motorcycle Accidents",
+    "type": "motorcycle accident",
+    "heroLine": "Riders get blamed. We change that narrative.",
+    "description": "Motorcyclists are disproportionately blamed in accidents. Law Dog's attorneys know the law, know the bias, and build cases that put responsibility where it belongs \u2014 on the negligent driver.",
+    "metaTitle": "Motorcycle Accident Lawyer in {city} | Law Dog",
+    "metaDescription": "Injured in a motorcycle accident in {city}? Don't let insurance companies blame the rider. Law Dog fights back. Free consultation. No fee unless we win.",
+    "schema_type": "LegalService",
+    "practice_code": "PI-MOTO",
+    "statute_of_limitations": "2 years (CA CCP \u00a7 335.1)",
+    "common_injuries": [
+      "road rash",
+      "traumatic brain injury",
+      "fractures",
+      "amputations",
+      "spinal injuries"
+    ],
+    "faqs": [
+      {
+        "q": "Can I recover damages even if I was lane splitting at the time of the accident?",
+        "a": "Yes. California is the only state where lane splitting is legal (CVC \u00a7 21658.1). The fact that you were lane splitting does not automatically reduce or eliminate your claim. Law Dog has successfully recovered compensation for riders injured while lane splitting legally."
+      },
+      {
+        "q": "Do I need to wear a helmet to have a valid injury claim?",
+        "a": "California law requires helmets (CVC \u00a7 27803). Riding without one may reduce your compensation under comparative fault rules, but does not bar your claim. An experienced attorney will minimize the impact of this factor on your recovery."
+      }
+    ]
+  },
+  {
+    "slug": "slip-and-fall-lawyer",
+    "title": "Slip and Fall Lawyer",
+    "shortTitle": "Slip & Fall",
+    "type": "slip and fall",
+    "heroLine": "Property owners have a duty. When they fail it, we hold them to account.",
+    "description": "Slip, trip, and fall accidents on dangerous property are preventable. Law Dog's premises liability attorneys pursue compensation from negligent property owners, landlords, and businesses.",
+    "metaTitle": "Slip and Fall Lawyer in {city} | Law Dog",
+    "metaDescription": "Injured in a slip and fall accident in {city}? Law Dog pursues negligent property owners for full compensation. Free consultation. No fee unless we win.",
+    "schema_type": "LegalService",
+    "practice_code": "PI-PREMISES",
+    "statute_of_limitations": "2 years (CA CCP \u00a7 335.1)",
+    "common_injuries": [
+      "hip fractures",
+      "wrist fractures",
+      "head injuries",
+      "knee injuries",
+      "shoulder injuries"
+    ],
+    "faqs": [
+      {
+        "q": "What do I need to prove in a slip and fall case in California?",
+        "a": "You must show the property owner knew or should have known about the dangerous condition, failed to fix or warn about it, and that this failure caused your injuries. Documentation is critical \u2014 photographs of the hazard, incident reports, and witness statements all strengthen your case."
+      },
+      {
+        "q": "What if the property where I fell is owned by the government?",
+        "a": "Claims against government entities in California require a Government Tort Claim filed within 6 months of the incident (Government Code \u00a7 911.2). Missing this deadline bars your claim entirely. Contact Law Dog immediately if you were injured on government property."
+      }
+    ]
+  },
+  {
+    "slug": "uber-lyft-accident-lawyer",
+    "title": "Uber & Lyft Accident Lawyer",
+    "shortTitle": "Rideshare Accidents",
+    "type": "rideshare accident",
+    "heroLine": "Rideshare companies are not your friend after a crash.",
+    "description": "Uber and Lyft accidents involve layered insurance questions depending on the driver's app status. Law Dog navigates the complexity and maximizes your recovery \u2014 whether you were a passenger, pedestrian, or another driver.",
+    "metaTitle": "Uber & Lyft Accident Lawyer in {city} | Law Dog",
+    "metaDescription": "Injured in an Uber or Lyft accident in {city}? Law Dog handles rideshare insurance complexity. Free consultation. No fee unless we win.",
+    "schema_type": "LegalService",
+    "practice_code": "PI-RIDESHARE",
+    "statute_of_limitations": "2 years (CA CCP \u00a7 335.1)",
+    "common_injuries": [
+      "whiplash",
+      "traumatic brain injury",
+      "broken bones",
+      "soft tissue injuries"
+    ],
+    "faqs": [
+      {
+        "q": "Is Uber or Lyft liable if their driver injured me?",
+        "a": "It depends on the driver's app status at the time of the crash. If the driver was on an active trip, Uber/Lyft carries up to $1 million in liability coverage. If the app was on but no trip accepted, a contingent policy applies ($50K-$100K). Law Dog determines which policy covers your injuries."
+      },
+      {
+        "q": "What if I was a passenger in an Uber or Lyft that was in an accident?",
+        "a": "Passengers are generally covered under Uber/Lyft's $1M liability policy regardless of fault. You may also have a claim against the other driver. Law Dog pursues all available coverage to maximize your compensation."
+      }
+    ]
+  },
+  {
+    "slug": "wrongful-death-lawyer",
+    "title": "Wrongful Death Lawyer",
+    "shortTitle": "Wrongful Death",
+    "type": "wrongful death",
+    "heroLine": "For families who lost someone who should still be here.",
+    "description": "When negligence takes a life, surviving family members deserve justice and financial security. Law Dog handles wrongful death cases with the gravity and tenacity they demand.",
+    "metaTitle": "Wrongful Death Lawyer in {city} | Law Dog",
+    "metaDescription": "Lost a loved one due to negligence in {city}? Law Dog's wrongful death attorneys fight for justice and your family's financial security. Free consultation.",
+    "schema_type": "LegalService",
+    "practice_code": "PI-WD",
+    "statute_of_limitations": "2 years (CA CCP \u00a7 335.1)",
+    "common_injuries": [
+      "fatal injuries from vehicle accidents",
+      "workplace fatalities",
+      "medical malpractice",
+      "product defects"
+    ],
+    "faqs": [
+      {
+        "q": "Who can file a wrongful death lawsuit in California?",
+        "a": "Under California Code of Civil Procedure \u00a7 377.60, eligible claimants include the surviving spouse or domestic partner, children, and in some cases grandchildren and other dependents. The personal representative of the decedent's estate may also bring a survivor action."
+      },
+      {
+        "q": "What damages are available in a wrongful death case?",
+        "a": "Surviving family members may recover loss of financial support, loss of gifts and benefits, funeral and burial expenses, and the reasonable value of household services. Separate survivor claims may recover lost earnings, medical expenses, and conscious pain and suffering before death."
+      }
+    ]
+  },
+  {
+    "slug": "catastrophic-injury-lawyer",
+    "title": "Catastrophic Injury Lawyer",
+    "shortTitle": "Catastrophic Injury",
+    "type": "catastrophic injury",
+    "heroLine": "Spinal cord. TBI. Amputation. These injuries don't resolve \u2014 they redefine life.",
+    "description": "Catastrophic injuries require a dramatically different damages framework than ordinary personal injury cases. Law Dog builds lifetime damage models with medical experts, life care planners, and forensic economists to pursue every dollar you'll ever need.",
+    "metaTitle": "Catastrophic Injury Lawyer in {city} | Law Dog",
+    "metaDescription": "Catastrophic injury in {city}? Law Dog builds lifetime damage models with medical experts. Free consultation. No fee unless we win.",
+    "schema_type": "LegalService",
+    "practice_code": "PI-CAT",
+    "statute_of_limitations": "2 years (CA CCP \u00a7 335.1); 6 months for government entities (Gov. Code \u00a7 911.2)",
+    "common_injuries": [
+      "spinal cord injury",
+      "traumatic brain injury",
+      "amputation",
+      "severe burns",
+      "vision or hearing loss",
+      "anoxic brain injury",
+      "polytrauma"
+    ],
+    "faqs": [
+      {
+        "q": "What qualifies as a catastrophic injury under California law in {city}?",
+        "a": "California law does not define catastrophic injury in a single statute, but courts consistently treat spinal cord injuries, traumatic brain injuries, amputations, severe burns, vision or hearing loss, anoxic brain injuries, and polytrauma as catastrophic because of their permanent, life-altering nature. These cases require a dramatically different damages framework \u2014 lifetime cost projections, life care plans, and forensic economic analysis rather than simple past-expense tallying."
+      },
+      {
+        "q": "How long do I have to file a catastrophic injury lawsuit in California?",
+        "a": "The general statute of limitations is two years from the date of injury under CCP \u00a7 335.1. If the defendant is a government entity, you have only six months to file a government tort claim under Government Code \u00a7 911.2. Evidence preservation is critical from day one \u2014 waiting even weeks can result in lost surveillance footage, destroyed black box data, and fading witness memory."
+      },
+      {
+        "q": "What is a life care plan and why do I need one?",
+        "a": "A life care plan is a comprehensive, expert-authored document that projects every medical and support cost a catastrophically injured person will incur for the rest of their life \u2014 surgeries, medications, in-home care, adaptive equipment, home modifications, and vocational therapy. Without one, insurers make low offers based on past expenses only."
+      },
+      {
+        "q": "Can I recover damages for lifetime care needs if the insurance policy limit is too low?",
+        "a": "Possibly. When the at-fault party's insurance is insufficient, we investigate every avenue of additional recovery: your own underinsured motorist coverage, umbrella policies, employer coverage, property owner coverage, and product liability claims if defective equipment contributed."
+      }
+    ]
+  },
+  {
+    "slug": "pedestrian-accident-lawyer",
+    "title": "Pedestrian & Bicycle Accident Lawyer",
+    "shortTitle": "Pedestrian & Bicycle",
+    "type": "pedestrian or bicycle accident",
+    "heroLine": "Crosswalk and sidewalk collisions. Often catastrophic \u2014 we pursue every dollar.",
+    "description": "Pedestrians and cyclists have no protective shell. When a driver fails to yield, passes too close, or doors a cyclist, California law puts the duty squarely on the driver. Law Dog pursues full recovery for every pedestrian and bicycle accident victim.",
+    "metaTitle": "Pedestrian & Bicycle Accident Lawyer in {city} | Law Dog",
+    "metaDescription": "Struck as a pedestrian or cyclist in {city}? California law protects you. Law Dog fights for full recovery. Free consultation. No fee unless we win.",
+    "schema_type": "LegalService",
+    "practice_code": "PI-PED",
+    "statute_of_limitations": "2 years (CA CCP \u00a7 335.1); 6 months for government entities (Gov. Code \u00a7 911.2)",
+    "common_injuries": [
+      "traumatic brain injury",
+      "spinal cord injury",
+      "multiple fractures",
+      "road rash",
+      "internal injuries",
+      "wrongful death"
+    ],
+    "faqs": [
+      {
+        "q": "Who is at fault when a driver hits a pedestrian in a crosswalk in {city}?",
+        "a": "California Vehicle Code \u00a7 21950 requires drivers to yield the right-of-way to pedestrians crossing in any marked or unmarked crosswalk at intersections. When a driver fails to yield and strikes a pedestrian in a crosswalk, they are presumptively negligent."
+      },
+      {
+        "q": "What if the driver who hit me fled the scene?",
+        "a": "Hit-and-run claims can still be compensated even when the at-fault driver is never identified. California requires uninsured motorist (UM) coverage that applies to hit-and-run incidents, including for pedestrians and cyclists. We identify all available coverage and aggressively pursue the full recovery."
+      },
+      {
+        "q": "Does California require drivers to give cyclists three feet of space?",
+        "a": "Yes. California Vehicle Code \u00a7 21760 requires drivers to maintain at least three feet of clearance when passing a cyclist. When a driver passes with less clearance and strikes or forces a cyclist off the road, the violation is evidence of negligence."
+      },
+      {
+        "q": "What is dooring and can I sue if a car door hit me while cycling?",
+        "a": "Dooring occurs when a parked driver or passenger opens a car door into a cyclist's path without checking for oncoming traffic. California Vehicle Code \u00a7 22517 prohibits this. When a door strikes a cyclist or forces a swerve into traffic, the person who opened the door is liable for all resulting injuries."
+      }
+    ]
+  },
+  {
+    "slug": "premises-liability-lawyer",
+    "title": "Premises Liability Lawyer",
+    "shortTitle": "Premises Liability",
+    "type": "premises liability",
+    "heroLine": "Unsafe properties, inadequate security, negligent maintenance. Owners are accountable.",
+    "description": "Property owners in California have a legal duty to maintain safe conditions for visitors. When negligent security, a dangerous condition, or a dog bite injures you, Law Dog holds the responsible property owner fully accountable.",
+    "metaTitle": "Premises Liability Lawyer in {city} | Law Dog",
+    "metaDescription": "Injured on someone else's property in {city}? California law holds owners accountable. Free consultation. No fee unless we win.",
+    "schema_type": "LegalService",
+    "practice_code": "PI-PREM",
+    "statute_of_limitations": "2 years (CA CCP \u00a7 335.1)",
+    "common_injuries": [
+      "traumatic brain injury",
+      "fractures",
+      "dog bite injuries",
+      "spinal injuries",
+      "lacerations requiring reconstructive surgery"
+    ],
+    "faqs": [
+      {
+        "q": "What is premises liability in California?",
+        "a": "Premises liability holds property owners and occupiers responsible for injuries caused by dangerous conditions they knew about, or should have known about, and failed to fix or warn visitors about. This covers negligent security, dangerous conditions, dog bites, and more."
+      },
+      {
+        "q": "Does California have strict liability for dog bites?",
+        "a": "Yes. California Civil Code \u00a7 3342 imposes strict liability on dog owners for bites that occur in a public place or while the victim is lawfully on private property \u2014 regardless of whether the dog had ever bitten anyone before. There is no 'one bite' exception in California."
+      },
+      {
+        "q": "What if the property owner says I was trespassing?",
+        "a": "Trespassing can reduce the duty of care owed, but property owners still cannot maintain conditions specifically designed to injure trespassers, and children are given special protection under the attractive nuisance doctrine. We evaluate the specific facts of your visit to determine your legal status and the owner's duty."
+      },
+      {
+        "q": "What is negligent security and how do I know if I have a claim?",
+        "a": "Negligent security claims arise when a property owner fails to provide reasonable security measures \u2014 adequate lighting, functioning locks, security personnel \u2014 given a known history of criminal activity on or near the property, and that failure enables an assault or other crime against a visitor."
+      }
+    ]
+  }
+]

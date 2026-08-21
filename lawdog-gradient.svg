@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="200" viewBox="0 0 800 200">
+  <defs>
+    <linearGradient id="lawdog-gradient" x1="0%" y1="0%" x2="100%" y2="0%" gradientTransform="rotate(110, 0.5, 0.5)">
+      <stop offset="0%"   stop-color="#9B4871"/>
+      <stop offset="33%"  stop-color="#F42659"/>
+      <stop offset="66%"  stop-color="#F40502"/>
+      <stop offset="100%" stop-color="#F77044"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="200" fill="url(#lawdog-gradient)"/>
+</svg>

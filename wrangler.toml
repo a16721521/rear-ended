@@ -1,0 +1,12 @@
+name = "gotrearended"
+compatibility_date = "2026-06-09"
+main = "workers/intake.js"
+
+# Deploy the Astro build output (run `npm run build` first), NOT the repo root.
+# The old Law Dog config served `.` (root static HTML); this project is Astro-native.
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+
+[[send_email]]
+name = "EMAIL"

@@ -1,0 +1,437 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import practiceAreas from '../../data/practice-areas.json';
+import cities from '../../data/cities.json';
+
+export function getStaticPaths() {
+  return practiceAreas.flatMap(practice =>
+    cities.map(city => ({
+      params: { practice: practice.slug, city: city.slug },
+      props: { practice, city },
+    }))
+  );
+}
+
+const { practice, city } = Astro.props;
+
+// Interpolate {city} tokens in strings
+const t = (s: string) => s.replace(/{city}/g, city.name);
+
+// Sibling cities for internal linking (same county, different city)
+const siblingsInCounty = cities
+  .filter(c => c.county === city.county && c.slug !== city.slug)
+  .slice(0, 6);
+
+// Other practice areas for cross-linking
+const otherPractices = practiceAreas.filter(p => p.slug !== practice.slug);
+
+const pageTitle = t(practice.metaTitle);
+const pageDescription = t(practice.metaDescription);
+const pageUrl = `https://lawdogla.com/${practice.slug}/${city.slug}/`;
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'LegalService',
+  name: `Law Dog — ${practice.title} in ${city.name}`,
+  description: t(practice.description),
+  url: pageUrl,
+  provider: { '@id': 'https://lawdogla.com/#organization' },
+  areaServed: [
+    {
+      '@type': 'City',
+      name: city.name,
+      containedInPlace: {
+        '@type': 'State',
+        name: 'California',
+      },
+    },
+  ],
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: city.lat,
+    longitude: city.lng,
+  },
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: practice.faqs.map(faq => ({
+    '@type': 'Question',
+    name: t(faq.q),
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: t(faq.a),
+    },
+  })),
+};
+---
+
+<PageLayout
+  title={pageTitle}
+  description={pageDescription}
+  schemas={[serviceSchema, faqSchema]}
+>
+
+  <!-- ── BREADCRUMB ─────────────────────────────────────────────── -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="wrap">
+      <ol>
+        <li><a href="/">Law Dog</a></li>
+        <li><a href={`/${practice.slug}/`}>{practice.shortTitle}</a></li>
+        <li aria-current="page">{city.name}</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── HERO ──────────────────────────────────────────────────── -->
+  <section class="lp-hero">
+    <div class="wrap">
+      <p class="label">Serving {city.county} County</p>
+      <h1 class="lp-hero__h reveal">
+        {practice.title}<br>
+        <em>in {city.name}</em>
+      </h1>
+      <p class="lp-hero__sub reveal">
+        {t(practice.heroLine)}
+      </p>
+      <div class="lp-hero__actions reveal">
+        <a href="/#contact" class="btn btn--primary">Free Case Evaluation</a>
+        <a href="tel:+18334529364" class="btn">(833) 4LAWDOG</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── LOCAL CONTEXT ──────────────────────────────────────────── -->
+  <section class="lp-local">
+    <div class="wrap">
+      <div class="lp-local__grid">
+
+        <div class="lp-local__col">
+          <p class="label" style="margin-bottom:16px;">About {city.name}</p>
+          <p class="lp-local__intro">
+            {city.name} is home to {city.population.toLocaleString()} residents
+            in {city.county} County. {practice.type.charAt(0).toUpperCase() + practice.type.slice(1)} cases
+            in {city.name} are heard at the <strong>{city.courthouse}</strong>,
+            located at {city.courthouse_address}.
+          </p>
+          <p class="lp-local__intro" style="margin-top:14px;">
+            Serious injuries from {practice.type}s are treated at local trauma centers
+            including {city.trauma_centers.slice(0, 2).join(' and ')}.
+            Law Dog represents {city.name} residents throughout every stage of the legal process —
+            from initial investigation to trial if needed.
+          </p>
+        </div>
+
+        <div class="lp-local__facts">
+          <div class="lp-local__fact">
+            <span class="lp-local__fact-label label">Courthouse</span>
+            <span class="lp-local__fact-val">{city.courthouse}</span>
+          </div>
+          <div class="lp-local__fact">
+            <span class="lp-local__fact-label label">County</span>
+            <span class="lp-local__fact-val">{city.county} County</span>
+          </div>
+          <div class="lp-local__fact">
+            <span class="lp-local__fact-label label">Population</span>
+            <span class="lp-local__fact-val">{city.population.toLocaleString()}</span>
+          </div>
+          <div class="lp-local__fact">
+            <span class="lp-local__fact-label label">Statute of Limitations</span>
+            <span class="lp-local__fact-val">{practice.statute_of_limitations}</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DANGEROUS CORRIDORS ────────────────────────────────────── -->
+  {(practice.practice_code === 'PI-AUTO' || practice.practice_code === 'PI-TRUCK' || practice.practice_code === 'PI-MOTO' || practice.practice_code === 'PI-RIDESHARE') && (
+    <section class="lp-corridors">
+      <div class="wrap">
+        <div class="section-header">
+          <span class="section-header__label">High-Accident Areas in {city.name}</span>
+        </div>
+        <ul class="lp-corridors__list">
+          {city.dangerous_corridors.map(corridor => (
+            <li>
+              <span class="mono" style="color:var(--gray-400);font-size:9px;letter-spacing:.12em;">LOCATION</span>
+              <span>{corridor}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="lp-corridors__note">
+          These corridors see disproportionate accident rates due to traffic volume, road design,
+          or intersection geometry. If you were injured near any of these areas, Law Dog can
+          investigate whether a third party — including a government entity — may share liability.
+        </p>
+      </div>
+    </section>
+  )}
+
+  <!-- ── TRAUMA CENTERS ─────────────────────────────────────────── -->
+  <section class="lp-trauma">
+    <div class="wrap">
+      <div class="section-header">
+        <span class="section-header__label">Trauma Centers Near {city.name}</span>
+      </div>
+      <ul class="lp-trauma__list">
+        {city.trauma_centers.map(center => (
+          <li>{center}</li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── FAQ ────────────────────────────────────────────────────── -->
+  <section class="lp-faq">
+    <div class="wrap">
+      <div class="lp-faq__grid">
+        <div class="lp-faq__aside">
+          <p class="label" style="margin-bottom:16px;">FAQ</p>
+          <h2 class="lp-faq__h">{practice.shortTitle} Questions<br>in {city.name}</h2>
+          <p style="font-size:14px;color:var(--gray-400);line-height:1.6;margin-top:12px;">
+            California law. {city.name}-specific context.
+          </p>
+        </div>
+        <ul class="faq__list">
+          {practice.faqs.map(faq => (
+            <li class="faq__item">
+              <button class="faq__q" aria-expanded="false">
+                <span>{t(faq.q)}</span>
+                <span class="faq__q-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq__a">
+                <p class="faq__a-inner">{t(faq.a)}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── NEARBY CITIES ──────────────────────────────────────────── -->
+  {siblingsInCounty.length > 0 && (
+    <section class="lp-nearby">
+      <div class="wrap">
+        <div class="section-header">
+          <span class="section-header__label">Also Serving {city.county} County</span>
+        </div>
+        <ul class="lp-nearby__list">
+          {siblingsInCounty.map(c => (
+            <li>
+              <a href={`/${practice.slug}/${c.slug}/`}>
+                {practice.title} in {c.name} →
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <!-- ── OTHER PRACTICE AREAS ───────────────────────────────────── -->
+  <section class="lp-cross">
+    <div class="wrap">
+      <div class="section-header">
+        <span class="section-header__label">Other Cases We Handle in {city.name}</span>
+      </div>
+      <ul class="lp-cross__list">
+        {otherPractices.slice(0, 4).map(p => (
+          <li>
+            <a href={`/${p.slug}/${city.slug}/`}>
+              {p.title} in {city.name} →
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── CTA ────────────────────────────────────────────────────── -->
+  <section class="lp-cta">
+    <div class="wrap">
+      <div class="lp-cta__inner">
+        <div>
+          <h2 class="lp-cta__h reveal">
+            Injured in {city.name}?<br>
+            <em>We're ready.</em>
+          </h2>
+          <p class="lp-cta__sub">Free consultation. No fee unless we win.</p>
+        </div>
+        <div class="lp-cta__actions">
+          <a href="/#contact" class="btn btn--primary">Get a Free Case Review</a>
+          <a href="tel:+18334529364" class="btn">(833) 4LAWDOG</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</PageLayout>
+
+<style>
+.breadcrumb {
+  background: var(--gray-100);
+  border-bottom: var(--rule);
+  padding: 12px 0;
+}
+.breadcrumb ol {
+  list-style: none; display: flex; gap: 8px;
+font-size: 10px;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--gray-400);
+}
+.breadcrumb li:not(:last-child)::after { content: '/'; margin-left: 8px; }
+.breadcrumb a { color: var(--gray-400); text-decoration: none; }
+.breadcrumb a:hover { color: var(--black); }
+
+.lp-hero { padding: 80px 0; border-bottom: var(--rule-heavy); }
+.lp-hero__h {
+font-size: clamp(40px, 6.5vw, 80px);
+  font-weight: 900; letter-spacing: -.04em; line-height: .92;
+  margin: 16px 0 24px;
+}
+.lp-hero__h em { font-style: italic; color: var(--accent); }
+.lp-hero__sub {
+  font-size: 15px; color: var(--gray-400);
+letter-spacing: .04em;
+  max-width: 52ch; margin-bottom: 36px;
+}
+.lp-hero__actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+.lp-local { padding: 60px 0; border-bottom: var(--rule-heavy); }
+.lp-local__grid { display: grid; grid-template-columns: 1fr 320px; gap: 60px; align-items: start; }
+.lp-local__intro { font-size: 15px; line-height: 1.75; color: var(--gray-700); }
+.lp-local__facts { display: flex; flex-direction: column; gap: 0; border: var(--rule-heavy); }
+.lp-local__fact { padding: 20px 24px; border-bottom: var(--rule-heavy); }
+.lp-local__fact:last-child { border-bottom: none; }
+.lp-local__fact-label { display: block; margin-bottom: 6px; }
+.lp-local__fact-val { font-size: 14px; font-weight: 600; }
+
+.lp-corridors { padding: 60px 0; border-bottom: var(--rule-heavy); }
+.lp-corridors__list {
+  list-style: none; margin-top: 0; border: var(--rule-heavy); border-top: none;
+}
+.lp-corridors__list li {
+  display: flex; gap: 20px; align-items: baseline;
+  padding: 16px 24px; border-bottom: var(--rule);
+  font-size: 14px;
+}
+.lp-corridors__list li:last-child { border-bottom: none; }
+.lp-corridors__note {
+  margin-top: 20px; font-size: 12px; line-height: 1.65;
+  color: var(--gray-400); max-width: 72ch;
+}
+
+.lp-trauma { padding: 60px 0; border-bottom: var(--rule-heavy); }
+.lp-trauma__list {
+  list-style: none; border: var(--rule-heavy); border-top: none;
+}
+.lp-trauma__list li {
+  padding: 16px 24px; border-bottom: var(--rule);
+  font-size: 14px;
+}
+.lp-trauma__list li:last-child { border-bottom: none; }
+
+.lp-faq { padding: 80px 0; border-bottom: var(--rule-heavy); }
+.lp-faq__grid { display: grid; grid-template-columns: 260px 1fr; gap: 60px; }
+.lp-faq__h {
+font-size: clamp(22px, 2.5vw, 30px);
+  font-weight: 900; letter-spacing: -.02em; line-height: 1.05;
+}
+
+/* Shared FAQ styles (duplicated for scoping) */
+.faq__list { list-style: none; }
+.faq__item { border-top: var(--rule); overflow: hidden; }
+.faq__q {
+  width: 100%; background: none; border: none; text-align: left; cursor: pointer;
+  display: grid; grid-template-columns: 1fr 28px; gap: 16px; align-items: center;
+  padding: 20px 0; font-family: inherit; font-size: 15px; font-weight: 600;
+  letter-spacing: -.01em; color: var(--black);
+}
+.faq__q-icon {
+  width: 28px; height: 28px; border: 1px solid var(--gray-200); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 300; color: var(--gray-400); flex-shrink: 0;
+  transition: transform .3s, background .2s, color .2s;
+}
+.faq__q[aria-expanded="true"] .faq__q-icon {
+  transform: rotate(45deg); background: var(--black); color: var(--white); border-color: var(--black);
+}
+.faq__a { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+.faq__a-inner { padding: 0 0 20px; font-size: 14px; line-height: 1.7; color: var(--gray-700); }
+.faq__item.open .faq__a { max-height: 500px; }
+
+.lp-nearby { padding: 48px 0; border-bottom: var(--rule-heavy); }
+.lp-nearby__list {
+  list-style: none; display: flex; flex-wrap: wrap; gap: 0;
+  border: var(--rule-heavy); border-top: none;
+}
+.lp-nearby__list li {
+  flex: 0 0 33.333%; border-right: var(--rule-heavy); border-bottom: var(--rule);
+}
+.lp-nearby__list li:nth-child(3n) { border-right: none; }
+.lp-nearby__list a {
+  display: block; padding: 16px 24px;
+  font-size: 13px; color: var(--gray-700);
+  text-decoration: none; transition: background .15s;
+}
+.lp-nearby__list a:hover { background: var(--gray-100); color: var(--black); }
+
+.lp-cross { padding: 48px 0; border-bottom: var(--rule-heavy); }
+.lp-cross__list {
+  list-style: none; display: grid; grid-template-columns: repeat(2, 1fr);
+  border: var(--rule-heavy); border-top: none;
+}
+.lp-cross__list li { border-right: var(--rule-heavy); border-bottom: var(--rule); }
+.lp-cross__list li:nth-child(2n) { border-right: none; }
+.lp-cross__list a {
+  display: block; padding: 16px 24px;
+  font-size: 13px; color: var(--gray-700);
+  text-decoration: none; transition: background .15s;
+}
+.lp-cross__list a:hover { background: var(--gray-100); color: var(--black); }
+
+.lp-cta { padding: 100px 0; border-bottom: var(--rule-heavy); }
+.lp-cta__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 40px; flex-wrap: wrap;
+}
+.lp-cta__h {
+font-size: clamp(32px, 4.5vw, 56px);
+  font-weight: 900; letter-spacing: -.03em; line-height: .95;
+}
+.lp-cta__h em { font-style: italic; color: var(--accent); }
+.lp-cta__sub {
+font-size: 11px;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gray-400); margin-top: 12px;
+}
+.lp-cta__actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+@media (max-width: 900px) {
+  .lp-local__grid, .lp-faq__grid { grid-template-columns: 1fr; gap: 40px; }
+  .lp-nearby__list li { flex: 0 0 50%; }
+  .lp-nearby__list li:nth-child(3n) { border-right: var(--rule-heavy); }
+  .lp-nearby__list li:nth-child(2n) { border-right: none; }
+  .lp-cta__inner { flex-direction: column; align-items: flex-start; }
+}
+</style>
+
+<script>
+document.querySelectorAll('.faq__q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq__item') as HTMLElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq__item').forEach(i => {
+      i.classList.remove('open');
+      (i.querySelector('.faq__q') as HTMLElement)?.setAttribute('aria-expanded', 'false');
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  });
+});
+</script>

@@ -1,0 +1,21 @@
+node_modules
+dist
+src
+workers
+.git
+.DS_Store
+Mockups
+Images
+my-clone
+*.md
+package.json
+package-lock.json
+tsconfig.json
+astro.config.mjs
+law_dog_premium.html
+law_dog_premium copy.html
+oneself-mockup.html
+hedgehog-game.html
+hero.jpeg
+hero2.jpeg
+skills-lock.json

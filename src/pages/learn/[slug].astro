@@ -1,0 +1,231 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('learn', p => !p.data.draft);
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.publishDate.toISOString(),
+  dateModified: (post.data.updatedDate ?? post.data.publishDate).toISOString(),
+  author: {
+    '@type': 'Person',
+    name: post.data.authorName,
+    jobTitle: post.data.authorTitle,
+    worksFor: { '@id': 'https://lawdogla.com/#organization' },
+  },
+  publisher: { '@id': 'https://lawdogla.com/#organization' },
+};
+
+const faqSchema = post.data.faq && post.data.faq.length > 0
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: post.data.faq.map(item => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: { '@type': 'Answer', text: item.answer },
+      })),
+    }
+  : null;
+
+const schemas = [articleSchema, ...(faqSchema ? [faqSchema] : [])];
+---
+
+<PageLayout
+  title={`${post.data.title} | Law Dog`}
+  description={post.data.description}
+  schemas={schemas}
+>
+  <article class="learn-article">
+    <header class="learn-article__header">
+      <div class="wrap">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Law Dog</a></li>
+            <li><a href="/learn/">Learn</a></li>
+            <li aria-current="page">{post.data.title}</li>
+          </ol>
+        </nav>
+
+        <p class="label" style="margin-bottom:20px;">{post.data.category.replace(/-/g, ' ')}</p>
+        <h1 class="learn-article__title">{post.data.title}</h1>
+        <p class="learn-article__desc">{post.data.description}</p>
+
+        <div class="learn-article__meta">
+          <span class="mono">By {post.data.authorName}</span>
+          <span class="mono">·</span>
+          <time class="mono" datetime={post.data.publishDate.toISOString()}>
+            {post.data.publishDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </time>
+          {post.data.updatedDate && (
+            <>
+              <span class="mono">· Updated</span>
+              <time class="mono" datetime={post.data.updatedDate.toISOString()}>
+                {post.data.updatedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </time>
+            </>
+          )}
+          {post.data.legalCitation && (
+            <span class="mono learn-article__citation">Cite: {post.data.legalCitation}</span>
+          )}
+        </div>
+      </div>
+    </header>
+
+    <div class="learn-article__body wrap">
+      <div class="prose">
+        <Content />
+      </div>
+
+      {post.data.faq && post.data.faq.length > 0 && (
+        <aside class="learn-article__faq">
+          <h2>Frequently Asked Questions</h2>
+          <ul class="faq__list">
+            {post.data.faq.map(item => (
+              <li class="faq__item">
+                <button class="faq__q" aria-expanded="false">
+                  <span>{item.question}</span>
+                  <span class="faq__q-icon" aria-hidden="true">+</span>
+                </button>
+                <div class="faq__a">
+                  <p class="faq__a-inner">{item.answer}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )}
+    </div>
+
+    <div class="learn-article__cta wrap">
+      <div class="learn-article__cta-inner">
+        <div>
+          <p class="label" style="margin-bottom:12px;">Have a case?</p>
+          <p style="font-size:18px;font-weight:700;letter-spacing:-.01em;">
+            Talk to a Law Dog attorney — free, no obligation.
+          </p>
+        </div>
+        <a href="/#contact" class="btn btn--primary">Free Consultation</a>
+      </div>
+    </div>
+  </article>
+</PageLayout>
+
+<style>
+.learn-article__header {
+  padding: 60px 0 48px;
+  border-bottom: var(--rule-heavy);
+  background: var(--off-white);
+}
+.learn-article__title {
+font-size: clamp(32px, 5vw, 60px);
+  font-weight: 900; letter-spacing: -.03em; line-height: .95;
+  margin-bottom: 20px;
+}
+.learn-article__desc {
+  font-size: 17px; line-height: 1.6; color: var(--gray-700);
+  max-width: 66ch; margin-bottom: 28px;
+}
+.learn-article__meta {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+  font-size: 11px; color: var(--gray-400); letter-spacing: .08em;
+}
+.learn-article__citation {
+  background: var(--gray-100); padding: 4px 10px;
+  border: 1px solid var(--gray-200); font-size: 10px;
+}
+
+.learn-article__body {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 80px;
+  padding-top: 60px;
+  padding-bottom: 80px;
+  border-bottom: var(--rule-heavy);
+  align-items: start;
+}
+
+.learn-article__faq h2 {
+font-size: 22px; font-weight: 900; letter-spacing: -.02em;
+  margin-bottom: 24px;
+}
+
+.faq__list { list-style: none; }
+.faq__item { border-top: var(--rule); overflow: hidden; }
+.faq__q {
+  width: 100%; background: none; border: none; text-align: left; cursor: pointer;
+  display: grid; grid-template-columns: 1fr 28px; gap: 12px; align-items: center;
+  padding: 18px 0; font-family: inherit; font-size: 14px; font-weight: 600;
+  letter-spacing: -.01em; color: var(--black);
+}
+.faq__q-icon {
+  width: 28px; height: 28px; border: 1px solid var(--gray-200); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 300; color: var(--gray-400); flex-shrink: 0;
+  transition: transform .3s, background .2s, color .2s;
+}
+.faq__q[aria-expanded="true"] .faq__q-icon {
+  transform: rotate(45deg); background: var(--black); color: var(--white); border-color: var(--black);
+}
+.faq__a { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+.faq__a-inner { padding: 0 0 16px; font-size: 13px; line-height: 1.7; color: var(--gray-700); }
+.faq__item.open .faq__a { max-height: 500px; }
+
+.learn-article__cta {
+  padding: 60px 0;
+  border-bottom: var(--rule-heavy);
+}
+.learn-article__cta-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px; flex-wrap: wrap;
+  padding: 40px; border: var(--rule-heavy); background: var(--off-white);
+}
+
+/* breadcrumb */
+.breadcrumb {
+  padding: 0 0 24px; margin-bottom: 0;
+}
+.breadcrumb ol {
+  list-style: none; display: flex; gap: 8px;
+font-size: 10px;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--gray-400);
+}
+.breadcrumb li:not(:last-child)::after { content: '/'; margin-left: 8px; }
+.breadcrumb a { color: var(--gray-400); text-decoration: none; }
+.breadcrumb a:hover { color: var(--black); }
+
+@media (max-width: 900px) {
+  .learn-article__body { grid-template-columns: 1fr; }
+  .learn-article__cta-inner { flex-direction: column; align-items: flex-start; }
+}
+</style>
+
+<script>
+document.querySelectorAll('.faq__q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq__item') as HTMLElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq__item').forEach(i => {
+      i.classList.remove('open');
+      (i.querySelector('.faq__q') as HTMLElement)?.setAttribute('aria-expanded', 'false');
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  });
+});
+</script>

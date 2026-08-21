@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Law Dog — Los Angeles</title>
+<meta name="description" content="Law Dog. A Los Angeles trial firm. Injury and employment.">
+<style>
+/* ─── RESET ─────────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ink:    #14110d;
+  --paper:  #e8e4da;
+  --line:   rgba(20,17,13,.16);
+  --line-2: rgba(20,17,13,.30);
+  --mute:   #6f6a5e;
+  --faint:  #9a9486;
+
+  /* Helvetica-family stack for the display type */
+  --sans: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  --mono: 'SFMono-Regular', 'SF Mono', 'Menlo', 'Consolas', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.3;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--ink); color: var(--paper); }
+
+/* ─── TYPE PRIMITIVES ───────────────────────────────────── */
+.mono {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.idx {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .08em;
+  color: var(--mute);
+  text-transform: uppercase;
+}
+
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 36px; }
+
+/* fade-up on scroll */
+.up { opacity: 0; transform: translateY(16px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
+.up.in { opacity: 1; transform: none; }
+
+/* ─── NAV ───────────────────────────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24px 36px;
+  background: rgba(232,228,218,.82);
+  backdrop-filter: saturate(140%) blur(14px);
+  -webkit-backdrop-filter: saturate(140%) blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+
+.nav__brand {
+  font-size: 14px; font-weight: 600;
+  letter-spacing: .02em;
+  text-decoration: none; color: var(--ink);
+  display: flex; align-items: baseline; gap: 9px;
+}
+.nav__brand span {
+  font-family: var(--mono);
+  font-size: 9px; letter-spacing: .14em;
+  color: var(--faint); text-transform: uppercase;
+}
+
+.nav__links {
+  display: flex; gap: 34px; list-style: none;
+}
+.nav__links a {
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--mute); text-decoration: none;
+  position: relative;
+  transition: color .3s ease;
+}
+.nav__links a::after {
+  content: ''; position: absolute; left: 0; bottom: -4px;
+  width: 100%; height: 1px; background: var(--ink);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .35s cubic-bezier(.2,.7,.2,1);
+}
+.nav__links a:hover { color: var(--ink); }
+.nav__links a:hover::after { transform: scaleX(1); }
+
+/* ─── HERO ──────────────────────────────────────────────── */
+.hero {
+  padding: 11vh 0 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.hero__meta {
+  display: flex; justify-content: space-between;
+  padding-bottom: 6vh;
+  color: var(--mute);
+}
+.hero__meta .r { text-align: right; }
+
+.hero__display {
+  font-size: clamp(46px, 8vw, 116px);
+  font-weight: 600;
+  line-height: .94;
+  letter-spacing: -.045em;
+  text-indent: -.02em;
+}
+.hero__display .soft { color: var(--mute); }
+
+.hero__foot {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end; gap: 40px;
+  padding: 7vh 0 5vh;
+}
+
+.hero__lede {
+  max-width: 38ch;
+  font-size: 16px; line-height: 1.5;
+  color: #34302a;
+}
+
+.hero__cta {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink); text-decoration: none;
+  padding-bottom: 6px; border-bottom: 1px solid var(--ink);
+  transition: gap .35s cubic-bezier(.2,.7,.2,1), opacity .3s;
+}
+.hero__cta:hover { gap: 20px; }
+.hero__cta .arr { transition: transform .35s cubic-bezier(.2,.7,.2,1); }
+.hero__cta:hover .arr { transform: translateX(4px); }
+
+/* ─── MARQUEE (quiet) ───────────────────────────────────── */
+.marquee {
+  border-bottom: 1px solid var(--line);
+  overflow: hidden; white-space: nowrap;
+  padding: 16px 0;
+}
+.marquee__run { display: inline-flex; animation: drift 60s linear infinite; }
+.marquee:hover .marquee__run { animation-play-state: paused; }
+@keyframes drift { to { transform: translateX(-50%); } }
+.marquee__item {
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--mute);
+  margin: 0 32px;
+}
+.marquee__item i { color: var(--ink); font-style: normal; }
+
+/* ─── INDEX / PRACTICE ──────────────────────────────────── */
+.section { padding: 9vh 0; border-bottom: 1px solid var(--line); }
+
+.section__head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 5vh;
+}
+.section__head h2 {
+  font-size: 13px; font-weight: 500;
+  letter-spacing: .02em;
+}
+
+.index__group + .index__group { margin-top: 4vh; }
+.index__cat {
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 10px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  align-items: baseline; gap: 28px;
+  padding: 26px 0;
+  border-top: 1px solid var(--line);
+  text-decoration: none; color: var(--ink);
+  position: relative;
+}
+.row::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--ink); transform: scaleX(0); transform-origin: left;
+  transition: transform .5s cubic-bezier(.2,.7,.2,1);
+  z-index: 0;
+}
+.row > * { position: relative; z-index: 1; transition: color .4s ease; }
+.row:hover { color: var(--paper); }
+.row:hover .row__n, .row:hover .row__note { color: rgba(232,228,218,.6); }
+.row:hover::before { transform: scaleX(1); }
+
+.row__n { font-family: var(--mono); font-size: 11px; color: var(--mute); }
+.row__name {
+  font-size: clamp(26px, 4vw, 46px); font-weight: 500;
+  letter-spacing: -.03em; line-height: 1;
+}
+.row__note {
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: .02em; text-transform: uppercase;
+  color: var(--mute); text-align: right; max-width: 24ch;
+}
+
+/* ─── STATEMENT ─────────────────────────────────────────── */
+.statement { padding: 13vh 0; border-bottom: 1px solid var(--line); }
+.statement p {
+  font-size: clamp(32px, 5.6vw, 84px);
+  font-weight: 600; line-height: 1.0;
+  letter-spacing: -.04em;
+  max-width: 18ch;
+}
+.statement p .soft { color: var(--mute); }
+
+/* ─── RESULTS (quiet table) ─────────────────────────────── */
+.results__list { border-top: 1px solid var(--line); }
+.rr {
+  display: grid;
+  grid-template-columns: 1fr auto 200px;
+  align-items: baseline; gap: 32px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--line);
+  transition: padding-left .45s cubic-bezier(.2,.7,.2,1);
+}
+.rr:hover { padding-left: 16px; }
+.rr__name { font-size: clamp(17px, 2vw, 22px); font-weight: 500; letter-spacing: -.01em; }
+.rr__type { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
+.rr__amt  { font-family: var(--mono); font-size: 15px; letter-spacing: .02em; text-align: right; }
+.results__fine {
+  margin-top: 28px;
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: .04em;
+  color: var(--faint); line-height: 1.7; max-width: 70ch;
+}
+
+/* ─── ABOUT ─────────────────────────────────────────────── */
+.about__grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 8vw; align-items: start;
+}
+.about__name {
+  font-size: clamp(34px, 5vw, 64px); font-weight: 600;
+  letter-spacing: -.04em; line-height: .96;
+}
+.about__role {
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--mute); margin-top: 20px;
+}
+.about__body p {
+  font-size: 16px; line-height: 1.6; color: #34302a;
+  max-width: 52ch;
+}
+.about__body p + p { margin-top: 18px; }
+.about__stats {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 0; margin-top: 44px; border-top: 1px solid var(--line);
+}
+.about__stat { padding: 22px 0; }
+.about__stat .f { font-size: clamp(24px,3vw,34px); font-weight: 500; letter-spacing: -.03em; }
+.about__stat .l { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); margin-top: 8px; }
+
+/* ─── CONTACT ───────────────────────────────────────────── */
+.contact__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8vw; align-items: start; }
+.contact__h {
+  font-size: clamp(40px, 6vw, 88px); font-weight: 600;
+  letter-spacing: -.045em; line-height: .94;
+}
+.contact__sub { margin-top: 24px; font-size: 16px; line-height: 1.5; color: #34302a; max-width: 34ch; }
+.contact__direct {
+  margin-top: 40px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--mute); line-height: 2;
+}
+.contact__direct b { color: var(--ink); font-weight: 400; }
+
+.field { border-bottom: 1px solid var(--line); }
+.field:first-child { border-top: 1px solid var(--line); }
+.field input, .field select, .field textarea {
+  width: 100%; font-family: var(--sans); font-size: 16px;
+  padding: 22px 2px; border: none; background: transparent; color: var(--ink);
+  outline: none; appearance: none; -webkit-appearance: none;
+}
+.field input::placeholder, .field textarea::placeholder { color: var(--mute); }
+.field textarea { resize: none; height: 76px; }
+.field label {
+  display: block; font-family: var(--mono); font-size: 9px;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--faint);
+  padding-top: 14px;
+}
+.submit {
+  margin-top: 28px; width: 100%;
+  background: var(--ink); color: var(--paper); border: none;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  padding: 20px; cursor: pointer;
+  transition: background .3s, color .3s;
+}
+.submit:hover { background: #34302a; }
+.contact__fine {
+  margin-top: 14px; font-family: var(--mono); font-size: 9px;
+  letter-spacing: .03em; color: var(--faint); line-height: 1.7;
+}
+
+/* ─── FOOTER ────────────────────────────────────────────── */
+footer { padding: 12vh 0 5vh; }
+.footer__mark {
+  font-size: clamp(64px, 18vw, 260px); font-weight: 600;
+  letter-spacing: -.05em; line-height: .8;
+}
+.footer__row {
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 24px;
+  margin-top: 6vh; padding-top: 28px; border-top: 1px solid var(--line);
+  font-family: var(--mono); font-size: 11px; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--mute);
+}
+.footer__row a { color: var(--mute); text-decoration: none; transition: color .3s; }
+.footer__row a:hover { color: var(--ink); }
+.footer__fine { margin-top: 36px; font-family: var(--mono); font-size: 9px; letter-spacing: .03em; color: var(--faint); line-height: 1.8; max-width: 76ch; }
+
+/* ─── RESPONSIVE ────────────────────────────────────────── */
+@media (max-width: 880px) {
+  .nav__links { display: none; }
+  .hero__foot { grid-template-columns: 1fr; gap: 28px; }
+  .about__grid, .contact__grid { grid-template-columns: 1fr; gap: 48px; }
+  .row { grid-template-columns: 40px 1fr; }
+  .row__note { display: none; }
+  .rr { grid-template-columns: 1fr auto; }
+  .rr__type { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav__brand" href="#top">Law Dog<span>LA</span></a>
+  <ul class="nav__links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero__meta mono">
+      <span>Los Angeles<br>Injury &amp; Employment</span>
+      <span class="r">Est. — / Trial firm<br>No fee unless we win</span>
+    </div>
+    <h1 class="hero__display up">
+      Somebody owes you.<br>
+      <span class="soft">We make them pay it.</span>
+    </h1>
+    <div class="hero__foot">
+      <p class="hero__lede up">
+        A Los Angeles trial firm for people hurt in a wreck, hurt on the job,
+        or pushed out by an employer. We try the cases others settle.
+      </p>
+      <a class="hero__cta up" href="#contact">
+        Request a consultation <span class="arr">→</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__run">
+    <span class="marquee__item"><i>No fee unless we win</i></span>
+    <span class="marquee__item">Free consultation</span>
+    <span class="marquee__item">Hablamos Español</span>
+    <span class="marquee__item"><i>Injury &amp; Employment</i></span>
+    <span class="marquee__item">Los Angeles County</span>
+    <span class="marquee__item">Available 24 / 7</span>
+    <span class="marquee__item"><i>No fee unless we win</i></span>
+    <span class="marquee__item">Free consultation</span>
+    <span class="marquee__item">Hablamos Español</span>
+    <span class="marquee__item"><i>Injury &amp; Employment</i></span>
+    <span class="marquee__item">Los Angeles County</span>
+    <span class="marquee__item">Available 24 / 7</span>
+  </div>
+</div>
+
+<!-- WORK / PRACTICE -->
+<section class="section" id="work">
+  <div class="wrap">
+    <div class="section__head up">
+      <h2>What we take on</h2>
+      <span class="idx">01 — Practice</span>
+    </div>
+
+    <div class="index__group up">
+      <div class="index__cat">Personal injury</div>
+      <a class="row" href="#contact">
+        <span class="row__n">01</span>
+        <span class="row__name">Vehicle accidents</span>
+        <span class="row__note">Car · truck · motorcycle · rideshare</span>
+      </a>
+      <a class="row" href="#contact">
+        <span class="row__n">02</span>
+        <span class="row__name">Injured at work</span>
+        <span class="row__note">On-the-job · third-party · comp denials</span>
+      </a>
+      <a class="row" href="#contact">
+        <span class="row__n">03</span>
+        <span class="row__name">Catastrophic injury</span>
+        <span class="row__note">Brain · spinal · wrongful death</span>
+      </a>
+    </div>
+
+    <div class="index__group up">
+      <div class="index__cat">Employment</div>
+      <a class="row" href="#contact">
+        <span class="row__n">04</span>
+        <span class="row__name">Wrongful termination</span>
+        <span class="row__note">Retaliation · constructive discharge</span>
+      </a>
+      <a class="row" href="#contact">
+        <span class="row__n">05</span>
+        <span class="row__name">Wage &amp; hour</span>
+        <span class="row__note">Unpaid wages · breaks · off-the-clock</span>
+      </a>
+      <a class="row" href="#contact">
+        <span class="row__n">06</span>
+        <span class="row__name">Discrimination</span>
+        <span class="row__note">FEHA · Title VII · harassment</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- STATEMENT -->
+<section class="statement">
+  <div class="wrap">
+    <p class="up">
+      They're counting on you<br>
+      to walk away.<br>
+      <span class="soft">Don't.</span>
+    </p>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="section" id="results">
+  <div class="wrap">
+    <div class="section__head up">
+      <h2>A few we'd mention</h2>
+      <span class="idx">02 — Results</span>
+    </div>
+    <div class="results__list up">
+      <div class="rr">
+        <span class="rr__name">Rideshare pedestrian collision</span>
+        <span class="rr__type">Verdict</span>
+        <span class="rr__amt">$0.0M</span>
+      </div>
+      <div class="rr">
+        <span class="rr__name">Retaliation — wrongful termination</span>
+        <span class="rr__type">Settlement</span>
+        <span class="rr__amt">$000,000</span>
+      </div>
+      <div class="rr">
+        <span class="rr__name">Commercial truck collision</span>
+        <span class="rr__type">Verdict</span>
+        <span class="rr__amt">$0.0M</span>
+      </div>
+      <div class="rr">
+        <span class="rr__name">Wage theft — class</span>
+        <span class="rr__type">Settlement</span>
+        <span class="rr__amt">$000,000</span>
+      </div>
+      <div class="rr">
+        <span class="rr__name">Construction site injury</span>
+        <span class="rr__type">Verdict</span>
+        <span class="rr__amt">$0.0M</span>
+      </div>
+    </div>
+    <p class="results__fine up">
+      Figures placeholder, pending review. Prior results do not guarantee a similar outcome.
+    </p>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="wrap">
+    <div class="section__head up">
+      <h2>The firm</h2>
+      <span class="idx">03 — About</span>
+    </div>
+    <div class="about__grid">
+      <div class="up">
+        <div class="about__name">[Attorney<br>Name]</div>
+        <div class="about__role">Founder · Trial Attorney · SBN [000000]</div>
+      </div>
+      <div class="about__body up">
+        <p>
+          One attorney. Two things we do well. Every case is handled here —
+          not packaged off, not passed down. The people insurers and employers
+          expect to walk away are the ones we take furthest.
+        </p>
+        <p>
+          [Placeholder.] Before founding the firm, [Attorney Name] [background,
+          admissions, notable results]. Member, State Bar of California.
+        </p>
+        <div class="about__stats">
+          <div class="about__stat"><div class="f">$00M+</div><div class="l">Recovered</div></div>
+          <div class="about__stat"><div class="f">000+</div><div class="l">Cases</div></div>
+          <div class="about__stat"><div class="f">00</div><div class="l">Years at trial</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+  <div class="wrap">
+    <div class="section__head up">
+      <h2>Tell us what happened</h2>
+      <span class="idx">04 — Contact</span>
+    </div>
+    <div class="contact__grid">
+      <div class="up">
+        <h3 class="contact__h">No fee<br>unless<br>we win.</h3>
+        <p class="contact__sub">We'll review it and call you back. Two minutes to start. No cost, no obligation.</p>
+        <div class="contact__direct">
+          Call &nbsp;<b>1-800-XXX-XXXX</b><br>
+          Mail &nbsp;<b>hello@lawdog.xx</b><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Los Angeles, CA
+        </div>
+      </div>
+      <form class="up" novalidate>
+        <div class="field"><input type="text" placeholder="Full name" autocomplete="name"></div>
+        <div class="field"><input type="tel" placeholder="Phone" autocomplete="tel"></div>
+        <div class="field">
+          <select aria-label="Matter">
+            <option value="">What happened?</option>
+            <option>Vehicle accident</option>
+            <option>Injured at work</option>
+            <option>Wrongful termination</option>
+            <option>Wage or hour</option>
+            <option>Discrimination or harassment</option>
+            <option>Something else</option>
+          </select>
+        </div>
+        <div class="field"><textarea placeholder="A line or two, in your own words"></textarea></div>
+        <button type="submit" class="submit">Send →</button>
+        <p class="contact__fine">
+          Submitting this does not create an attorney-client relationship.
+          Confidential. Intake routing pending setup.
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="footer__mark">Law Dog</div>
+    <div class="footer__row">
+      <span>Los Angeles, CA</span>
+      <span><a href="#work">Work</a> &nbsp; <a href="#results">Results</a> &nbsp; <a href="#about">About</a> &nbsp; <a href="#contact">Contact</a></span>
+      <span>© 2026</span>
+    </div>
+    <p class="footer__fine">
+      [Placeholder] Law Dog is the trade name of [Firm Legal Name], a California law firm.
+      [Attorney Name], SBN [000000], responsible attorney. Attorney advertising. The information
+      here is not legal advice; viewing it or submitting a form does not create an attorney-client
+      relationship. Prior results do not guarantee a similar outcome. Required California
+      disclosures pending compliance review.
+    </p>
+  </div>
+</footer>
+
+<script>
+  // fade-up on scroll
+  const io = new IntersectionObserver((es) => {
+    es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .12, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.up').forEach((el, i) => {
+    el.style.transitionDelay = (Math.min(i, 4) * 60) + 'ms';
+    io.observe(el);
+  });
+
+  // form placeholder
+  document.querySelector('form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const b = e.target.querySelector('.submit');
+    b.textContent = "Received — we'll be in touch.";
+    b.disabled = true;
+  });
+</script>
+</body>
+</html>
