@@ -2,6 +2,11 @@ name = "gotrearended"
 compatibility_date = "2026-06-09"
 main = "workers/intake.js"
 
+# Bind the apex domain to this Worker as a Custom Domain on deploy.
+routes = [
+  { pattern = "gotrearended.com", custom_domain = true }
+]
+
 # Deploy the Astro build output (run `npm run build` first), NOT the repo root.
 # The old Law Dog config served `.` (root static HTML); this project is Astro-native.
 [assets]

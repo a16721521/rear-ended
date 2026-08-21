@@ -41,7 +41,7 @@ const iconMap: Record<string, string> = {
         </p>
         <div class="hero-actions">
           <a href="/get-started/" class="btn btn--primary">Start your claim <span style="opacity:.55">→</span></a>
-          <a href="tel:+18005550199" class="btn">(800) 555-0199</a>
+          <a href="tel:+12132865834" class="btn">(213) 286-5834</a>
         </div>
       </div>
     </div>
@@ -185,7 +185,7 @@ const iconMap: Record<string, string> = {
       <p class="cta-sub reveal d1">Free consultation. No obligation. No fee unless we win.</p>
       <div class="cta-actions reveal d2">
         <a href="/get-started/" class="btn btn--primary" style="padding:15px 34px;font-size:15px;">Start your claim →</a>
-        <a href="tel:+18005550199" class="btn" style="padding:15px 26px;font-size:14px;">(800) 555-0199</a>
+        <a href="tel:+12132865834" class="btn" style="padding:15px 26px;font-size:14px;">(213) 286-5834</a>
       </div>
     </div>
   </div>
@@ -312,13 +312,21 @@ const iconMap: Record<string, string> = {
 .diff-body { font-size: 14.5px; color: var(--gray-500); line-height: 1.66; letter-spacing: -.015em; max-width: 520px; }
 
 /* ── CTA ── */
-.cta-wrap { border-top: 1px solid var(--gray-200); }
+.cta-wrap {
+  border-top: 1px solid #cdeede;
+  background:
+    radial-gradient(ellipse at 12% 8%, rgba(52,211,153,.22) 0%, transparent 52%),
+    radial-gradient(ellipse at 30% 92%, rgba(45,212,191,.16) 0%, transparent 50%),
+    radial-gradient(ellipse at 88% 90%, rgba(14,159,110,.15) 0%, transparent 55%),
+    radial-gradient(ellipse at 64% 28%, rgba(201,251,184,.42) 0%, transparent 60%),
+    linear-gradient(155deg, #edfff6 0%, #d7f7e5 55%, #e9fbf1 100%);
+}
 .cta-inner { max-width: 760px; margin: 0 auto; padding: 136px 52px; text-align: center; }
 .cta-heading { font-size: clamp(40px, 5.5vw, 80px); font-weight: 800; letter-spacing: -.042em; line-height: .93; color: var(--black); margin-bottom: 28px; }
 .cta-sub { font-size: 16.5px; color: var(--gray-400); line-height: 1.6; letter-spacing: -.015em; margin-bottom: 48px; }
 .cta-actions { display: flex; align-items: center; justify-content: center; gap: 14px; }
-.cta-actions .btn--primary { background: var(--gradient); }
-.cta-actions .btn--primary:hover { filter: brightness(1.08); box-shadow: 0 8px 28px var(--accent-glow); }
+.cta-actions .btn--primary { background: var(--gradient); box-shadow: 0 6px 20px rgba(14,159,110,.20); }
+.cta-actions .btn--primary:hover { filter: brightness(1.08); box-shadow: 0 10px 30px rgba(14,159,110,.32); }
 
 /* ── MOBILE ── */
 @media (max-width: 768px) {

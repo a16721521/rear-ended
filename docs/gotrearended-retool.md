@@ -52,8 +52,12 @@ Retool touches only:
   - Honesty fixes: fake press strip → real value-props; **removed Law Dog's GA4 ID** (was `G-J5LER585NS`).
   - Verified: homepage output has no real Law Dog refs; green tokens confirmed in bundled CSS.
 
-### Placeholders on the homepage (replace before any launch)
-- **Phone** `(800) 555-0199` (reserved fictional number) — everywhere: Nav, hero, CTA, Footer, CallBar, schema.
+### Homepage brand state
+- **Phone**: real — `(213) 286-5834` (`tel:+12132865834`) everywhere incl. schema.
+- **Main font**: Space Grotesk (body/UI). Wordmark stays Oswald 300. Loaded via Google Fonts in `BaseLayout`.
+- **"Ready to fight back?" CTA**: mint background with a subtle multi-tone green gradient.
+
+### Placeholders still on the homepage (replace before any launch)
 - **Email** `hello@gotrearended.com` (assumed on-domain).
 - **Schema NAP**: locality LA / region CA only, no street address; telephone is the placeholder.
 - **GA4**: none — add Rear Ended's own measurement ID in `BaseLayout`.
@@ -67,7 +71,12 @@ Retool touches only:
 - [ ] Legal pages (privacy / terms) — see Known gaps.
 - [ ] Rewrite project docs (`CLAUDE.md`, `BRANDING.md`, `ROADMAP.md` are still Law Dog's).
 - [ ] Remove leftover Law Dog root `.html` files once Astro parity confirmed.
-- [ ] Deploy + verify on gotrearended.com.
+
+### Shipped 2026-08-21
+- [x] Code pushed to GitHub: https://github.com/a16721521/rear-ended (`main`).
+- [x] Deployed to Cloudflare Worker `gotrearended`; `gotrearended.com` custom domain bound and serving the homepage (verified HTTP 200, text/html). `wrangler.toml` now declares the custom-domain route.
+- ⚠️ Deployed **as-is** at owner's direction: demo metrics/verdicts and placeholder phone/email are live. Replace before promoting the site.
+- Interior pages (practice/city) are live too but still Law Dog brand/content — not linked prominently from the homepage nav, but reachable.
 
 ---
 

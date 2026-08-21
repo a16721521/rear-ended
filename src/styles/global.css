@@ -18,7 +18,7 @@
   --accent-glow: rgba(52, 211, 153, .32);
   --warn-bg:   #05100b;
 
-  --sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  --sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
   --wordmark: 'Oswald', 'Helvetica Neue', Arial, sans-serif;
 
   --rule:       1px solid var(--gray-200);
