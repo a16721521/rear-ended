@@ -127,8 +127,14 @@ const allSchemas = [
     <!-- Schema.org JSON-LD -->
     <Schema schemas={allSchemas} />
 
-    <!-- Google tag (gtag.js) — TODO: add FLM Law's own GA4 measurement ID.
-         Removed Law Dog's ID (G-J5LER585NS) so this site does not report into their property. -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LQJXMDVKLT"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-LQJXMDVKLT');
+    </script>
 
   </head>
   <body>

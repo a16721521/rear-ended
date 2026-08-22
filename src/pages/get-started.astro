@@ -3,8 +3,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout
-  title="Free Case Review | Law Dog"
-  description="Start your free personal injury case review with Law Dog. Tell us what happened — takes less than 2 minutes. No fee unless we win, no upfront cost."
+  title="Free Case Review | FLM Law"
+  description="Start your free auto accident case review with FLM Law. Tell us what happened — takes less than 2 minutes. No fee unless we win, no upfront cost."
 >
 
 <style>
@@ -14,8 +14,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   --border-h: rgba(255,255,255,0.14);
   --muted:    rgba(255,255,255,0.38);
   --muted2:   rgba(255,255,255,0.55);
-  --sel-bg:   rgba(244,38,89,0.12);
-  --sel-border: #F42659;
+  --sel-bg:   rgba(18,161,80,0.12);
+  --sel-border: #12A150;
 }
 
 html, body {
@@ -45,7 +45,7 @@ html, body {
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 28px; z-index: 50;
 }
-.top-logo { height: 50px; width: auto; display: block; }
+
 .step-counter { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0.04em; transition: opacity 0.3s; }
 .step-counter.hidden { opacity: 0; pointer-events: none; }
 
@@ -87,7 +87,7 @@ html, body {
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   color: var(--muted2); transition: background 0.18s, color 0.18s;
 }
-:global(.opt.selected .opt-icon) { background: rgba(244,38,89,0.2); color: #F42659; }
+:global(.opt.selected .opt-icon) { background: rgba(18,161,80,0.2); color: #12A150; }
 :global(.opt-icon svg) { width: 18px; height: 18px; }
 :global(.opt-label) { font-size: 16px; font-weight: 600; color: var(--white); letter-spacing: -0.02em; flex: 1; }
 :global(.opt-check) {
@@ -117,7 +117,7 @@ html, body {
 
 /* ── SUBMIT BUTTON ── */
 :global(.btn-submit) {
-  width: 100%; padding: 17px; background: var(--gradient); color: var(--white);
+  width: 100%; padding: 17px; background: var(--gradient); color: var(--black);
   font-family: var(--sans); font-size: 16px; font-weight: 700; letter-spacing: -0.02em;
   border: none; border-radius: 14px; cursor: pointer;
   transition: filter 0.2s, transform 0.2s cubic-bezier(.2,.8,.2,1);
@@ -141,12 +141,12 @@ html, body {
 /* ── CONFIRMATION ── */
 :global(.confirm-wrap) { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0; }
 :global(.confirm-ring) {
-  width: 80px; height: 80px; border-radius: 50%; background: rgba(244,38,89,0.12);
-  border: 1.5px solid rgba(244,38,89,0.35); display: flex; align-items: center; justify-content: center;
+  width: 80px; height: 80px; border-radius: 50%; background: rgba(18,161,80,0.12);
+  border: 1.5px solid rgba(18,161,80,0.35); display: flex; align-items: center; justify-content: center;
   margin-bottom: 32px; animation: ringPop 0.5s cubic-bezier(.2,.8,.2,1) 0.1s both;
 }
 @keyframes ringPop { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-:global(.confirm-ring svg) { width: 32px; height: 32px; color: #F42659; animation: checkDraw 0.4s cubic-bezier(.2,.8,.2,1) 0.35s both; }
+:global(.confirm-ring svg) { width: 32px; height: 32px; color: #12A150; animation: checkDraw 0.4s cubic-bezier(.2,.8,.2,1) 0.35s both; }
 @keyframes checkDraw { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
 :global(.confirm-title) { font-size: 30px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 14px; }
 :global(.confirm-sub) { font-size: 16px; color: var(--muted); line-height: 1.6; max-width: 360px; margin-bottom: 40px; }
@@ -192,7 +192,7 @@ html, body {
   font-family: var(--sans); font-size: 14px; font-weight: 700; padding: 13px;
   border-radius: 9px; text-decoration: none; letter-spacing: -0.02em;
 }
-.call-bar .cb-call { background: var(--gradient); color: var(--white); }
+.call-bar .cb-call { background: var(--gradient); color: var(--black); }
 .call-bar .cb-back { background: rgba(255,255,255,0.1); color: var(--white); }
 
 @media (max-width: 768px) {
@@ -209,7 +209,7 @@ html, body {
 <!-- Top bar -->
 <div class="top-bar">
   <a href="/">
-    <img class="top-logo" src="/logo_white.png" alt="Law Dog" />
+    <span style="font-family:var(--wordmark);font-weight:500;font-size:24px;color:#fff;letter-spacing:.005em;">FLM Law</span>
   </a>
   <span class="step-counter" id="stepCounter">Step 1 of 5</span>
 </div>
@@ -223,7 +223,7 @@ html, body {
 <button class="btn-back hidden" id="btnBack" aria-label="Go back">← Back</button>
 
 <div class="call-bar">
-  <a href="tel:+18334529364" class="cb-call">Call (833) 4LAWDOG</a>
+  <a href="tel:+12132865834" class="cb-call">Call (213) 286-5834</a>
   <a href="/" class="cb-back">← Back to home</a>
 </div>
 

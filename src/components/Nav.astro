@@ -25,7 +25,7 @@ const currentPath = Astro.url.pathname;
     </ul>
     <div class="nav-right">
       <a href="tel:+12132865834" class="nav-phone">(213) 286-5834</a>
-      <a href="/#contact" class="nav-cta">Free case review →</a>
+      <a href="/get-started/" class="nav-cta">Free case review →</a>
       <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
         <span></span><span></span><span></span>
       </button>
@@ -38,7 +38,7 @@ const currentPath = Astro.url.pathname;
     {navLinks.map(({ href, label }) => (
       <li><a href={href}>{label}</a></li>
     ))}
-    <li><a href="/#contact">Free Case Review</a></li>
+    <li><a href="/get-started/">Free Case Review</a></li>
   </ul>
   <a href="tel:+12132865834" class="mm-call">Call (213) 286-5834</a>
 </div>
