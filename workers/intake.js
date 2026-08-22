@@ -1,18 +1,18 @@
 /**
- * Law Dog intake worker.
+ * FLM Law intake worker.
  *
- * Handles POST /api/intake — validates the submission from get-started.html,
+ * Handles POST /api/intake — validates the submission from get-started,
  * sends a notification email via the Workers Email binding, and returns JSON.
  *
  * All other requests fall through to static assets.
  *
  * Setup (one-time):
- *   npx wrangler email sending enable getlawdog.com
+ *   npx wrangler email sending enable gotrearended.com
  */
 
 const ALLOWED_ORIGINS = [
-  'https://getlawdog.com',
-  'https://www.getlawdog.com',
+  'https://gotrearended.com',
+  'https://www.gotrearended.com',
 ];
 
 const CASE_TYPE_LABELS = {
@@ -97,7 +97,7 @@ async function handleIntake(request, env) {
 <head><meta charset="utf-8"></head>
 <body style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;color:#111">
   <div style="background:#080808;padding:16px 24px;border-radius:8px;margin-bottom:24px">
-    <span style="color:#fff;font-weight:700;font-size:18px">🐕 Law Dog — New Intake Lead</span>
+    <span style="color:#fff;font-weight:700;font-size:18px">FLM Law — New Intake Lead</span>
   </div>
   <table style="width:100%;border-collapse:collapse;font-size:15px">
     <tr style="background:#f5f5f5"><td style="padding:10px 14px;font-weight:600;width:140px">Name</td><td style="padding:10px 14px">${esc(name)}</td></tr>
@@ -108,12 +108,12 @@ async function handleIntake(request, env) {
     <tr><td style="padding:10px 14px;font-weight:600">Doctor seen</td><td style="padding:10px 14px">${esc(doctorLabel)}</td></tr>
     <tr style="background:#f5f5f5"><td style="padding:10px 14px;font-weight:600">Symptoms</td><td style="padding:10px 14px">${esc(symptomsLabel)}</td></tr>
   </table>
-  <p style="margin-top:24px;font-size:13px;color:#888">Submitted via getlawdog.com/get-started</p>
+  <p style="margin-top:24px;font-size:13px;color:#888">Submitted via gotrearended.com/get-started</p>
 </body>
 </html>`;
 
   const text = [
-    'Law Dog — New Intake Lead',
+    'FLM Law — New Intake Lead',
     '',
     `Name:      ${name}`,
     `Phone:     ${phone}`,
@@ -127,7 +127,7 @@ async function handleIntake(request, env) {
   try {
     await env.EMAIL.send({
       to: 'a16721521@gmail.com',
-      from: { email: 'intake@getlawdog.com', name: 'Law Dog Intake' },
+      from: { email: 'intake@gotrearended.com', name: 'FLM Law Intake' },
       subject,
       html,
       text,
