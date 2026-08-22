@@ -142,11 +142,10 @@ const allSchemas = [
 
     <!-- Scroll reveal -->
     <script>
-      const observer = new IntersectionObserver(
-        (entries) => entries.forEach(e => e.target.classList.toggle('in', e.isIntersecting)),
-        { threshold: 0.1 }
-      );
-      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
     </script>
 
     <!-- GA4 — phone click tracking (matches static site's Phase 2 instrumentation) -->

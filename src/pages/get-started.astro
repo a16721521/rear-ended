@@ -18,11 +18,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   --sel-border: #12A150;
 }
 
-html, body {
-  height: 100%;
-  background: var(--black);
-  color: var(--white);
-  overflow: hidden;
+:global(html), :global(body) {
+  height: 100% !important;
+  background: var(--black) !important;
+  color: var(--white) !important;
+  overflow: hidden !important;
 }
 
 /* ── PROGRESS BAR ── */
@@ -208,7 +208,7 @@ html, body {
 
 <!-- Top bar -->
 <div class="top-bar">
-  <a href="/">
+  <a href="/" style="text-decoration:none;">
     <span style="font-family:var(--wordmark);font-weight:500;font-size:24px;color:#fff;letter-spacing:.005em;">FLM Law</span>
   </a>
   <span class="step-counter" id="stepCounter">Step 1 of 5</span>

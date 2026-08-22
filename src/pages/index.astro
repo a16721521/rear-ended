@@ -82,16 +82,54 @@ const iconMap: Record<string, string> = {
     <p class="section-eyebrow reveal">Practice areas</p>
     <div class="practice-header">
       <h2 class="section-heading reveal">Every case,<br>fought to win.</h2>
-      <p class="section-body reveal d1">We handle the most consequential personal injury and employment cases in California. No case is too complex. No opponent is too large.</p>
+      <p class="section-body reveal d1">We handle the most consequential personal injury cases in California. No case is too complex. No opponent is too large.</p>
     </div>
     <div class="case-grid">
-      {practiceAreas.map((p, i) => (
-        <a href={`/${p.slug}/`} class:list={['case-item', 'reveal', i % 3 === 1 ? 'd1' : i % 3 === 2 ? 'd2' : '']}>
-          <span class="material-symbols-outlined case-icon" aria-hidden="true">{iconMap[p.slug] ?? 'gavel'}</span>
-          <div class="case-title">{p.shortTitle}</div>
-          <div class="case-desc">{p.heroLine}</div>
-        </a>
-      ))}
+      <a href="/car-accident-lawyer/" class="case-item reveal">
+        <span class="material-symbols-outlined case-icon" aria-hidden="true">directions_car</span>
+        <div class="case-title">Car Accidents</div>
+        <div class="case-desc">Collisions, rear-ends, T-bones, and hit-and-run. Full recovery for all auto liability claims.</div>
+      </a>
+      <a href="/truck-accident-lawyer/" class="case-item reveal d1">
+        <span class="material-symbols-outlined case-icon" aria-hidden="true">local_shipping</span>
+        <div class="case-title">Truck & Commercial Vehicle</div>
+        <div class="case-desc">18-wheelers, delivery fleets, and semi-trucks. Complex multi-party liability handled in full.</div>
+      </a>
+      <a href="/uber-lyft-accident-lawyer/" class="case-item reveal d2">
+        <span class="material-symbols-outlined case-icon" aria-hidden="true">hail</span>
+        <div class="case-title">Rideshare Accidents</div>
+        <div class="case-desc">Uber, Lyft, and on-demand transport. We cut through layered insurance disputes fast.</div>
+      </a>
+      <a href="/slip-and-fall-lawyer/" class="case-item reveal">
+        <span class="material-symbols-outlined case-icon" aria-hidden="true">personal_injury</span>
+        <div class="case-title">Slip & Fall</div>
+        <div class="case-desc">Wet floors, uneven surfaces, dark stairwells. Premises liability cases on full contingency.</div>
+      </a>
+      <a href="/catastrophic-injury-lawyer/" class="case-item reveal d1">
+        <span class="material-symbols-outlined case-icon" aria-hidden="true">emergency</span>
+        <div class="case-title">Catastrophic Injury</div>
+        <div class="case-desc">Spinal cord, traumatic brain injury, and amputation. Lifetime damages, fully analyzed.</div>
+      </a>
+      <a href="/motorcycle-accident-lawyer/" class="case-item reveal d2">
+        <span class="material-symbols-outlined case-icon" aria-hidden="true">two_wheeler</span>
+        <div class="case-title">Motorcycle Accidents</div>
+        <div class="case-desc">Severe injuries, lane-splitting disputes, helmet defense. We fight hard for riders.</div>
+      </a>
+      <a href="/pedestrian-accident-lawyer/" class="case-item reveal">
+        <span class="material-symbols-outlined case-icon" aria-hidden="true">directions_walk</span>
+        <div class="case-title">Pedestrian Accidents</div>
+        <div class="case-desc">Crosswalk and sidewalk collisions. Often catastrophic — we pursue every dollar.</div>
+      </a>
+      <a href="/wrongful-death-lawyer/" class="case-item reveal d1">
+        <span class="material-symbols-outlined case-icon" aria-hidden="true">sentiment_dissatisfied</span>
+        <div class="case-title">Wrongful Death</div>
+        <div class="case-desc">Justice and financial recovery for families who've lost someone to negligence.</div>
+      </a>
+      <a href="/premises-liability-lawyer/" class="case-item reveal d2">
+        <span class="material-symbols-outlined case-icon" aria-hidden="true">home_work</span>
+        <div class="case-title">Premises Liability</div>
+        <div class="case-desc">Unsafe properties, inadequate security, negligent maintenance. Owners are accountable.</div>
+      </a>
     </div>
   </div>
 

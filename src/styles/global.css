@@ -84,10 +84,12 @@ body {
   transform: translateY(22px);
   transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1);
 }
-.reveal.in {
+.reveal.visible {
   opacity: 1;
   transform: none;
 }
+.d1 { transition-delay: .08s; } .d2 { transition-delay: .16s; } .d3 { transition-delay: .24s; }
+.d4 { transition-delay: .32s; } .d5 { transition-delay: .40s; }
 @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } }
 
 /* ─── BUTTONS ──────────────────────────────────────────────────────────── */
