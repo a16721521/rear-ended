@@ -11,18 +11,50 @@ export function getStaticPaths() {
 }
 
 const { practice } = Astro.props;
+const siteOrigin = Astro.site?.origin ?? 'https://gotrearended.com';
 
-// Top cities to feature on the hub page (high population first)
 const featuredCities = [...cities]
   .sort((a, b) => b.population - a.population)
-  .slice(0, 12);
+  .slice(0, 20);
+
+const injuryInfo: Record<string, { name: string; desc: string }> = {
+  'whiplash': { name: 'Whiplash & Cervical Spine', desc: 'The most frequently dismissed injury — and one of the most debilitating. Chronic neck pain, limited range of motion, and radiating nerve pain that can last years.' },
+  'traumatic brain injury': { name: 'Traumatic Brain Injury (TBI)', desc: 'Concussions and mild TBIs don\'t always show on initial CT scans but cause months of cognitive impairment, headaches, and personality changes.' },
+  'spinal cord injury': { name: 'Spinal Cord Injuries', desc: 'Partial or complete spinal cord injuries cause permanent neurological deficits. High-value cases requiring life-care planning and long-term medical projections.' },
+  'broken bones': { name: 'Broken Bones & Fractures', desc: 'Ribs, wrists, clavicle, pelvis, and femur fractures from impact. Surgery, hardware, and extended rehabilitation all factor into damages.' },
+  'internal injuries': { name: 'Internal Injuries', desc: 'Organ lacerations, ruptures, and internal bleeding are common in high-impact incidents. Symptoms may be delayed — seek emergency care the same day.' },
+  'road rash': { name: 'Road Rash & Abrasions', desc: 'Severe road rash can require skin grafts, cause permanent scarring, and lead to chronic pain and nerve damage.' },
+  'fractures': { name: 'Fractures & Compound Breaks', desc: 'Compound fractures and multi-bone breaks requiring surgical repair with plates, screws, or rods. Long recovery with significant pain.' },
+  'amputations': { name: 'Amputations', desc: 'Loss of a limb requires lifetime prosthetic costs, vocational rehabilitation, psychological counseling, and home modifications.' },
+  'spinal injuries': { name: 'Spinal Injuries', desc: 'Herniated discs, vertebral fractures, and nerve compression causing permanent pain, numbness, and reduced mobility.' },
+  'soft tissue injuries': { name: 'Soft Tissue & Nerve Damage', desc: 'Sprains, strains, torn ligaments, and peripheral nerve injuries cause real, ongoing functional limitations.' },
+  'hip fractures': { name: 'Hip Fractures', desc: 'Often require surgical repair or total hip replacement, followed by months of rehabilitation and elevated risk of complications.' },
+  'wrist fractures': { name: 'Wrist & Hand Fractures', desc: 'Distal radius fractures and ligament tears requiring surgery and extensive physical therapy. Loss of grip strength affects employment.' },
+  'head injuries': { name: 'Head Injuries', desc: 'Skull fractures, concussions, and subdural hematomas. Even "minor" head injuries can cause persistent cognitive and physical symptoms.' },
+  'knee injuries': { name: 'Knee Injuries', desc: 'ACL tears, meniscus damage, and patellar fractures frequently require surgery and months of rehabilitation.' },
+  'shoulder injuries': { name: 'Shoulder Injuries', desc: 'Rotator cuff tears, dislocations, and labrum injuries causing chronic pain and limited range of motion.' },
+  'internal organ damage': { name: 'Internal Organ Damage', desc: 'Ruptured organs, kidney damage, and abdominal injuries from blunt force trauma requiring emergency surgery.' },
+  'crush injuries': { name: 'Crush Injuries', desc: 'Compression injuries causing compartment syndrome, tissue death, and permanent disability. Immediate surgical intervention is critical.' },
+  'wrongful death': { name: 'Wrongful Death', desc: 'When negligence takes a life, surviving family can recover economic loss, loss of companionship, and funeral expenses.' },
+  'severe burns': { name: 'Severe Burns', desc: 'Third-degree burns requiring skin grafts cause permanent disfigurement and chronic pain. Among the most expensive injury categories.' },
+  'vision or hearing loss': { name: 'Vision or Hearing Loss', desc: 'Permanent sensory loss dramatically impacts quality of life, employment, and independence.' },
+  'anoxic brain injury': { name: 'Anoxic Brain Injury', desc: 'Brain damage from oxygen deprivation causing permanent cognitive deficits, personality changes, and physical disability.' },
+  'polytrauma': { name: 'Polytrauma', desc: 'Multiple simultaneous injuries creating compounding damage and dramatically longer recovery across multiple medical specialties.' },
+  'multiple fractures': { name: 'Multiple Fractures', desc: 'Multiple simultaneous bone fractures requiring surgical repair, extended hospitalization, and months of rehabilitation.' },
+  'fatal injuries from vehicle accidents': { name: 'Fatal Vehicle Collisions', desc: 'Surviving family can recover loss of financial support, funeral costs, and loss of companionship under California law.' },
+  'workplace fatalities': { name: 'Workplace Fatalities', desc: 'May give rise to both wrongful death claims and workers\' compensation death benefits from multiple liable parties.' },
+  'medical malpractice': { name: 'Medical Malpractice', desc: 'Healthcare provider negligence causing death requires expert medical testimony. Special procedural requirements apply.' },
+  'product defects': { name: 'Product Defects', desc: 'Defective products causing death give rise to strict liability claims against manufacturers. No proof of negligence required.' },
+  'dog bite injuries': { name: 'Dog Bite Injuries', desc: 'California strict liability means the owner is responsible regardless of the animal\'s history. Severe bites cause permanent scarring.' },
+  'lacerations requiring reconstructive surgery': { name: 'Lacerations & Scarring', desc: 'Deep lacerations requiring reconstructive surgery cause permanent disfigurement and lasting non-economic damages.' },
+};
 
 const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: practice.faqs.map(faq => ({
+  mainEntity: practice.faqs.map((faq: { q: string; a: string }) => ({
     '@type': 'Question',
-    name: faq.q.replace('{city}', 'Los Angeles'),
+    name: faq.q.replace(/{city}/g, 'Los Angeles'),
     acceptedAnswer: {
       '@type': 'Answer',
       text: faq.a.replace(/{city}/g, 'Los Angeles'),
@@ -33,263 +65,717 @@ const faqSchema = {
 const serviceSchema = {
   '@context': 'https://schema.org',
   '@type': 'LegalService',
-  name: `Law Dog — ${practice.title}`,
+  name: `FLM Law — ${practice.title}s`,
   description: practice.description,
-  url: `https://lawdogla.com/${practice.slug}/`,
-  provider: { '@id': 'https://lawdogla.com/#organization' },
-  areaServed: {
-    '@type': 'State',
-    name: 'California',
-  },
+  url: `${siteOrigin}/${practice.slug}/`,
+  provider: { '@id': `${siteOrigin}/#organization` },
+  areaServed: { '@type': 'State', name: 'California' },
 };
+
+const solParts = practice.statute_of_limitations.split('(');
+const solValue = solParts[0].trim();
+const solNote = (practice.statute_of_limitations.match(/\(([^)]+)\)/) || [])[1] || '';
+
+const cityRe = /{city}/g;
+const processedFaqs = practice.faqs.map((faq: { q: string; a: string }) => ({
+  q: faq.q.replace(cityRe, 'Los Angeles'),
+  a: faq.a.replace(cityRe, 'Los Angeles'),
+}));
 ---
 
 <PageLayout
-  title={`${practice.title} in Los Angeles | Law Dog`}
+  title={`${practice.title} in Los Angeles | FLM Law`}
   description={practice.description}
   schemas={[faqSchema, serviceSchema]}
 >
 
-  <!-- ── HERO ─────────────────────────────────────────────────────── -->
-  <section class="pa-hero">
-    <div class="wrap">
-      <p class="label">Practice Area</p>
-      <h1 class="pa-hero__h reveal">{practice.title}</h1>
-      <p class="pa-hero__sub reveal">{practice.heroLine}</p>
-      <div class="pa-hero__actions reveal">
-        <a href="/get-started/" class="btn btn--primary">Free Case Evaluation</a>
-        <a href="tel:+18334529364" class="btn">(833) 4LAWDOG</a>
+<!-- ══════ HERO ══════ -->
+<header class="ca-hero-bg">
+  <div class="ca-hero">
+    <nav class="ca-breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="bc-sep" aria-hidden="true">/</span>
+      <span class="bc-current" aria-current="page">{practice.shortTitle}</span>
+    </nav>
+
+    <h1 class="ca-headline">
+      {practice.title}s.<br>
+      <span class="dim">{practice.heroLine}</span>
+    </h1>
+
+    <p class="ca-sub">{practice.description}</p>
+
+    <div class="ca-actions">
+      <a href="/get-started/" class="btn-primary">Free case review <span style="opacity:.55">&rarr;</span></a>
+      <a href="tel:+12132865834" class="btn-secondary">Call (213) 286-5834</a>
+    </div>
+
+    <div class="ca-hero-meta">
+      <span>No fee unless we win</span>
+      <span>Free consultation, 24/7</span>
+      <span>Se habla espa&ntilde;ol</span>
+      <span>Serving all of California</span>
+    </div>
+  </div>
+</header>
+
+<!-- ══════ INTRO + FACT CARD ══════ -->
+<section class="intro-section" id="overview">
+  <div class="intro-copy">
+    <p class="section-eyebrow reveal">{practice.shortTitle}</p>
+    <h2 class="reveal">Time is not on your side. Insurance companies start working against you on day one.</h2>
+    <p class="reveal d1">{practice.description}</p>
+    <p class="reveal d1">
+      The other side's insurer assigned an adjuster to your claim within 24 hours. That adjuster's only job is to close your case for as little as possible. They will call you, seem sympathetic, request a recorded statement, and make an offer that sounds reasonable but isn't. <strong>Do not speak with them before speaking with us.</strong>
+    </p>
+    <p class="reveal d1">
+      FLM Law represents {practice.type} victims on pure contingency. We advance every litigation cost — investigation, expert witnesses, medical record compilation, depositions — and collect only as a percentage of what we recover. No recovery means no fee, period. Our interests and yours are identical: <strong>maximize your compensation.</strong>
+    </p>
+    <p class="reveal d1">
+      California's pure comparative fault rule (<a href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1431.2" target="_blank" rel="noopener noreferrer">Civil Code &sect; 1431.2</a>) means you can recover even if you were partly at fault — your recovery is simply reduced by your share of responsibility. <a href="/get-started/">Contact us today</a> — the earlier we start building your case, the more evidence we can preserve.
+    </p>
+  </div>
+
+  <aside class="fact-card reveal d2" aria-label="California legal facts">
+    <div class="fact-card-head"><h3>Know your rights</h3></div>
+    <div class="fact-row">
+      <div class="fact-label">Filing deadline</div>
+      <div class="fact-value">{solValue}</div>
+      <div class="fact-note">{solNote}</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-label">Government entity involved?</div>
+      <div class="fact-value">6 months</div>
+      <div class="fact-note"><a href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=911.2" target="_blank" rel="noopener noreferrer">Gov. Code &sect; 911.2</a> — city, county, or state</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-label">Partly at fault?</div>
+      <div class="fact-value">Still recoverable</div>
+      <div class="fact-note">Pure comparative fault — recovery reduced, not eliminated</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-label">Cost to you</div>
+      <div class="fact-value">$0 upfront</div>
+      <div class="fact-note">Contingency — our fee comes from the recovery, or nothing</div>
+    </div>
+    <a href="tel:+12132865834" class="fact-card-cta">Call (213) 286-5834</a>
+  </aside>
+</section>
+
+<!-- ══════ POST-INCIDENT PLAYBOOK ══════ -->
+<section class="playbook-section" id="what-to-do">
+  <div class="playbook-sticky">
+    <p class="section-eyebrow reveal">After the incident</p>
+    <h2 class="reveal">What to do next.</h2>
+    <p class="reveal d1">
+      The first hours after an incident determine more of your case than you realize. Evidence is time-sensitive — documentation fades, cameras overwrite, memories blur. Follow these steps exactly.
+    </p>
+    <a href="/get-started/" class="btn-primary reveal d2">Tell us what happened <span style="opacity:.55">&rarr;</span></a>
+  </div>
+
+  <div class="steps-list">
+    <div class="step-item reveal">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-tag">Immediately</div>
+        <div class="step-title">Get to safety and call 911</div>
+        <p>If you're in danger, move yourself to safety. Call 911 and get a police or incident report number. An official report is foundational to your claim. Get the responding officer's name and badge number.</p>
       </div>
     </div>
-  </section>
 
-  <!-- ── ABOUT ─────────────────────────────────────────────────────── -->
-  <section class="pa-about">
-    <div class="wrap">
-      <div class="pa-about__grid">
-        <div class="pa-about__body">
-          <p class="label" style="margin-bottom:24px;">Why It Matters</p>
-          <p class="pa-about__p">{practice.description}</p>
-          <div class="pa-about__details">
-            <div>
-              <span class="label">Statute of Limitations</span>
-              <p class="pa-about__detail-val">{practice.statute_of_limitations}</p>
-            </div>
-            <div>
-              <span class="label">Practice Code</span>
-              <p class="pa-about__detail-val mono">{practice.practice_code}</p>
-            </div>
+    <div class="step-item reveal d1">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-tag">At the scene</div>
+        <div class="step-title">Document everything, right now</div>
+        <p>Photograph <strong>all</strong> damage, the scene, conditions, and any visible injuries — yours and others'. If there are witnesses, get their names and phone numbers. Collect the other party's insurance info, license, and registration.</p>
+      </div>
+    </div>
+
+    <div class="step-item reveal d2">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-tag">Same day — critical</div>
+        <div class="step-title">See a doctor today. Not tomorrow.</div>
+        <p>Adrenaline suppresses pain — you may feel fine and have serious injuries. A gap between the incident and your first medical visit becomes a gap in your claim. Insurers will argue your injuries weren't caused by the incident. Go to an ER, urgent care, or your doctor <strong>the same day</strong>.</p>
+      </div>
+    </div>
+
+    <div class="step-item reveal">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-tag">Within 24 hours</div>
+        <div class="step-title">Do not talk to any insurance adjuster</div>
+        <p>The opposing insurer will call you quickly — they're trained to. <strong>Do not give a recorded statement.</strong> Do not accept a check. Do not say "I'm okay." Anything you say will be used to minimize your claim. Tell them your attorney handles all communications, then call us.</p>
+      </div>
+    </div>
+
+    <div class="step-item reveal d1">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-tag">Within 48 hours</div>
+        <div class="step-title">Preserve all evidence</div>
+        <p>Save all text messages, emails, and correspondence related to the incident. Do not post about it on social media. Keep all medical records, receipts, and bills. Surveillance footage overwrites in 24–72 hours — act fast.</p>
+      </div>
+    </div>
+
+    <div class="step-item reveal d2">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <div class="step-tag">As soon as possible</div>
+        <div class="step-title">Call FLM Law. Start building the case.</div>
+        <p>The opposing side is already preserving evidence in their favor. We send preservation letters, retain investigators, and begin documenting before anything else is lost. The earlier we start, the stronger your case.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ COMMON INJURIES ══════ -->
+<section class="injuries-section" id="injuries">
+  <div class="injuries-inner">
+    <div class="injuries-header">
+      <p class="section-eyebrow reveal" style="background:rgba(255,255,255,.5);-webkit-background-clip:text;background-clip:text;color:transparent;">Common injuries</p>
+      <h2 class="section-heading reveal" style="color:var(--white)">The injuries insurers<br>try hardest to minimize.</h2>
+      <p class="section-sub reveal d1" style="color:rgba(255,255,255,.45);max-width:560px;">Every injury below has been undervalued by insurance adjusters who argue it's "soft tissue only" or "pre-existing." We document, argue, and litigate each one.</p>
+    </div>
+
+    <div class="inj-grid">
+      {practice.common_injuries.map((injury: string, i: number) => {
+        const info = injuryInfo[injury.toLowerCase()] ?? { name: injury, desc: 'A serious injury that requires thorough medical documentation and expert testimony to properly value.' };
+        const delay = i % 3 === 1 ? 'd1' : i % 3 === 2 ? 'd2' : '';
+        return (
+          <div class={`inj-item reveal ${delay}`}>
+            <div class="inj-name">{info.name}</div>
+            <div class="inj-desc">{info.desc}</div>
           </div>
-        </div>
-        <div class="pa-about__injuries">
-          <p class="label" style="margin-bottom:20px;">Common Injuries</p>
-          <ul>
-            {practice.common_injuries.map(injury => (
-              <li>{injury}</li>
-            ))}
-          </ul>
-          <a href="/get-started/" class="btn btn--primary" style="margin-top:40px;">Get a Free Consultation</a>
-        </div>
-      </div>
+        );
+      })}
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ── CITIES ─────────────────────────────────────────────────────── -->
-  <section class="pa-cities">
-    <div class="wrap">
-      <div class="section-header">
-        <span class="section-header__label">Serving Southern California</span>
-        <a href="#all-cities" class="label" style="color:var(--black);text-decoration:none;">All cities ↓</a>
+<!-- ══════ INSURANCE TACTICS ══════ -->
+<section class="tactics-section" id="insurance-tactics">
+  <div class="tactics-inner">
+    <div class="tactics-kicker">What adjusters don't tell you</div>
+    <h2 class="tactics-heading reveal">How insurance companies close cases cheap. And what we do about it.</h2>
+    <p class="tactics-sub reveal d1">Insurance adjusters are professionals whose performance is measured by how little they pay on each claim. Every tactic below has been used against our clients — before they called us.</p>
+
+    <div class="tactics-grid">
+      <div class="tactic-card reveal">
+        <span class="tactic-num">Tactic 01</span>
+        <div class="tactic-title">The fast call and the friendly voice</div>
+        <div class="tactic-body">Adjusters call within 24–48 hours — sometimes within hours. They seem sympathetic, ask how you're feeling, and offer to "help get this resolved quickly." <strong>The goal is a recorded statement.</strong> Anything you say about your injuries or what happened will be used to establish a ceiling on your claim value.</div>
       </div>
-      <div class="pa-cities__grid">
-        {featuredCities.map(city => (
-          <a href={`/${practice.slug}/${city.slug}/`} class="city-card">
-            <span class="city-card__county">{city.county} County</span>
-            <span class="city-card__name">{city.name}</span>
-            <span class="city-card__pop mono">Pop. {city.population.toLocaleString()}</span>
-          </a>
-        ))}
+
+      <div class="tactic-card reveal d1">
+        <span class="tactic-num">Tactic 02</span>
+        <div class="tactic-title">The quick-pay offer before you know your injuries</div>
+        <div class="tactic-body">A check for $2,500 or $5,000 arrives within days, before you've finished treatment — often before you've fully understood your injuries. It comes with a release that <strong>permanently closes your claim</strong>. Signing a settlement release before fully healed is one of the most expensive mistakes injury victims make.</div>
       </div>
-      <div id="all-cities" class="pa-cities__all">
-        <p class="label" style="margin-bottom:16px;">All Served Cities</p>
-        <ul class="pa-cities__list">
-          {cities.map(city => (
-            <li>
-              <a href={`/${practice.slug}/${city.slug}/`}>{city.name}</a>
-            </li>
-          ))}
-        </ul>
+
+      <div class="tactic-card reveal d2">
+        <span class="tactic-num">Tactic 03</span>
+        <div class="tactic-title">Disputing or inflating your percentage of fault</div>
+        <div class="tactic-body">California's comparative fault rule means the insurer directly profits from assigning you more of the blame. If they can argue you were 40% at fault instead of 0%, they cut your payout by 40%. <strong>They do this routinely, with little evidence.</strong> Our job is to build the factual record that defeats those arguments.</div>
+      </div>
+
+      <div class="tactic-card reveal d3">
+        <span class="tactic-num">Tactic 04</span>
+        <div class="tactic-title">The "independent" medical examination</div>
+        <div class="tactic-body">Insurers request an IME — supposedly a neutral medical opinion — conducted by a physician the insurer pays repeatedly. Studies consistently show IME doctors reach favorable-to-insurer conclusions at rates far above treating physicians. <strong>We prepare clients for these exams</strong> and challenge IME opinions that contradict treating physician findings.</div>
+      </div>
+
+      <div class="tactic-card reveal">
+        <span class="tactic-num">Tactic 05</span>
+        <div class="tactic-title">Surveillance and social media monitoring</div>
+        <div class="tactic-body">If your case has value, the insurer may hire investigators to follow you and monitor your social media for evidence that your injuries are exaggerated. A photo from a family event, a check-in at a gym, a single caption can be used to challenge your claim. <strong>We advise every client on protective measures</strong> from day one.</div>
+      </div>
+
+      <div class="tactic-card reveal d1">
+        <span class="tactic-num">Tactic 06</span>
+        <div class="tactic-title">Delaying until the statute runs out</div>
+        <div class="tactic-body">In multi-year cases, some insurers deliberately slow-walk negotiations with the goal of running out the statute of limitations. When time expires, your right to sue is gone permanently. <strong>We calendar every deadline from day one</strong> and file suit if necessary to preserve your rights — regardless of where settlement talks stand.</div>
       </div>
     </div>
-  </section>
 
-  <!-- ── FAQ ───────────────────────────────────────────────────────── -->
-  <section class="pa-faq">
-    <div class="wrap">
-      <div class="pa-faq__grid">
-        <div class="pa-faq__aside">
-          <p class="label" style="margin-bottom:20px;">Common Questions</p>
-          <h2 class="pa-faq__h">What do you need to know?</h2>
-          <p class="pa-faq__sub">California law. Plain language.</p>
+    <div class="tactics-cta">
+      <a href="/get-started/" class="btn-primary">Get a free case review &rarr;</a>
+      <span class="tactics-cta-note">No obligation. No upfront cost. We handle all communication with insurers.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ COMPENSATION ══════ -->
+<section class="comp-section" id="compensation">
+  <div class="comp-header">
+    <p class="section-eyebrow reveal">What you can recover</p>
+    <h2 class="section-heading reveal">Three categories of damages. We pursue all of them.</h2>
+    <p class="section-sub reveal d1">California allows injury victims to recover the full spectrum of damages caused by another party's negligence. Here's what that means in practice.</p>
+  </div>
+
+  <div class="comp-grid">
+    <div class="comp-col reveal">
+      <div class="comp-col-head">
+        <div class="comp-col-label">Category 01</div>
+        <div class="comp-col-title">Economic Damages</div>
+      </div>
+      <div class="comp-items">
+        <div class="comp-item">
+          <div class="comp-item-name">All medical bills — past</div>
+          <div class="comp-item-note">ER, hospitalization, surgery, specialists, imaging, PT, chiropractic</div>
         </div>
-        <ul class="faq__list">
-          {practice.faqs.map(faq => (
-            <li class="faq__item">
-              <button class="faq__q" aria-expanded="false">
-                <span>{faq.q.replace(/{city}/g, 'Los Angeles')}</span>
-                <span class="faq__q-icon" aria-hidden="true">+</span>
-              </button>
-              <div class="faq__a">
-                <p class="faq__a-inner">{faq.a.replace(/{city}/g, 'Los Angeles')}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <div class="comp-item">
+          <div class="comp-item-name">All medical costs — future</div>
+          <div class="comp-item-note">Projected treatment, surgery, medications, and long-term care if injury is permanent</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-item-name">Lost wages</div>
+          <div class="comp-item-note">Every day of work missed because of the incident or recovery</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-item-name">Lost earning capacity</div>
+          <div class="comp-item-note">Future income you can no longer earn due to permanent limitations</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-item-name">Out-of-pocket expenses</div>
+          <div class="comp-item-note">Transportation to medical appointments, home care, modifications to home or vehicle</div>
+        </div>
       </div>
     </div>
-  </section>
 
-  <!-- ── CTA ───────────────────────────────────────────────────────── -->
-  <section class="pa-cta">
-    <div class="wrap">
-      <p class="label" style="margin-bottom:24px;">No fee unless we win</p>
-      <h2 class="pa-cta__h reveal">Ready to fight for<br><em>what you're owed?</em></h2>
-      <a href="/get-started/" class="btn btn--primary reveal" style="margin-top:40px;">Start Your Free Case Review</a>
+    <div class="comp-col reveal d1">
+      <div class="comp-col-head">
+        <div class="comp-col-label">Category 02</div>
+        <div class="comp-col-title">Non-Economic Damages</div>
+      </div>
+      <div class="comp-items">
+        <div class="comp-item">
+          <div class="comp-item-name">Pain and suffering</div>
+          <div class="comp-item-note">Physical pain — past, ongoing, and future — caused by the incident and injuries</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-item-name">Emotional distress</div>
+          <div class="comp-item-note">Anxiety, PTSD, depression, phobias, and psychological trauma</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-item-name">Loss of enjoyment of life</div>
+          <div class="comp-item-note">Activities, hobbies, and relationships you can no longer participate in</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-item-name">Disfigurement and scarring</div>
+          <div class="comp-item-note">Visible scarring or permanent physical changes from the incident</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-item-name">Loss of consortium</div>
+          <div class="comp-item-note">Impact on your relationship with spouse or domestic partner — a separate recoverable element</div>
+        </div>
+      </div>
     </div>
-  </section>
+
+    <div class="comp-col reveal d2">
+      <div class="comp-col-head">
+        <div class="comp-col-label">Category 03</div>
+        <div class="comp-col-title">Property &amp; Special Damages</div>
+      </div>
+      <div class="comp-items">
+        <div class="comp-item">
+          <div class="comp-item-name">Vehicle repair or replacement</div>
+          <div class="comp-item-note">Full fair-market value if totaled; full repair cost if repairable</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-item-name">Rental car costs</div>
+          <div class="comp-item-note">Transportation while your vehicle is being repaired or replaced</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-item-name">Diminished vehicle value</div>
+          <div class="comp-item-note">A repaired vehicle is worth less than an undamaged one — this is separately recoverable</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-item-name">Personal property damage</div>
+          <div class="comp-item-note">Phones, glasses, car seats, equipment damaged in the incident</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-item-name">Punitive damages</div>
+          <div class="comp-item-note">Available when conduct is egregious — DUI, deliberate acts, gross recklessness</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ WHY FLM ══════ -->
+<section class="why-section" id="why-flm">
+  <div class="why-inner">
+    <div class="why-header">
+      <div>
+        <p class="section-eyebrow reveal">Why FLM Law</p>
+        <h2 class="section-heading reveal">The difference between<br>a settlement and a fight.</h2>
+      </div>
+      <p class="section-sub reveal d1">Insurance companies track which firms litigate and which fold. Here's what separates us.</p>
+    </div>
+
+    <div class="diff-grid">
+      <div class="diff-item reveal">
+        <div class="diff-icon"><span class="material-symbols-outlined" style="font-size:20px;color:var(--white);font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24">gavel</span></div>
+        <div class="diff-title">We try cases. And they know it.</div>
+        <div class="diff-body">The single biggest driver of settlement value is whether the opposing insurer believes you'll go to trial. We prepare every case for trial from day one. Insurers that know us price their offers accordingly.</div>
+      </div>
+      <div class="diff-item reveal d1">
+        <div class="diff-icon"><span class="material-symbols-outlined" style="font-size:20px;color:var(--white);font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24">search</span></div>
+        <div class="diff-title">Full-resource investigation</div>
+        <div class="diff-body">We retain accident reconstruction specialists, biomechanical engineers, and medical experts before we demand anything. Physical evidence, camera footage, and eyewitness accounts — we get them before they disappear.</div>
+      </div>
+      <div class="diff-item reveal d2">
+        <div class="diff-icon"><span class="material-symbols-outlined" style="font-size:20px;color:var(--white);font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24">assignment</span></div>
+        <div class="diff-title">Medical build that holds up</div>
+        <div class="diff-body">A weak medical record is the most common reason claims settle for less than they're worth. We work with treating physicians to ensure documentation captures the full impact of every injury.</div>
+      </div>
+      <div class="diff-item reveal">
+        <div class="diff-icon"><span class="material-symbols-outlined" style="font-size:20px;color:var(--white);font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24">schedule</span></div>
+        <div class="diff-title">We never rush a settlement</div>
+        <div class="diff-body">We don't settle until you've either completed treatment or a physician has established the permanence of your injuries. Settling before maximum medical improvement is one of the most costly mistakes in personal injury.</div>
+      </div>
+      <div class="diff-item reveal d1">
+        <div class="diff-icon"><span class="material-symbols-outlined" style="font-size:20px;color:var(--white);font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24">phone_iphone</span></div>
+        <div class="diff-title">Direct attorney access</div>
+        <div class="diff-body">You get your attorney's direct line on day one. No paralegal relay, no "I'll pass along the message." You have questions, we answer them. You hear news the day it happens.</div>
+      </div>
+      <div class="diff-item reveal d2">
+        <div class="diff-icon"><span class="material-symbols-outlined" style="font-size:20px;color:var(--white);font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24">verified</span></div>
+        <div class="diff-title">Zero upfront cost. Ever.</div>
+        <div class="diff-body">We advance every cost of litigation — experts, filing fees, depositions, medical records, everything. Our fee is a percentage of the recovery, paid only when you win. If we don't recover, you owe us nothing.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ STATUTE OF LIMITATIONS ══════ -->
+<section class="statute-section">
+  <div class="statute-inner">
+    <div class="statute-left">
+      <div class="statute-tag">Statute of limitations</div>
+      <h2 class="statute-heading reveal">California gives you two years.<br>Government claims: six months.</h2>
+      <p class="statute-body reveal d1">
+        Under <strong>California Code of Civil Procedure &sect; 335.1</strong>, you have two years from the date of the incident to file suit. Once that window closes, it cannot be reopened — no exceptions for late discovery of injuries, financial hardship, or delay by the insurer.
+        <br><br>
+        If a government vehicle, a city bus, a road condition maintained by CalTrans, or a public facility was involved, <strong>Government Code &sect; 911.2</strong> requires a formal administrative claim within six months. This is an absolute bar — courts cannot waive it.
+        <br><br>
+        Evidence disappears fast. The earlier we start building your case, the more we can preserve.
+      </p>
+    </div>
+    <div class="statute-cta">
+      <a href="/get-started/" class="btn-primary">Start your case today &rarr;</a>
+      <a href="tel:+12132865834" class="btn-secondary">Call (213) 286-5834</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ FAQ ══════ -->
+<section class="faq-section" id="faq">
+  <div class="faq-header">
+    <p class="section-eyebrow reveal">Frequently asked questions</p>
+    <h2 class="section-heading reveal">Honest answers<br>to hard questions.</h2>
+  </div>
+
+  <div class="faq-list" role="list">
+    {processedFaqs.map((faq: { q: string; a: string }) => (
+      <div class="faq-item" role="listitem">
+        <button class="faq-trigger" aria-expanded="false">
+          {faq.q}
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-body">
+          <div class="faq-body-inner" set:html={faq.a} />
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<!-- ══════ SERVICE AREA ══════ -->
+<section class="area-section" id="service-area">
+  <div class="area-inner">
+    <h2 class="area-heading reveal">Serving Los Angeles County &amp; beyond.</h2>
+    <p class="area-sub reveal d1">{practice.shortTitle} cases accepted throughout Southern California. We come to you.</p>
+
+    <div class="area-chips reveal d2">
+      {featuredCities.map(city => (
+        <a class="area-chip" href={`/${practice.slug}/${city.slug}/`}>{city.name}</a>
+      ))}
+    </div>
+
+    <div class="area-cta-band reveal">
+      <div>
+        <h3>Injured? Don't wait.</h3>
+        <p>Evidence disappears. Deadlines are real. The consultation is free and takes less than 15 minutes.</p>
+      </div>
+      <div class="area-cta-actions">
+        <a href="/get-started/" class="btn-primary">Start your case &rarr;</a>
+        <a href="tel:+12132865834" class="btn-secondary">Call (213) 286-5834</a>
+      </div>
+    </div>
+  </div>
+</section>
 
 </PageLayout>
 
 <style>
-.pa-hero {
-  padding: 100px 0;
-  border-bottom: var(--rule-heavy);
-}
-.pa-hero__h {
-font-size: clamp(44px, 7vw, 90px);
-  font-weight: 900; letter-spacing: -.04em; line-height: .92;
-  margin: 16px 0 24px;
-}
-.pa-hero__sub {
-  font-size: 16px; color: var(--gray-400);
-letter-spacing: .04em;
-  max-width: 52ch; margin-bottom: 40px;
-}
-.pa-hero__actions { display: flex; gap: 16px; flex-wrap: wrap; }
+/* ── BUTTONS ── */
+.btn-primary { display: inline-flex; align-items: center; gap: 6px; background: var(--gradient); color: var(--black); font-family: var(--sans); font-size: 14px; font-weight: 700; padding: 14px 26px; border-radius: 9px; border: none; cursor: pointer; letter-spacing: -.025em; text-decoration: none; transition: filter .2s, transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .2s; }
+.btn-primary:hover { filter: brightness(1.08); transform: translateY(-2px); box-shadow: 0 8px 28px var(--accent-glow); }
+.btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--gray-500); font-family: var(--sans); font-size: 14px; font-weight: 500; padding: 14px 22px; border-radius: 9px; border: 1px solid var(--gray-200); cursor: pointer; letter-spacing: -.02em; text-decoration: none; transition: all .2s cubic-bezier(.2,.8,.2,1); }
+.btn-secondary:hover { border-color: var(--gray-400); color: var(--black); transform: translateY(-2px); }
 
-.pa-about { padding: 80px 0; border-bottom: var(--rule-heavy); }
-.pa-about__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
-.pa-about__p { font-size: 16px; line-height: 1.75; color: var(--gray-700); margin-bottom: 40px; }
-.pa-about__details { display: flex; gap: 40px; }
-.pa-about__detail-val { font-size: 15px; margin-top: 8px; }
-.pa-about__injuries ul {
-  list-style: none; display: flex; flex-direction: column; gap: 8px;
-}
-.pa-about__injuries li {
-  font-size: 14px; color: var(--gray-700);
-  padding-left: 16px; position: relative;
-}
-.pa-about__injuries li::before {
-  content: '–'; position: absolute; left: 0;
-color: var(--accent);
-}
+/* ── SECTION ELEMENTS ── */
+.section-eyebrow { font-size: 11.5px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; background: var(--gradient); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.section-eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--gradient); display: block; flex-shrink: 0; }
+.section-heading { font-size: clamp(36px,4.5vw,64px); font-weight: 800; letter-spacing: -.038em; line-height: .93; color: var(--black); margin-bottom: 20px; }
+.section-sub { font-size: 16px; color: var(--gray-500); line-height: 1.65; letter-spacing: -.015em; max-width: 460px; }
 
-.pa-cities { padding: 80px 0; border-bottom: var(--rule-heavy); }
-.pa-cities__grid {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  border: var(--rule-heavy); border-top: none;
+/* ── HERO ── */
+.ca-hero-bg {
+  background: var(--black);
+  background-image:
+    radial-gradient(ellipse at 100% 100%, rgba(18,161,80,.18) 0%, transparent 52%),
+    radial-gradient(ellipse at 0% 60%, rgba(14,159,110,.16) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 0%, rgba(255,255,255,.015) 0%, transparent 40%);
+  min-height: 78vh; display: flex; flex-direction: column; justify-content: flex-end;
+  position: relative; overflow: hidden;
 }
-.city-card {
-  padding: 28px 24px;
-  border-right: var(--rule-heavy); border-bottom: var(--rule-heavy);
-  text-decoration: none; color: var(--black);
-  display: flex; flex-direction: column; gap: 6px;
-  transition: background .15s;
+.ca-hero-bg::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(-72deg, transparent 0px, transparent 120px, rgba(255,255,255,.012) 120px, rgba(255,255,255,.012) 121px);
 }
-.city-card:hover { background: var(--gray-100); }
-.city-card:nth-child(4n) { border-right: none; }
-.city-card__county { font-size: 9px; letter-spacing: .14em; text-transform: uppercase;
-color: var(--gray-400); }
-.city-card__name { font-size: 18px; font-weight: 700; letter-spacing: -.01em; }
-.city-card__pop { font-size: 10px; color: var(--gray-400); margin-top: 4px; }
+.ca-hero { max-width: 1360px; margin: 0 auto; padding: 186px 52px 72px; width: 100%; position: relative; z-index: 1; }
+.ca-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 36px; }
+.ca-breadcrumb a { color: rgba(255,255,255,.4); text-decoration: none; transition: color .2s; }
+.ca-breadcrumb a:hover { color: rgba(255,255,255,.75); }
+.bc-sep { color: rgba(255,255,255,.18); }
+.bc-current { color: rgba(255,255,255,.68); }
+.ca-headline { font-size: clamp(50px,6.8vw,104px); line-height: .95; letter-spacing: -.038em; font-weight: 800; color: var(--white); margin-bottom: 32px; max-width: 14ch; }
+.ca-headline .dim { color: rgba(255,255,255,.38); }
+.ca-sub { font-size: 17px; color: rgba(255,255,255,.6); line-height: 1.65; letter-spacing: -.015em; max-width: 490px; margin-bottom: 44px; }
+.ca-actions { display: flex; align-items: center; gap: 14px; margin-bottom: 52px; flex-wrap: wrap; }
+.ca-actions .btn-secondary { color: rgba(255,255,255,.75); border-color: rgba(255,255,255,.22); }
+.ca-actions .btn-secondary:hover { color: var(--white); border-color: rgba(255,255,255,.5); }
+.ca-hero-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 28px; padding-top: 28px; border-top: 1px solid rgba(255,255,255,.09); }
+.ca-hero-meta span { font-size: 12px; font-weight: 600; letter-spacing: .02em; color: rgba(255,255,255,.5); display: flex; align-items: center; gap: 8px; }
+.ca-hero-meta span::before { content: ''; width: 5px; height: 5px; background: var(--gradient); border-radius: 50%; }
 
-.pa-cities__all { margin-top: 48px; }
-.pa-cities__list {
-  list-style: none;
-  display: flex; flex-wrap: wrap; gap: 4px 0;
-  column-count: 4;
-}
-.pa-cities__list a {
-  font-size: 13px; color: var(--gray-700);
-  text-decoration: none; padding: 5px 16px 5px 0;
-  display: block;
-  transition: color .15s;
-}
-.pa-cities__list a:hover { color: var(--black); text-decoration: underline; }
+/* ── INTRO + FACT CARD ── */
+.intro-section { max-width: 1360px; margin: 0 auto; padding: 112px 52px; display: grid; grid-template-columns: 1fr 380px; gap: 96px; align-items: start; }
+.intro-copy h2 { font-size: clamp(28px,3vw,42px); font-weight: 800; letter-spacing: -.034em; line-height: 1.04; margin-bottom: 28px; }
+.intro-copy p { font-size: 16px; color: var(--gray-700); line-height: 1.78; letter-spacing: -.012em; margin-bottom: 22px; max-width: 640px; }
+.intro-copy p strong { color: var(--black); font-weight: 700; }
+.intro-copy p a { color: var(--black); font-weight: 600; text-decoration-color: var(--gray-300); text-underline-offset: 3px; }
+.intro-copy p a:hover { text-decoration-color: var(--accent); }
+.fact-card { position: sticky; top: 96px; border: 1px solid var(--gray-200); border-radius: 16px; overflow: hidden; }
+.fact-card-head { padding: 22px 28px; background: var(--black); }
+.fact-card-head h3 { font-size: 13px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; background: var(--gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.fact-row { padding: 20px 28px; border-bottom: 1px solid var(--gray-100); }
+.fact-row:last-of-type { border-bottom: none; }
+.fact-label { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--gray-400); margin-bottom: 5px; }
+.fact-value { font-size: 15px; font-weight: 700; letter-spacing: -.02em; color: var(--black); line-height: 1.35; }
+.fact-note { font-size: 12px; color: var(--gray-500); line-height: 1.5; margin-top: 4px; }
+.fact-note a { color: var(--black); font-weight: 600; text-decoration-color: var(--gray-300); text-underline-offset: 2px; }
+.fact-note a:hover { text-decoration-color: var(--accent); }
+.fact-card-cta { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 8px 20px 20px; background: var(--gradient); color: var(--black); font-size: 14px; font-weight: 700; padding: 14px; border-radius: 10px; text-decoration: none; letter-spacing: -.015em; transition: filter .2s, transform .2s cubic-bezier(.2,.8,.2,1); }
+.fact-card-cta:hover { filter: brightness(1.08); transform: translateY(-1px); }
 
-.pa-faq { padding: 100px 0; border-bottom: var(--rule-heavy); }
-.pa-faq__grid { display: grid; grid-template-columns: 280px 1fr; gap: 80px; }
-.pa-faq__h {
-font-size: clamp(24px, 3vw, 36px);
-  font-weight: 900; letter-spacing: -.03em; line-height: 1;
-  margin-bottom: 12px;
-}
-.pa-faq__sub { font-size: 14px; line-height: 1.6; color: var(--gray-400); }
+/* ── PLAYBOOK ── */
+.playbook-section { max-width: 1360px; margin: 0 auto; padding: 112px 52px; display: grid; grid-template-columns: 320px 1fr; gap: 96px; align-items: start; }
+.playbook-sticky { position: sticky; top: 96px; }
+.playbook-sticky h2 { font-size: clamp(32px,3.8vw,52px); font-weight: 800; letter-spacing: -.038em; line-height: .95; margin-bottom: 20px; }
+.playbook-sticky p { font-size: 15px; color: var(--gray-500); line-height: 1.68; letter-spacing: -.012em; margin-bottom: 28px; }
+.steps-list { display: flex; flex-direction: column; gap: 0; }
+.step-item { display: grid; grid-template-columns: 64px 1fr; gap: 0; position: relative; }
+.step-item::before { content: ''; position: absolute; left: 19px; top: 52px; bottom: 4px; width: 2px; background: var(--gray-100); }
+.step-item:last-child::before { display: none; }
+.step-num { width: 40px; height: 40px; border: 1.5px solid var(--gray-200); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 12px; font-weight: 800; color: var(--gray-400); letter-spacing: -.02em; margin-top: 4px; background: var(--white); position: relative; z-index: 1; transition: border-color .3s, color .3s, background .3s; }
+.step-item.active .step-num { border-color: transparent; background: var(--gradient); color: var(--black); }
+.step-body { padding: 0 0 44px 20px; }
+.step-tag { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gray-400); margin-bottom: 8px; }
+.step-title { font-size: 17px; font-weight: 700; letter-spacing: -.03em; color: var(--black); margin-bottom: 10px; }
+.step-body p { font-size: 14.5px; color: var(--gray-500); line-height: 1.68; letter-spacing: -.012em; }
+.step-body strong { color: var(--gray-700); font-weight: 600; }
 
-.faq__list { list-style: none; }
-.faq__item { border-top: var(--rule); overflow: hidden; }
-.faq__q {
-  width: 100%; background: none; border: none; text-align: left; cursor: pointer;
-  display: grid; grid-template-columns: 1fr 28px; gap: 16px; align-items: center;
-  padding: 22px 0; font-family: inherit; font-size: 15px; font-weight: 600;
-  letter-spacing: -.01em; color: var(--black);
-}
-.faq__q-icon {
-  width: 28px; height: 28px; border: 1px solid var(--gray-200); border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; font-weight: 300; color: var(--gray-400); flex-shrink: 0;
-  transition: transform .3s, background .2s, color .2s;
-}
-.faq__q[aria-expanded="true"] .faq__q-icon {
-  transform: rotate(45deg); background: var(--black); color: var(--white); border-color: var(--black);
-}
-.faq__a { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
-.faq__a-inner { padding: 0 0 20px; font-size: 14px; line-height: 1.7; color: var(--gray-700); }
-.faq__item.open .faq__a { max-height: 500px; }
+/* ── INJURIES ── */
+.injuries-section { background: var(--black); padding: 112px 0; overflow: hidden; }
+.injuries-inner { max-width: 1360px; margin: 0 auto; padding: 0 52px; }
+.injuries-header { margin-bottom: 56px; }
+.inj-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.07); border-radius: 12px; overflow: hidden; }
+.inj-item { padding: 36px 32px; background: rgba(255,255,255,.03); transition: background .3s; }
+.inj-item:hover { background: rgba(255,255,255,.06); }
+.inj-name { font-size: 16px; font-weight: 700; letter-spacing: -.03em; color: var(--white); margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+.inj-name::before { content: ''; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; background: var(--gradient); }
+.inj-desc { font-size: 13.5px; color: rgba(255,255,255,.45); line-height: 1.65; letter-spacing: -.01em; }
 
-.pa-cta {
-  padding: 120px 0; text-align: center;
-  border-bottom: var(--rule-heavy);
-}
-.pa-cta__h {
-font-size: clamp(36px, 5.5vw, 70px);
-  font-weight: 900; letter-spacing: -.03em; line-height: 1;
-}
-.pa-cta__h em { font-style: italic; color: var(--accent); }
+/* ── TACTICS ── */
+.tactics-section { background: var(--warn-bg); border-top: 1px solid rgba(52,211,153,.15); border-bottom: 1px solid rgba(52,211,153,.15); position: relative; overflow: hidden; }
+.tactics-section::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(-55deg, transparent 0px, transparent 60px, rgba(18,161,80,.025) 60px, rgba(18,161,80,.025) 61px); pointer-events: none; }
+.tactics-inner { max-width: 1360px; margin: 0 auto; padding: 112px 52px; position: relative; z-index: 1; }
+.tactics-kicker { display: inline-flex; align-items: center; gap: 8px; background: rgba(18,161,80,.12); border: 1px solid rgba(18,161,80,.3); color: #34D399; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 6px 14px; border-radius: 6px; margin-bottom: 28px; }
+.tactics-kicker::before { content: '\26A0'; font-size: 11px; }
+.tactics-heading { font-size: clamp(32px,4vw,58px); font-weight: 800; letter-spacing: -.038em; line-height: .96; color: var(--white); margin-bottom: 16px; max-width: 18ch; }
+.tactics-sub { font-size: 16px; color: rgba(255,255,255,.45); line-height: 1.65; letter-spacing: -.015em; max-width: 560px; margin-bottom: 64px; }
+.tactics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
+.tactic-card { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06); padding: 36px 36px 32px; border-radius: 2px; position: relative; transition: background .3s; }
+.tactic-card:hover { background: rgba(255,255,255,.055); }
+.tactic-num { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: rgba(18,161,80,.7); margin-bottom: 14px; display: block; }
+.tactic-title { font-size: 17px; font-weight: 700; letter-spacing: -.03em; color: var(--white); margin-bottom: 12px; line-height: 1.3; }
+.tactic-body { font-size: 14px; color: rgba(255,255,255,.45); line-height: 1.72; letter-spacing: -.01em; }
+.tactic-body strong { color: rgba(255,255,255,.75); font-weight: 600; }
+.tactics-cta { margin-top: 52px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.tactics-cta-note { font-size: 13px; color: rgba(255,255,255,.35); letter-spacing: -.01em; }
 
-@media (max-width: 900px) {
-  .pa-about__grid, .pa-faq__grid { grid-template-columns: 1fr; gap: 40px; }
-  .pa-cities__grid { grid-template-columns: repeat(3, 1fr); }
-  .pa-cities__list { column-count: 2; }
+/* ── COMPENSATION ── */
+.comp-section { max-width: 1360px; margin: 0 auto; padding: 112px 52px; }
+.comp-header { max-width: 600px; margin-bottom: 64px; }
+.comp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.comp-col { border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden; }
+.comp-col-head { padding: 22px 28px; background: var(--off-white); border-bottom: 1px solid var(--gray-200); }
+.comp-col-label { font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gray-400); margin-bottom: 6px; }
+.comp-col-title { font-size: 18px; font-weight: 800; letter-spacing: -.03em; color: var(--black); }
+.comp-items { padding: 0; }
+.comp-item { padding: 16px 28px; border-bottom: 1px solid var(--gray-100); display: flex; flex-direction: column; gap: 3px; }
+.comp-item:last-child { border-bottom: none; }
+.comp-item-name { font-size: 14px; font-weight: 600; color: var(--black); letter-spacing: -.02em; }
+.comp-item-note { font-size: 12.5px; color: var(--gray-400); line-height: 1.5; }
+
+/* ── WHY US ── */
+.why-section { background: var(--off-white); border-top: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200); }
+.why-inner { max-width: 1360px; margin: 0 auto; padding: 112px 52px; }
+.why-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-bottom: 64px; }
+.diff-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.diff-item { background: var(--white); border: 1px solid var(--gray-200); border-radius: 12px; padding: 36px 32px 32px; transition: box-shadow .3s, transform .3s cubic-bezier(.2,.8,.2,1); }
+.diff-item:hover { box-shadow: 0 16px 48px rgba(0,0,0,.07); transform: translateY(-2px); }
+.diff-icon { width: 42px; height: 42px; border-radius: 10px; background: var(--black); display: flex; align-items: center; justify-content: center; margin-bottom: 22px; }
+.diff-title { font-size: 17px; font-weight: 700; letter-spacing: -.03em; color: var(--black); margin-bottom: 10px; }
+.diff-body { font-size: 14px; color: var(--gray-500); line-height: 1.72; letter-spacing: -.01em; }
+
+/* ── STATUTE ── */
+.statute-section { background: var(--black); }
+.statute-inner { max-width: 1360px; margin: 0 auto; padding: 80px 52px; display: flex; align-items: center; justify-content: space-between; gap: 48px; flex-wrap: wrap; }
+.statute-left { max-width: 640px; }
+.statute-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(18,161,80,.12); border: 1px solid rgba(18,161,80,.3); color: #34D399; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 6px 14px; border-radius: 6px; margin-bottom: 22px; }
+.statute-tag::before { content: '\23F1'; }
+.statute-heading { font-size: clamp(26px,3vw,40px); font-weight: 800; letter-spacing: -.035em; line-height: 1.05; color: var(--white); margin-bottom: 14px; }
+.statute-body { font-size: 15px; color: rgba(255,255,255,.5); line-height: 1.72; letter-spacing: -.012em; }
+.statute-body strong { color: rgba(255,255,255,.85); font-weight: 600; }
+.statute-cta { display: flex; gap: 14px; flex-wrap: wrap; }
+.statute-cta .btn-secondary { color: rgba(255,255,255,.75); border-color: rgba(255,255,255,.22); }
+.statute-cta .btn-secondary:hover { color: var(--white); border-color: rgba(255,255,255,.5); }
+
+/* ── FAQ ── */
+.faq-section { max-width: 1360px; margin: 0 auto; padding: 112px 52px; }
+.faq-header { max-width: 560px; margin-bottom: 56px; }
+.faq-list { display: flex; flex-direction: column; max-width: 860px; }
+.faq-item { border-bottom: 1px solid var(--gray-200); }
+.faq-trigger { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 24px 0; background: none; border: none; cursor: pointer; font-family: var(--sans); font-size: 16px; font-weight: 600; color: var(--black); text-align: left; letter-spacing: -.025em; transition: color .2s; }
+.faq-trigger:hover { color: var(--accent); }
+.faq-chevron { width: 20px; height: 20px; flex-shrink: 0; color: var(--gray-400); transition: transform .4s cubic-bezier(.16,1,.3,1), color .2s; }
+.faq-item.open .faq-chevron { transform: rotate(180deg); color: var(--accent); }
+.faq-body { max-height: 0; overflow: hidden; transition: max-height .4s cubic-bezier(.16,1,.3,1); }
+.faq-body-inner { padding: 0 0 26px; font-size: 15px; color: var(--gray-500); line-height: 1.78; letter-spacing: -.012em; max-width: 680px; }
+
+/* ── SERVICE AREA ── */
+.area-section { background: var(--off-white); border-top: 1px solid var(--gray-200); padding: 80px 0; }
+.area-inner { max-width: 1360px; margin: 0 auto; padding: 0 52px; }
+.area-heading { font-size: clamp(26px,3vw,40px); font-weight: 800; letter-spacing: -.035em; line-height: 1.05; margin-bottom: 12px; }
+.area-sub { font-size: 15px; color: var(--gray-500); margin-bottom: 32px; }
+.area-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 48px; }
+.area-chip { background: var(--white); border: 1px solid var(--gray-200); border-radius: 100px; padding: 7px 16px; font-size: 12.5px; font-weight: 500; color: var(--gray-700); letter-spacing: -.01em; white-space: nowrap; transition: all .2s; text-decoration: none; display: inline-block; cursor: pointer; }
+.area-chip:hover { background: var(--black); color: var(--white); border-color: var(--black); }
+.area-cta-band { background: var(--black); border-radius: 16px; padding: 52px 56px; display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+.area-cta-band h3 { font-size: clamp(24px,2.8vw,38px); font-weight: 800; letter-spacing: -.035em; line-height: 1.05; color: var(--white); max-width: 400px; }
+.area-cta-band p { font-size: 14px; color: rgba(255,255,255,.5); margin-top: 8px; }
+.area-cta-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.area-cta-actions .btn-secondary { color: rgba(255,255,255,.75); border-color: rgba(255,255,255,.22); }
+.area-cta-actions .btn-secondary:hover { color: var(--white); border-color: rgba(255,255,255,.5); }
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .ca-hero { padding: 130px 20px 48px; }
+  .ca-headline { font-size: clamp(42px,12vw,64px); }
+  .ca-sub { font-size: 15px; max-width: 100%; }
+  .ca-actions { flex-direction: column; align-items: stretch; }
+  .ca-actions .btn-primary, .ca-actions .btn-secondary { width: 100%; justify-content: center; padding: 15px 20px; }
+  .ca-breadcrumb > :nth-child(2), .ca-breadcrumb > :nth-child(3) { display: none; }
+
+  .intro-section { grid-template-columns: 1fr; gap: 48px; padding: 72px 20px; }
+  .fact-card { position: static; }
+
+  .playbook-section { grid-template-columns: 1fr; gap: 48px; padding: 72px 20px; }
+  .playbook-sticky { position: static; }
+
+  .injuries-inner { padding: 72px 20px; }
+  .inj-grid { grid-template-columns: 1fr; }
+
+  .tactics-inner { padding: 72px 20px; }
+  .tactics-grid { grid-template-columns: 1fr; }
+
+  .comp-section { padding: 72px 20px; }
+  .comp-grid { grid-template-columns: 1fr; gap: 16px; }
+
+  .why-inner { padding: 72px 20px; }
+  .diff-grid { grid-template-columns: 1fr; }
+  .why-header { flex-direction: column; align-items: flex-start; }
+
+  .statute-inner { padding: 72px 20px; flex-direction: column; }
+
+  .faq-section { padding: 72px 20px; }
+
+  .area-inner { padding: 0 20px; }
+  .area-section { padding: 56px 0; }
+  .area-cta-band { padding: 36px 24px; flex-direction: column; }
+  .area-cta-actions .btn-primary, .area-cta-actions .btn-secondary { width: 100%; justify-content: center; }
 }
-@media (max-width: 600px) {
-  .pa-cities__grid { grid-template-columns: 1fr 1fr; }
+@media (max-width: 480px) {
+  .comp-grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .step-item .step-num { border-color: transparent; background: var(--gradient); color: var(--black); }
 }
 </style>
 
 <script>
-document.querySelectorAll('.faq__q').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const item = btn.closest('.faq__item') as HTMLElement;
-    const isOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq__item').forEach(i => {
-      i.classList.remove('open');
-      (i.querySelector('.faq__q') as HTMLElement)?.setAttribute('aria-expanded', 'false');
+// FAQ accordion
+(function() {
+  document.querySelectorAll('.faq-trigger').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item') as HTMLElement;
+      const body = item.querySelector('.faq-body') as HTMLElement;
+      const isOpen = item.classList.contains('open');
+
+      document.querySelectorAll('.faq-item.open').forEach(open => {
+        (open as HTMLElement).classList.remove('open');
+        ((open as HTMLElement).querySelector('.faq-body') as HTMLElement).style.maxHeight = '0';
+        (open.querySelector('.faq-trigger') as HTMLElement).setAttribute('aria-expanded', 'false');
+      });
+
+      if (!isOpen) {
+        item.classList.add('open');
+        body.style.maxHeight = body.scrollHeight + 'px';
+        btn.setAttribute('aria-expanded', 'true');
+      }
     });
-    if (!isOpen) {
-      item.classList.add('open');
-      btn.setAttribute('aria-expanded', 'true');
-    }
   });
-});
+})();
+
+// Stepped timeline fill
+(function() {
+  const steps = document.querySelectorAll('.playbook-section .step-item');
+  if (!steps.length) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    steps.forEach(s => s.classList.add('active'));
+    return;
+  }
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { (e.target as HTMLElement).classList.add('active'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.5, rootMargin: '0px 0px -10% 0px' });
+  steps.forEach(s => obs.observe(s));
+})();
 </script>

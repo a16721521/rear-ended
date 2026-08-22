@@ -5,9 +5,9 @@
     "shortTitle": "Car Accidents",
     "type": "car accident",
     "heroLine": "Hit by a careless driver. We take it personally.",
-    "description": "California roads are dangerous. When another driver's negligence puts you in the hospital, Law Dog fights for maximum compensation \u2014 medical bills, lost wages, pain and suffering.",
-    "metaTitle": "Car Accident Lawyer in {city} | Law Dog",
-    "metaDescription": "Injured in a car accident in {city}? Law Dog's trial attorneys fight for maximum compensation. Free consultation. No fee unless we win.",
+    "description": "California roads are dangerous. When another driver's negligence puts you in the hospital, FLM Law fights for maximum compensation \u2014 medical bills, lost wages, pain and suffering.",
+    "metaTitle": "Car Accident Lawyer in {city} | FLM Law",
+    "metaDescription": "Injured in a car accident in {city}? FLM Law's trial attorneys fight for maximum compensation. Free consultation. No fee unless we win.",
     "schema_type": "LegalService",
     "practice_code": "PI-AUTO",
     "statute_of_limitations": "2 years (CA CCP \u00a7 335.1)",
@@ -21,7 +21,7 @@
     "faqs": [
       {
         "q": "What should I do immediately after a car accident in {city}?",
-        "a": "Call 911, document the scene with photos, exchange insurance information, and seek medical attention even if you feel fine. Do not admit fault. Then call Law Dog \u2014 we offer free consultations and can advise you before you speak to any insurance adjuster."
+        "a": "Call 911, document the scene with photos, exchange insurance information, and seek medical attention even if you feel fine. Do not admit fault. Then call FLM Law \u2014 we offer free consultations and can advise you before you speak to any insurance adjuster."
       },
       {
         "q": "How long do I have to file a car accident claim in California?",
@@ -43,9 +43,9 @@
     "shortTitle": "Truck Accidents",
     "type": "truck accident",
     "heroLine": "Commercial carriers have legal teams on standby. You need one too.",
-    "description": "18-wheeler and commercial truck accidents cause catastrophic injuries. Multiple parties may be liable \u2014 the driver, the carrier, the shipper, the truck manufacturer. Law Dog investigates all of them.",
-    "metaTitle": "Truck Accident Lawyer in {city} | Law Dog",
-    "metaDescription": "Seriously injured in a truck accident in {city}? Law Dog's attorneys pursue carriers, drivers, and shippers. Free consultation. No fee unless we win.",
+    "description": "18-wheeler and commercial truck accidents cause catastrophic injuries. Multiple parties may be liable \u2014 the driver, the carrier, the shipper, the truck manufacturer. FLM Law investigates all of them.",
+    "metaTitle": "Truck Accident Lawyer in {city} | FLM Law",
+    "metaDescription": "Seriously injured in a truck accident in {city}? FLM Law's attorneys pursue carriers, drivers, and shippers. Free consultation. No fee unless we win.",
     "schema_type": "LegalService",
     "practice_code": "PI-TRUCK",
     "statute_of_limitations": "2 years (CA CCP \u00a7 335.1)",
@@ -59,7 +59,7 @@
     "faqs": [
       {
         "q": "Who can be held liable in a truck accident in {city}?",
-        "a": "In commercial truck accidents, liability can extend to the truck driver, the trucking company, the cargo loader, the truck manufacturer (if a defect contributed), and even the company that leased the vehicle. Law Dog's investigators identify every responsible party."
+        "a": "In commercial truck accidents, liability can extend to the truck driver, the trucking company, the cargo loader, the truck manufacturer (if a defect contributed), and even the company that leased the vehicle. FLM Law's investigators identify every responsible party."
       },
       {
         "q": "How is a truck accident case different from a car accident case?",
@@ -77,9 +77,9 @@
     "shortTitle": "Motorcycle Accidents",
     "type": "motorcycle accident",
     "heroLine": "Riders get blamed. We change that narrative.",
-    "description": "Motorcyclists are disproportionately blamed in accidents. Law Dog's attorneys know the law, know the bias, and build cases that put responsibility where it belongs \u2014 on the negligent driver.",
-    "metaTitle": "Motorcycle Accident Lawyer in {city} | Law Dog",
-    "metaDescription": "Injured in a motorcycle accident in {city}? Don't let insurance companies blame the rider. Law Dog fights back. Free consultation. No fee unless we win.",
+    "description": "Motorcyclists are disproportionately blamed in accidents. FLM Law's attorneys know the law, know the bias, and build cases that put responsibility where it belongs \u2014 on the negligent driver.",
+    "metaTitle": "Motorcycle Accident Lawyer in {city} | FLM Law",
+    "metaDescription": "Injured in a motorcycle accident in {city}? Don't let insurance companies blame the rider. FLM Law fights back. Free consultation. No fee unless we win.",
     "schema_type": "LegalService",
     "practice_code": "PI-MOTO",
     "statute_of_limitations": "2 years (CA CCP \u00a7 335.1)",
@@ -93,7 +93,7 @@
     "faqs": [
       {
         "q": "Can I recover damages even if I was lane splitting at the time of the accident?",
-        "a": "Yes. California is the only state where lane splitting is legal (CVC \u00a7 21658.1). The fact that you were lane splitting does not automatically reduce or eliminate your claim. Law Dog has successfully recovered compensation for riders injured while lane splitting legally."
+        "a": "Yes. California is the only state where lane splitting is legal (CVC \u00a7 21658.1). The fact that you were lane splitting does not automatically reduce or eliminate your claim. FLM Law has successfully recovered compensation for riders injured while lane splitting legally."
       },
       {
         "q": "Do I need to wear a helmet to have a valid injury claim?",
@@ -107,9 +107,9 @@
     "shortTitle": "Slip & Fall",
     "type": "slip and fall",
     "heroLine": "Property owners have a duty. When they fail it, we hold them to account.",
-    "description": "Slip, trip, and fall accidents on dangerous property are preventable. Law Dog's premises liability attorneys pursue compensation from negligent property owners, landlords, and businesses.",
-    "metaTitle": "Slip and Fall Lawyer in {city} | Law Dog",
-    "metaDescription": "Injured in a slip and fall accident in {city}? Law Dog pursues negligent property owners for full compensation. Free consultation. No fee unless we win.",
+    "description": "Slip, trip, and fall accidents on dangerous property are preventable. FLM Law's premises liability attorneys pursue compensation from negligent property owners, landlords, and businesses.",
+    "metaTitle": "Slip and Fall Lawyer in {city} | FLM Law",
+    "metaDescription": "Injured in a slip and fall accident in {city}? FLM Law pursues negligent property owners for full compensation. Free consultation. No fee unless we win.",
     "schema_type": "LegalService",
     "practice_code": "PI-PREMISES",
     "statute_of_limitations": "2 years (CA CCP \u00a7 335.1)",
@@ -127,7 +127,7 @@
       },
       {
         "q": "What if the property where I fell is owned by the government?",
-        "a": "Claims against government entities in California require a Government Tort Claim filed within 6 months of the incident (Government Code \u00a7 911.2). Missing this deadline bars your claim entirely. Contact Law Dog immediately if you were injured on government property."
+        "a": "Claims against government entities in California require a Government Tort Claim filed within 6 months of the incident (Government Code \u00a7 911.2). Missing this deadline bars your claim entirely. Contact FLM Law immediately if you were injured on government property."
       }
     ]
   },
@@ -137,9 +137,9 @@
     "shortTitle": "Rideshare Accidents",
     "type": "rideshare accident",
     "heroLine": "Rideshare companies are not your friend after a crash.",
-    "description": "Uber and Lyft accidents involve layered insurance questions depending on the driver's app status. Law Dog navigates the complexity and maximizes your recovery \u2014 whether you were a passenger, pedestrian, or another driver.",
-    "metaTitle": "Uber & Lyft Accident Lawyer in {city} | Law Dog",
-    "metaDescription": "Injured in an Uber or Lyft accident in {city}? Law Dog handles rideshare insurance complexity. Free consultation. No fee unless we win.",
+    "description": "Uber and Lyft accidents involve layered insurance questions depending on the driver's app status. FLM Law navigates the complexity and maximizes your recovery \u2014 whether you were a passenger, pedestrian, or another driver.",
+    "metaTitle": "Uber & Lyft Accident Lawyer in {city} | FLM Law",
+    "metaDescription": "Injured in an Uber or Lyft accident in {city}? FLM Law handles rideshare insurance complexity. Free consultation. No fee unless we win.",
     "schema_type": "LegalService",
     "practice_code": "PI-RIDESHARE",
     "statute_of_limitations": "2 years (CA CCP \u00a7 335.1)",
@@ -152,11 +152,11 @@
     "faqs": [
       {
         "q": "Is Uber or Lyft liable if their driver injured me?",
-        "a": "It depends on the driver's app status at the time of the crash. If the driver was on an active trip, Uber/Lyft carries up to $1 million in liability coverage. If the app was on but no trip accepted, a contingent policy applies ($50K-$100K). Law Dog determines which policy covers your injuries."
+        "a": "It depends on the driver's app status at the time of the crash. If the driver was on an active trip, Uber/Lyft carries up to $1 million in liability coverage. If the app was on but no trip accepted, a contingent policy applies ($50K-$100K). FLM Law determines which policy covers your injuries."
       },
       {
         "q": "What if I was a passenger in an Uber or Lyft that was in an accident?",
-        "a": "Passengers are generally covered under Uber/Lyft's $1M liability policy regardless of fault. You may also have a claim against the other driver. Law Dog pursues all available coverage to maximize your compensation."
+        "a": "Passengers are generally covered under Uber/Lyft's $1M liability policy regardless of fault. You may also have a claim against the other driver. FLM Law pursues all available coverage to maximize your compensation."
       }
     ]
   },
@@ -166,9 +166,9 @@
     "shortTitle": "Wrongful Death",
     "type": "wrongful death",
     "heroLine": "For families who lost someone who should still be here.",
-    "description": "When negligence takes a life, surviving family members deserve justice and financial security. Law Dog handles wrongful death cases with the gravity and tenacity they demand.",
-    "metaTitle": "Wrongful Death Lawyer in {city} | Law Dog",
-    "metaDescription": "Lost a loved one due to negligence in {city}? Law Dog's wrongful death attorneys fight for justice and your family's financial security. Free consultation.",
+    "description": "When negligence takes a life, surviving family members deserve justice and financial security. FLM Law handles wrongful death cases with the gravity and tenacity they demand.",
+    "metaTitle": "Wrongful Death Lawyer in {city} | FLM Law",
+    "metaDescription": "Lost a loved one due to negligence in {city}? FLM Law's wrongful death attorneys fight for justice and your family's financial security. Free consultation.",
     "schema_type": "LegalService",
     "practice_code": "PI-WD",
     "statute_of_limitations": "2 years (CA CCP \u00a7 335.1)",
@@ -195,9 +195,9 @@
     "shortTitle": "Catastrophic Injury",
     "type": "catastrophic injury",
     "heroLine": "Spinal cord. TBI. Amputation. These injuries don't resolve \u2014 they redefine life.",
-    "description": "Catastrophic injuries require a dramatically different damages framework than ordinary personal injury cases. Law Dog builds lifetime damage models with medical experts, life care planners, and forensic economists to pursue every dollar you'll ever need.",
-    "metaTitle": "Catastrophic Injury Lawyer in {city} | Law Dog",
-    "metaDescription": "Catastrophic injury in {city}? Law Dog builds lifetime damage models with medical experts. Free consultation. No fee unless we win.",
+    "description": "Catastrophic injuries require a dramatically different damages framework than ordinary personal injury cases. FLM Law builds lifetime damage models with medical experts, life care planners, and forensic economists to pursue every dollar you'll ever need.",
+    "metaTitle": "Catastrophic Injury Lawyer in {city} | FLM Law",
+    "metaDescription": "Catastrophic injury in {city}? FLM Law builds lifetime damage models with medical experts. Free consultation. No fee unless we win.",
     "schema_type": "LegalService",
     "practice_code": "PI-CAT",
     "statute_of_limitations": "2 years (CA CCP \u00a7 335.1); 6 months for government entities (Gov. Code \u00a7 911.2)",
@@ -235,9 +235,9 @@
     "shortTitle": "Pedestrian & Bicycle",
     "type": "pedestrian or bicycle accident",
     "heroLine": "Crosswalk and sidewalk collisions. Often catastrophic \u2014 we pursue every dollar.",
-    "description": "Pedestrians and cyclists have no protective shell. When a driver fails to yield, passes too close, or doors a cyclist, California law puts the duty squarely on the driver. Law Dog pursues full recovery for every pedestrian and bicycle accident victim.",
-    "metaTitle": "Pedestrian & Bicycle Accident Lawyer in {city} | Law Dog",
-    "metaDescription": "Struck as a pedestrian or cyclist in {city}? California law protects you. Law Dog fights for full recovery. Free consultation. No fee unless we win.",
+    "description": "Pedestrians and cyclists have no protective shell. When a driver fails to yield, passes too close, or doors a cyclist, California law puts the duty squarely on the driver. FLM Law pursues full recovery for every pedestrian and bicycle accident victim.",
+    "metaTitle": "Pedestrian & Bicycle Accident Lawyer in {city} | FLM Law",
+    "metaDescription": "Struck as a pedestrian or cyclist in {city}? California law protects you. FLM Law fights for full recovery. Free consultation. No fee unless we win.",
     "schema_type": "LegalService",
     "practice_code": "PI-PED",
     "statute_of_limitations": "2 years (CA CCP \u00a7 335.1); 6 months for government entities (Gov. Code \u00a7 911.2)",
@@ -274,8 +274,8 @@
     "shortTitle": "Premises Liability",
     "type": "premises liability",
     "heroLine": "Unsafe properties, inadequate security, negligent maintenance. Owners are accountable.",
-    "description": "Property owners in California have a legal duty to maintain safe conditions for visitors. When negligent security, a dangerous condition, or a dog bite injures you, Law Dog holds the responsible property owner fully accountable.",
-    "metaTitle": "Premises Liability Lawyer in {city} | Law Dog",
+    "description": "Property owners in California have a legal duty to maintain safe conditions for visitors. When negligent security, a dangerous condition, or a dog bite injures you, FLM Law holds the responsible property owner fully accountable.",
+    "metaTitle": "Premises Liability Lawyer in {city} | FLM Law",
     "metaDescription": "Injured on someone else's property in {city}? California law holds owners accountable. Free consultation. No fee unless we win.",
     "schema_type": "LegalService",
     "practice_code": "PI-PREM",
