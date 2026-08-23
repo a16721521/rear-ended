@@ -1,6 +1,7 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import practiceAreas from '../data/practice-areas.json';
+import cities from '../data/cities.json';
 
 const heroSchema = {
   '@context': 'https://schema.org',
@@ -9,18 +10,9 @@ const heroSchema = {
   url: 'https://gotrearended.com',
 };
 
-// Icons for practice-area cards, keyed by slug (Material Symbols Outlined)
-const iconMap: Record<string, string> = {
-  'car-accident-lawyer': 'directions_car',
-  'truck-accident-lawyer': 'local_shipping',
-  'motorcycle-accident-lawyer': 'two_wheeler',
-  'slip-and-fall-lawyer': 'personal_injury',
-  'uber-lyft-accident-lawyer': 'hail',
-  'wrongful-death-lawyer': 'sentiment_dissatisfied',
-  'catastrophic-injury-lawyer': 'emergency',
-  'pedestrian-accident-lawyer': 'directions_walk',
-  'premises-liability-lawyer': 'home_work',
-};
+const featuredCities = [...cities]
+  .sort((a, b) => b.population - a.population)
+  .slice(0, 20);
 ---
 
 <PageLayout
@@ -37,10 +29,10 @@ const iconMap: Record<string, string> = {
         <div class="hero-eyebrow">Auto-collision injury attorneys · California</div>
         <h1 class="hero-headline">got<br><span class="grad">rear ended?</span></h1>
         <p class="hero-sub">
-          The other driver hit you — we make them pay. Medical bills, lost wages, and the settlement you're actually owed. No fee unless we win.
+          The other driver hit you — we make them pay. Medical bills, lost wages, and the settlement you're actually owed.
         </p>
         <div class="hero-actions">
-          <a href="/get-started/" class="btn btn--primary">Start your claim <span style="opacity:.55">→</span></a>
+          <a href="/get-started/" class="btn btn--primary">Start your claim <span style="opacity:.55">&rarr;</span></a>
           <a href="tel:+12132865834" class="btn">(213) 286-5834</a>
         </div>
       </div>
@@ -48,13 +40,36 @@ const iconMap: Record<string, string> = {
   </div>
 
   <!-- ══════ TRUST STRIP ══════ -->
-  <div style="border-top:1px solid var(--gray-200);border-bottom:1px solid var(--gray-200);">
+  <div class="trust-bg">
     <div class="trust-strip">
-      <span class="trust-label">Why us</span>
-      <span class="trust-item">No fee unless we win</span>
-      <span class="trust-item">Free case review</span>
-      <span class="trust-item">No upfront costs</span>
-      <span class="trust-item">Fast response</span>
+      <div class="trust-item">
+        <span class="material-symbols-outlined trust-icon" aria-hidden="true">verified</span>
+        <div>
+          <div class="trust-title">No fee unless we win</div>
+          <div class="trust-note">Pure contingency</div>
+        </div>
+      </div>
+      <div class="trust-item">
+        <span class="material-symbols-outlined trust-icon" aria-hidden="true">schedule</span>
+        <div>
+          <div class="trust-title">Free consultation, 24/7</div>
+          <div class="trust-note">Nights &amp; weekends</div>
+        </div>
+      </div>
+      <div class="trust-item">
+        <span class="material-symbols-outlined trust-icon" aria-hidden="true">payments</span>
+        <div>
+          <div class="trust-title">$0 upfront</div>
+          <div class="trust-note">We advance all costs</div>
+        </div>
+      </div>
+      <div class="trust-item">
+        <span class="material-symbols-outlined trust-icon" aria-hidden="true">translate</span>
+        <div>
+          <div class="trust-title">Se habla espa&ntilde;ol</div>
+          <div class="trust-note">Bilingual team</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -78,58 +93,87 @@ const iconMap: Record<string, string> = {
   </div>
 
   <!-- ══════ PRACTICE AREAS ══════ -->
-  <div class="section">
-    <p class="section-eyebrow reveal">Practice areas</p>
-    <div class="practice-header">
-      <h2 class="section-heading reveal">Every case,<br>fought to win.</h2>
-      <p class="section-body reveal d1">We handle the most consequential personal injury cases in California. No case is too complex. No opponent is too large.</p>
+  <div class="pa-bg">
+    <div class="section">
+      <p class="section-eyebrow reveal">Practice areas</p>
+      <div class="practice-header">
+        <h2 class="section-heading reveal">Every case,<br>fought to win.</h2>
+        <p class="section-body reveal d1">We handle the most consequential personal injury cases in California. No case is too complex. No opponent is too large.</p>
+      </div>
+      <div class="case-grid">
+        <a href="/car-accident-lawyer/" class="case-item reveal">
+          <span class="material-symbols-outlined case-icon" aria-hidden="true">directions_car</span>
+          <div class="case-title">Car Accidents</div>
+          <div class="case-desc">Collisions, rear-ends, T-bones, and hit-and-run. Full recovery for all auto liability claims.</div>
+        </a>
+        <a href="/truck-accident-lawyer/" class="case-item reveal d1">
+          <span class="material-symbols-outlined case-icon" aria-hidden="true">local_shipping</span>
+          <div class="case-title">Truck & Commercial Vehicle</div>
+          <div class="case-desc">18-wheelers, delivery fleets, and semi-trucks. Complex multi-party liability handled in full.</div>
+        </a>
+        <a href="/uber-lyft-accident-lawyer/" class="case-item reveal d2">
+          <span class="material-symbols-outlined case-icon" aria-hidden="true">hail</span>
+          <div class="case-title">Rideshare Accidents</div>
+          <div class="case-desc">Uber, Lyft, and on-demand transport. We cut through layered insurance disputes fast.</div>
+        </a>
+        <a href="/slip-and-fall-lawyer/" class="case-item reveal">
+          <span class="material-symbols-outlined case-icon" aria-hidden="true">personal_injury</span>
+          <div class="case-title">Slip & Fall</div>
+          <div class="case-desc">Wet floors, uneven surfaces, dark stairwells. Premises liability cases on full contingency.</div>
+        </a>
+        <a href="/catastrophic-injury-lawyer/" class="case-item reveal d1">
+          <span class="material-symbols-outlined case-icon" aria-hidden="true">emergency</span>
+          <div class="case-title">Catastrophic Injury</div>
+          <div class="case-desc">Spinal cord, traumatic brain injury, and amputation. Lifetime damages, fully analyzed.</div>
+        </a>
+        <a href="/motorcycle-accident-lawyer/" class="case-item reveal d2">
+          <span class="material-symbols-outlined case-icon" aria-hidden="true">two_wheeler</span>
+          <div class="case-title">Motorcycle Accidents</div>
+          <div class="case-desc">Severe injuries, lane-splitting disputes, helmet defense. We fight hard for riders.</div>
+        </a>
+        <a href="/pedestrian-accident-lawyer/" class="case-item reveal">
+          <span class="material-symbols-outlined case-icon" aria-hidden="true">directions_walk</span>
+          <div class="case-title">Pedestrian Accidents</div>
+          <div class="case-desc">Crosswalk and sidewalk collisions. Often catastrophic — we pursue every dollar.</div>
+        </a>
+        <a href="/wrongful-death-lawyer/" class="case-item reveal d1">
+          <span class="material-symbols-outlined case-icon" aria-hidden="true">sentiment_dissatisfied</span>
+          <div class="case-title">Wrongful Death</div>
+          <div class="case-desc">Justice and financial recovery for families who've lost someone to negligence.</div>
+        </a>
+        <a href="/premises-liability-lawyer/" class="case-item reveal d2">
+          <span class="material-symbols-outlined case-icon" aria-hidden="true">home_work</span>
+          <div class="case-title">Premises Liability</div>
+          <div class="case-desc">Unsafe properties, inadequate security, negligent maintenance. Owners are accountable.</div>
+        </a>
+      </div>
     </div>
-    <div class="case-grid">
-      <a href="/car-accident-lawyer/" class="case-item reveal">
-        <span class="material-symbols-outlined case-icon" aria-hidden="true">directions_car</span>
-        <div class="case-title">Car Accidents</div>
-        <div class="case-desc">Collisions, rear-ends, T-bones, and hit-and-run. Full recovery for all auto liability claims.</div>
-      </a>
-      <a href="/truck-accident-lawyer/" class="case-item reveal d1">
-        <span class="material-symbols-outlined case-icon" aria-hidden="true">local_shipping</span>
-        <div class="case-title">Truck & Commercial Vehicle</div>
-        <div class="case-desc">18-wheelers, delivery fleets, and semi-trucks. Complex multi-party liability handled in full.</div>
-      </a>
-      <a href="/uber-lyft-accident-lawyer/" class="case-item reveal d2">
-        <span class="material-symbols-outlined case-icon" aria-hidden="true">hail</span>
-        <div class="case-title">Rideshare Accidents</div>
-        <div class="case-desc">Uber, Lyft, and on-demand transport. We cut through layered insurance disputes fast.</div>
-      </a>
-      <a href="/slip-and-fall-lawyer/" class="case-item reveal">
-        <span class="material-symbols-outlined case-icon" aria-hidden="true">personal_injury</span>
-        <div class="case-title">Slip & Fall</div>
-        <div class="case-desc">Wet floors, uneven surfaces, dark stairwells. Premises liability cases on full contingency.</div>
-      </a>
-      <a href="/catastrophic-injury-lawyer/" class="case-item reveal d1">
-        <span class="material-symbols-outlined case-icon" aria-hidden="true">emergency</span>
-        <div class="case-title">Catastrophic Injury</div>
-        <div class="case-desc">Spinal cord, traumatic brain injury, and amputation. Lifetime damages, fully analyzed.</div>
-      </a>
-      <a href="/motorcycle-accident-lawyer/" class="case-item reveal d2">
-        <span class="material-symbols-outlined case-icon" aria-hidden="true">two_wheeler</span>
-        <div class="case-title">Motorcycle Accidents</div>
-        <div class="case-desc">Severe injuries, lane-splitting disputes, helmet defense. We fight hard for riders.</div>
-      </a>
-      <a href="/pedestrian-accident-lawyer/" class="case-item reveal">
-        <span class="material-symbols-outlined case-icon" aria-hidden="true">directions_walk</span>
-        <div class="case-title">Pedestrian Accidents</div>
-        <div class="case-desc">Crosswalk and sidewalk collisions. Often catastrophic — we pursue every dollar.</div>
-      </a>
-      <a href="/wrongful-death-lawyer/" class="case-item reveal d1">
-        <span class="material-symbols-outlined case-icon" aria-hidden="true">sentiment_dissatisfied</span>
-        <div class="case-title">Wrongful Death</div>
-        <div class="case-desc">Justice and financial recovery for families who've lost someone to negligence.</div>
-      </a>
-      <a href="/premises-liability-lawyer/" class="case-item reveal d2">
-        <span class="material-symbols-outlined case-icon" aria-hidden="true">home_work</span>
-        <div class="case-title">Premises Liability</div>
-        <div class="case-desc">Unsafe properties, inadequate security, negligent maintenance. Owners are accountable.</div>
-      </a>
+  </div>
+
+  <!-- ══════ HOW IT WORKS ══════ -->
+  <div class="section">
+    <p class="section-eyebrow reveal">How it works</p>
+    <h2 class="section-heading reveal" style="margin-bottom:64px;">Three steps.<br>No surprises.</h2>
+
+    <div class="process-grid">
+      <div class="process-step reveal">
+        <div class="process-num">01</div>
+        <div class="process-icon-wrap"><span class="material-symbols-outlined" aria-hidden="true">phone_iphone</span></div>
+        <h3 class="process-title">Tell us what happened</h3>
+        <p class="process-body">Call us or fill out the form. In 15 minutes we'll know whether you have a case — and what it could be worth. Free. No obligation.</p>
+      </div>
+      <div class="process-step reveal d1">
+        <div class="process-num">02</div>
+        <div class="process-icon-wrap"><span class="material-symbols-outlined" aria-hidden="true">search</span></div>
+        <h3 class="process-title">We investigate &amp; build</h3>
+        <p class="process-body">We gather evidence, retain experts, compile medical records, and handle every conversation with the insurer. You focus on recovering.</p>
+      </div>
+      <div class="process-step reveal d2">
+        <div class="process-num">03</div>
+        <div class="process-icon-wrap"><span class="material-symbols-outlined" aria-hidden="true">payments</span></div>
+        <h3 class="process-title">You get compensated</h3>
+        <p class="process-body">We negotiate aggressively or take them to trial. You receive your settlement or verdict — we only get paid when you do.</p>
+      </div>
     </div>
   </div>
 
@@ -216,13 +260,55 @@ const iconMap: Record<string, string> = {
     </div>
   </div>
 
+  <!-- ══════ STATUTE OF LIMITATIONS ══════ -->
+  <div class="statute-bg">
+    <div class="statute-inner">
+      <div class="statute-left">
+        <div class="statute-tag">Statute of limitations</div>
+        <h2 class="statute-heading reveal">California gives you two years.<br>Government claims: six months.</h2>
+        <p class="statute-body reveal d1">
+          Under <strong>CCP &sect; 335.1</strong>, you have two years from the date of your injury to file suit. Claims against government entities — city buses, CalTrans roads, public facilities — must be filed within six months under <strong>Gov. Code &sect; 911.2</strong>. Once the window closes, it cannot be reopened.
+        </p>
+      </div>
+      <div class="statute-cta">
+        <a href="/get-started/" class="btn btn--primary">Start your case today &rarr;</a>
+        <a href="tel:+12132865834" class="btn btn--ghost">Call (213) 286-5834</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ SERVICE AREA ══════ -->
+  <div class="area-bg">
+    <div class="area-inner">
+      <h2 class="area-heading reveal">Serving Los Angeles County &amp; beyond.</h2>
+      <p class="area-sub reveal d1">Personal injury cases accepted throughout Southern California. We come to you.</p>
+
+      <div class="area-chips reveal d2">
+        {featuredCities.map(city => (
+          <a class="area-chip" href={`/car-accident-lawyer/${city.slug}/`}>{city.name}</a>
+        ))}
+      </div>
+
+      <div class="area-cta-band reveal">
+        <div>
+          <h3>Injured? Don't wait.</h3>
+          <p>Evidence disappears. Deadlines are real. The consultation is free and takes less than 15 minutes.</p>
+        </div>
+        <div class="area-cta-actions">
+          <a href="/get-started/" class="btn btn--primary">Free case review &rarr;</a>
+          <a href="tel:+12132865834" class="btn btn--ghost">Call (213) 286-5834</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ══════ CTA ══════ -->
   <div class="cta-wrap">
     <div class="cta-inner">
       <h2 class="cta-heading reveal">Ready to<br>fight back?</h2>
       <p class="cta-sub reveal d1">Free consultation. No obligation. No fee unless we win.</p>
       <div class="cta-actions reveal d2">
-        <a href="/get-started/" class="btn btn--primary" style="padding:15px 34px;font-size:15px;">Start your claim →</a>
+        <a href="/get-started/" class="btn btn--primary" style="padding:15px 34px;font-size:15px;">Start your claim &rarr;</a>
         <a href="tel:+12132865834" class="btn" style="padding:15px 26px;font-size:14px;">(213) 286-5834</a>
       </div>
     </div>
@@ -263,7 +349,6 @@ const iconMap: Record<string, string> = {
   line-height: .93; letter-spacing: -.038em; font-weight: 800;
   color: var(--white); margin-bottom: 32px;
 }
-.hero-headline .dim { color: rgba(255,255,255,.45); }
 .hero-headline .grad { background: var(--gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .hero-sub {
   font-size: 16.5px; color: rgba(255,255,255,.68);
@@ -278,20 +363,16 @@ const iconMap: Record<string, string> = {
 }
 .hero-actions .btn:hover { color: var(--white); border-color: rgba(255,255,255,.65); background: transparent; }
 
-/* ── TRUST STRIP ── */
+/* ── TRUST STRIP (#6 — beefed up) ── */
+.trust-bg { border-top: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200); }
 .trust-strip {
-  padding: 22px 52px; display: flex; align-items: center; gap: 56px;
-  max-width: 1360px; margin: 0 auto;
+  max-width: 1360px; margin: 0 auto; padding: 28px 52px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
 }
-.trust-label {
-  font-size: 11px; font-weight: 600; color: var(--gray-300);
-  letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; flex-shrink: 0;
-}
-.trust-item {
-  font-size: 12px; font-weight: 600; color: var(--gray-400);
-  letter-spacing: .01em; white-space: nowrap; display: flex; align-items: center; gap: 8px;
-}
-.trust-item::before { content: ''; width: 5px; height: 5px; background: var(--gradient); border-radius: 50%; opacity: .5; }
+.trust-item { display: flex; align-items: center; gap: 14px; }
+.trust-icon { font-size: 22px; color: var(--accent); flex-shrink: 0; font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+.trust-title { font-size: 14px; font-weight: 700; color: var(--black); letter-spacing: -.02em; line-height: 1.3; }
+.trust-note { font-size: 12px; color: var(--gray-400); letter-spacing: -.01em; margin-top: 1px; }
 
 /* ── METRICS ── */
 .metrics-section {
@@ -309,10 +390,23 @@ const iconMap: Record<string, string> = {
 
 /* ── SECTION SHARED ── */
 .section { max-width: 1360px; margin: 0 auto; padding: 112px 52px; }
-.section-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gray-300); margin-bottom: 56px; }
+
+/* #5 — gradient eyebrows to match practice pages */
+.section-eyebrow {
+  font-size: 11.5px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase;
+  background: var(--gradient); -webkit-background-clip: text; background-clip: text; color: transparent;
+  margin-bottom: 56px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--gradient); display: block; flex-shrink: 0; }
+
 .section-heading { font-size: clamp(32px, 3.8vw, 56px); font-weight: 800; letter-spacing: -.036em; line-height: .98; color: var(--black); margin-bottom: 24px; }
 .section-body { font-size: 15.5px; color: var(--gray-500); line-height: 1.66; letter-spacing: -.015em; max-width: 400px; }
 .practice-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-bottom: 56px; }
+
+/* #4 — off-white bg for practice areas */
+.pa-bg { background: var(--off-white); border-top: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200); }
+.pa-bg .section { padding-top: 112px; padding-bottom: 112px; }
 
 /* ── PRACTICE AREAS ── */
 .case-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--gray-200); border: 1px solid var(--gray-200); }
@@ -326,10 +420,23 @@ const iconMap: Record<string, string> = {
 .case-item:hover .case-title { color: var(--accent); }
 .case-desc { font-size: 13px; color: var(--gray-400); line-height: 1.6; letter-spacing: -.01em; }
 
+/* ── HOW IT WORKS (#7) ── */
+.process-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
+.process-step { position: relative; }
+.process-num { font-size: 11px; font-weight: 800; letter-spacing: .08em; color: var(--gray-300); margin-bottom: 24px; }
+.process-icon-wrap {
+  width: 56px; height: 56px; border-radius: 14px; background: var(--black);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 24px;
+}
+.process-icon-wrap .material-symbols-outlined { font-size: 24px; color: var(--white); font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+.process-title { font-size: 20px; font-weight: 700; letter-spacing: -.03em; color: var(--black); margin-bottom: 10px; }
+.process-body { font-size: 14.5px; color: var(--gray-500); line-height: 1.68; letter-spacing: -.012em; max-width: 340px; }
+
 /* ── RESULTS (DARK) ── */
 .results-bg { background: var(--black); }
 .results-section { max-width: 1360px; margin: 0 auto; padding: 112px 52px; }
-.results-section .section-eyebrow { color: rgba(255,255,255,.22); }
+.results-section .section-eyebrow { background: none; -webkit-background-clip: unset; background-clip: unset; color: rgba(255,255,255,.22); }
+.results-section .section-eyebrow::before { background: rgba(255,255,255,.22); }
 .results-header { display: grid; grid-template-columns: 1fr 1fr; gap: 96px; margin-bottom: 72px; align-items: end; }
 .results-heading { font-size: clamp(36px, 4vw, 58px); font-weight: 800; letter-spacing: -.038em; line-height: .98; color: var(--white); }
 .results-sub { font-size: 15.5px; color: rgba(255,255,255,.38); line-height: 1.66; letter-spacing: -.015em; }
@@ -349,11 +456,49 @@ const iconMap: Record<string, string> = {
 .diff-title { font-size: 21px; font-weight: 700; letter-spacing: -.028em; color: var(--black); margin-bottom: 10px; line-height: 1.1; }
 .diff-body { font-size: 14.5px; color: var(--gray-500); line-height: 1.66; letter-spacing: -.015em; max-width: 520px; }
 
+/* ── STATUTE OF LIMITATIONS (#9) ── */
+.statute-bg { background: var(--black); }
+.statute-inner {
+  max-width: 1360px; margin: 0 auto; padding: 80px 52px;
+  display: flex; align-items: center; justify-content: space-between; gap: 48px; flex-wrap: wrap;
+}
+.statute-left { max-width: 640px; }
+.statute-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(18,161,80,.12); border: 1px solid rgba(18,161,80,.3); color: #34D399;
+  font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: 6px 14px; border-radius: 6px; margin-bottom: 22px;
+}
+.statute-tag::before { content: '\23F1'; }
+.statute-heading { font-size: clamp(26px,3vw,40px); font-weight: 800; letter-spacing: -.035em; line-height: 1.05; color: var(--white); margin-bottom: 14px; }
+.statute-body { font-size: 15px; color: rgba(255,255,255,.5); line-height: 1.72; letter-spacing: -.012em; }
+.statute-body strong { color: rgba(255,255,255,.85); font-weight: 600; }
+.statute-cta { display: flex; gap: 14px; flex-wrap: wrap; }
+
+/* ── SERVICE AREA (#8) ── */
+.area-bg { background: var(--off-white); border-top: 1px solid var(--gray-200); padding: 80px 0; }
+.area-inner { max-width: 1360px; margin: 0 auto; padding: 0 52px; }
+.area-heading { font-size: clamp(26px,3vw,40px); font-weight: 800; letter-spacing: -.035em; line-height: 1.05; margin-bottom: 12px; }
+.area-sub { font-size: 15px; color: var(--gray-500); margin-bottom: 32px; }
+.area-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 48px; }
+.area-chip {
+  background: var(--white); border: 1px solid var(--gray-200); border-radius: 100px;
+  padding: 7px 16px; font-size: 12.5px; font-weight: 500; color: var(--gray-700);
+  letter-spacing: -.01em; white-space: nowrap; transition: all .2s; text-decoration: none;
+}
+.area-chip:hover { background: var(--black); color: var(--white); border-color: var(--black); }
+.area-cta-band {
+  background: var(--black); border-radius: 16px; padding: 52px 56px;
+  display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap;
+}
+.area-cta-band h3 { font-size: clamp(24px,2.8vw,38px); font-weight: 800; letter-spacing: -.035em; line-height: 1.05; color: var(--white); }
+.area-cta-band p { font-size: 14px; color: rgba(255,255,255,.5); margin-top: 8px; }
+.area-cta-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
 /* ── CTA ── */
 .cta-wrap {
   border-top: 1px solid rgba(255,255,255,.10);
   background-color: #0a5f47;
-  /* Full-green mesh gradient, brightest at the bottom-left */
   background-image:
     radial-gradient(60% 80% at 8% 100%, rgba(152,251,152,.95) 0%, rgba(152,251,152,0) 70%),
     radial-gradient(46% 64% at 0% 60%, rgba(201,251,184,.80) 0%, rgba(201,251,184,0) 72%),
@@ -379,8 +524,7 @@ const iconMap: Record<string, string> = {
   .hero-actions { flex-direction: column; align-items: stretch; }
   .hero-actions .btn { width: 100%; justify-content: center; padding: 15px 20px; }
 
-  .trust-strip { padding: 18px 20px; gap: 20px; overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; scrollbar-width: none; }
-  .trust-strip::-webkit-scrollbar { display: none; }
+  .trust-strip { grid-template-columns: 1fr 1fr; padding: 20px; gap: 20px; }
 
   .metrics-section { grid-template-columns: 1fr; padding: 52px 20px; gap: 0; }
   .metric { padding: 28px 0; border-right: none; border-bottom: 1px solid var(--gray-200); }
@@ -396,6 +540,9 @@ const iconMap: Record<string, string> = {
   .case-title { font-size: 14px; }
   .case-desc { font-size: 12px; }
 
+  .process-grid { grid-template-columns: 1fr; gap: 40px; }
+  .process-body { max-width: 100%; }
+
   .results-section { padding: 64px 20px; }
   .results-header { grid-template-columns: 1fr; gap: 20px; margin-bottom: 40px; }
   .results-grid { grid-template-columns: 1fr; }
@@ -405,6 +552,16 @@ const iconMap: Record<string, string> = {
   .diff-layout { grid-template-columns: 1fr; gap: 40px; }
   .diff-sticky { position: static; }
   .diff-item { grid-template-columns: 36px 1fr; gap: 16px; padding: 28px 0; }
+
+  .statute-inner { padding: 64px 20px; flex-direction: column; }
+  .statute-cta { width: 100%; }
+  .statute-cta .btn { width: 100%; justify-content: center; }
+
+  .area-bg { padding: 56px 0; }
+  .area-inner { padding: 0 20px; }
+  .area-cta-band { padding: 36px 24px; flex-direction: column; }
+  .area-cta-actions { width: 100%; }
+  .area-cta-actions .btn { width: 100%; justify-content: center; }
 
   .cta-inner { padding: 80px 20px; }
   .cta-heading { font-size: clamp(36px, 10vw, 56px); }
@@ -416,5 +573,6 @@ const iconMap: Record<string, string> = {
 @media (max-width: 420px) {
   .case-grid { grid-template-columns: 1fr; }
   .hero-headline { font-size: clamp(40px, 13vw, 60px); }
+  .trust-strip { grid-template-columns: 1fr; }
 }
 </style>
