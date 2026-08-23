@@ -12,8 +12,7 @@ routes = [
 [assets]
 directory = "./dist"
 binding = "ASSETS"
-# Run the Worker on every request (incl. asset paths) so the password gate applies sitewide.
-run_worker_first = true
+run_worker_first = false
 
 [[send_email]]
 name = "EMAIL"
