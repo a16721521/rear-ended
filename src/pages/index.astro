@@ -290,26 +290,14 @@ const featuredCities = [...cities]
       </div>
 
       <div class="area-cta-band reveal">
-        <div>
-          <h3>Injured? Don't wait.</h3>
-          <p>Evidence disappears. Deadlines are real. The consultation is free and takes less than 15 minutes.</p>
+        <div class="area-cta-text">
+          <h3>Ready to fight back?</h3>
+          <p>Evidence disappears. Deadlines are real. Free consultation — no obligation, no fee unless we win.</p>
         </div>
         <div class="area-cta-actions">
-          <a href="/get-started/" class="btn btn--primary">Free case review &rarr;</a>
-          <a href="tel:+12132865834" class="btn btn--ghost">Call (213) 286-5834</a>
+          <a href="/get-started/" class="btn btn--primary" style="padding:16px 36px;font-size:15px;background:var(--white);color:var(--black);box-shadow:0 8px 26px rgba(3,40,28,.30);">Start your claim &rarr;</a>
+          <a href="tel:+12132865834" class="btn btn--ghost" style="padding:16px 28px;font-size:15px;">(213) 286-5834</a>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════ CTA ══════ -->
-  <div class="cta-wrap">
-    <div class="cta-inner">
-      <h2 class="cta-heading reveal">Ready to<br>fight back?</h2>
-      <p class="cta-sub reveal d1">Free consultation. No obligation. No fee unless we win.</p>
-      <div class="cta-actions reveal d2">
-        <a href="/get-started/" class="btn btn--primary" style="padding:15px 34px;font-size:15px;">Start your claim &rarr;</a>
-        <a href="tel:+12132865834" class="btn" style="padding:15px 26px;font-size:14px;">(213) 286-5834</a>
       </div>
     </div>
   </div>
@@ -488,16 +476,8 @@ const featuredCities = [...cities]
 }
 .area-chip:hover { background: var(--black); color: var(--white); border-color: var(--black); }
 .area-cta-band {
-  background: var(--black); border-radius: 16px; padding: 52px 56px;
-  display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap;
-}
-.area-cta-band h3 { font-size: clamp(24px,2.8vw,38px); font-weight: 800; letter-spacing: -.035em; line-height: 1.05; color: var(--white); }
-.area-cta-band p { font-size: 14px; color: rgba(255,255,255,.5); margin-top: 8px; }
-.area-cta-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-
-/* ── CTA ── */
-.cta-wrap {
-  border-top: 1px solid rgba(255,255,255,.10);
+  border-radius: 20px; padding: 100px 72px;
+  display: flex; align-items: center; justify-content: space-between; gap: 48px; flex-wrap: wrap;
   background-color: #0a5f47;
   background-image:
     radial-gradient(60% 80% at 8% 100%, rgba(152,251,152,.95) 0%, rgba(152,251,152,0) 70%),
@@ -507,14 +487,9 @@ const featuredCities = [...cities]
     radial-gradient(64% 84% at 100% 100%, rgba(13,110,80,.60) 0%, rgba(13,110,80,0) 62%),
     linear-gradient(135deg, #0f7d5a 0%, #0a5f47 55%, #063d30 100%);
 }
-.cta-inner { max-width: 760px; margin: 0 auto; padding: 136px 52px; text-align: center; }
-.cta-heading { font-size: clamp(40px, 5.5vw, 80px); font-weight: 800; letter-spacing: -.042em; line-height: .93; color: var(--white); margin-bottom: 28px; }
-.cta-sub { font-size: 16.5px; color: rgba(255,255,255,.75); line-height: 1.6; letter-spacing: -.015em; margin-bottom: 48px; }
-.cta-actions { display: flex; align-items: center; justify-content: center; gap: 14px; }
-.cta-actions .btn--primary { background: var(--white); color: var(--black); box-shadow: 0 8px 26px rgba(3,40,28,.30); }
-.cta-actions .btn--primary:hover { filter: none; transform: translateY(-2px); box-shadow: 0 14px 36px rgba(3,40,28,.42); }
-.cta-actions .btn { color: var(--white); border-color: rgba(255,255,255,.55); background: transparent; }
-.cta-actions .btn:hover { color: var(--white); border-color: var(--white); background: rgba(255,255,255,.12); transform: translateY(-2px); }
+.area-cta-band h3 { font-size: clamp(32px,3.8vw,52px); font-weight: 800; letter-spacing: -.038em; line-height: 1.0; color: var(--white); }
+.area-cta-band p { font-size: 16px; color: rgba(255,255,255,.7); margin-top: 14px; max-width: 440px; line-height: 1.6; }
+.area-cta-actions { display: flex; gap: 14px; flex-wrap: wrap; }
 
 /* ── MOBILE ── */
 @media (max-width: 768px) {
@@ -559,15 +534,10 @@ const featuredCities = [...cities]
 
   .area-bg { padding: 56px 0; }
   .area-inner { padding: 0 20px; }
-  .area-cta-band { padding: 36px 24px; flex-direction: column; }
+  .area-cta-band { padding: 56px 24px; flex-direction: column; text-align: center; }
+  .area-cta-band p { max-width: 100%; }
   .area-cta-actions { width: 100%; }
   .area-cta-actions .btn { width: 100%; justify-content: center; }
-
-  .cta-inner { padding: 80px 20px; }
-  .cta-heading { font-size: clamp(36px, 10vw, 56px); }
-  .cta-sub { font-size: 15px; }
-  .cta-actions { flex-direction: column; align-items: stretch; }
-  .cta-actions .btn { width: 100%; justify-content: center; }
 }
 
 @media (max-width: 420px) {
