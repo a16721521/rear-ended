@@ -25,7 +25,7 @@ const currentPath = Astro.url.pathname;
     </ul>
     <div class="nav-right">
       <a href="tel:+12132865834" class="nav-phone">(213) 286-5834</a>
-      <a href="/get-started/" class="nav-cta">Free case review →</a>
+      <a href="/get-started/" class="nav-cta">Free case review <span class="arrow">→</span></a>
       <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
         <span></span><span></span><span></span>
       </button>
@@ -90,7 +90,9 @@ const currentPath = Astro.url.pathname;
   cursor: pointer; letter-spacing: -.02em; text-decoration: none; white-space: nowrap;
   transition: filter .2s, transform .2s cubic-bezier(.2,.8,.2,1);
 }
+.nav-cta .arrow { display: inline-block; transition: transform .25s ease; }
 .nav-cta:hover { transform: translateY(-1px); filter: brightness(1.12); }
+.nav-cta:hover .arrow { transform: translateX(4px); }
 
 .nav-burger {
   display: none; flex-direction: column; justify-content: center; gap: 5px;
