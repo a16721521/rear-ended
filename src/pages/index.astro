@@ -333,11 +333,12 @@ const featuredCities = [...cities]
 }
 .hero-eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--gradient); display: block; flex-shrink: 0; }
 .hero-headline {
+  font-family: 'Oswald', sans-serif;
   font-size: clamp(52px, 7.2vw, 112px);
-  line-height: .93; letter-spacing: -.038em; font-weight: 800;
-  color: var(--white); margin-bottom: 32px;
+  line-height: .93; letter-spacing: -.02em; font-weight: 700;
+  color: var(--white); margin-bottom: 32px; text-transform: uppercase;
 }
-.hero-headline .grad { background: var(--gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero-headline .grad { color: var(--white); }
 .hero-sub {
   font-size: 16.5px; color: rgba(255,255,255,.68);
   line-height: 1.62; letter-spacing: -.015em; font-weight: 400;
