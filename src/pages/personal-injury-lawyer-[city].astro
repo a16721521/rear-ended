@@ -1,0 +1,524 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import practiceAreas from '../data/practice-areas.json';
+import cities from '../data/cities.json';
+
+export function getStaticPaths() {
+  return cities.map(city => ({
+    params: { city: city.slug },
+    props: { city },
+  }));
+}
+
+const { city } = Astro.props;
+
+const iconMap: Record<string, string> = {
+  'car-accident-lawyer': 'directions_car',
+  'truck-accident-lawyer': 'local_shipping',
+  'motorcycle-accident-lawyer': 'two_wheeler',
+  'uber-lyft-accident-lawyer': 'hail',
+  'pedestrian-accident-lawyer': 'directions_walk',
+  'slip-and-fall-lawyer': 'personal_injury',
+  'premises-liability-lawyer': 'home_work',
+  'catastrophic-injury-lawyer': 'emergency',
+  'wrongful-death-lawyer': 'sentiment_dissatisfied',
+};
+
+const blurbMap: Record<string, string> = {
+  'car-accident-lawyer': 'Rear-end collisions, T-bone crashes, head-on wrecks, and DUI accidents — the most common and most contested injury claims on the road.',
+  'truck-accident-lawyer': '18-wheelers, delivery vehicles, and commercial fleets. These cases involve federal regulations, black-box data, and multiple liable parties.',
+  'motorcycle-accident-lawyer': 'Lane-splitting collisions, left-turn failures, and dooring. Motorcycle crashes produce some of the most severe injuries on the road.',
+  'uber-lyft-accident-lawyer': 'Uber and Lyft crashes involve up to three layers of insurance depending on driver status — we identify every coverage source, every time.',
+  'pedestrian-accident-lawyer': 'Crosswalk strikes, dooring, and school-zone accidents. Vehicle Code § 21950 requires drivers to yield — when they don’t, we pursue every claim.',
+  'slip-and-fall-lawyer': 'Wet floors, broken walkways, and unmarked hazards. Property owners have a duty to keep their premises reasonably safe for visitors.',
+  'premises-liability-lawyer': 'Negligent security, pool accidents, dog bites, and structural failures. When a property owner’s negligence injures you, they are responsible.',
+  'catastrophic-injury-lawyer': 'Spinal cord injuries, traumatic brain injuries, amputations, and severe burns. These cases demand life-care planners and forensic economists.',
+  'wrongful-death-lawyer': 'When negligence takes a family member, surviving spouses, children, and dependents can recover for financial loss and lost companionship.',
+};
+
+const orderedPractices = [
+  'car-accident-lawyer', 'truck-accident-lawyer', 'motorcycle-accident-lawyer',
+  'uber-lyft-accident-lawyer', 'pedestrian-accident-lawyer', 'slip-and-fall-lawyer',
+  'premises-liability-lawyer', 'catastrophic-injury-lawyer', 'wrongful-death-lawyer',
+].map(slug => practiceAreas.find(p => p.slug === slug)).filter(Boolean);
+
+const siblingsInCounty = cities
+  .filter(c => c.county === city.county && c.slug !== city.slug)
+  .slice(0, 8);
+
+const faqs = [
+  {
+    q: `How long do I have to file a personal injury lawsuit in ${city.name}?`,
+    a: `Two years from the date of injury under California Code of Civil Procedure § 335.1. If your injury involved a government entity — a city vehicle, a transit agency, or a dangerous public road — you have just six months to file an administrative tort claim under Government Code § 911.2. Missing either deadline permanently bars your case, so call an attorney as soon as you are physically able.`,
+  },
+  {
+    q: `What is the average personal injury settlement in ${city.name}?`,
+    a: `Settlement values vary widely based on injury severity, liability clarity, and available insurance. Minor soft-tissue cases typically resolve between $15,000 and $75,000. Cases involving surgery, permanent impairment, or traumatic brain injury routinely reach six or seven figures. The single biggest variable is the quality of the case build — not just the injury itself.`,
+  },
+  {
+    q: `Which courthouse handles personal injury cases in ${city.name}?`,
+    a: `Most personal injury cases arising in ${city.name} are filed in ${city.county} County Superior Court. The primary venue is the ${city.courthouse}, located at ${city.courthouse_address}. Depending on where the incident occurred and the parties involved, your case may be venued at another courthouse in the county — we file and litigate in every venue.`,
+  },
+  {
+    q: `Can I recover if I was partly at fault for my ${city.name} accident?`,
+    a: `Yes. California follows pure comparative fault under Civil Code § 1431.2. Even if you were 40% responsible, you recover 60% of your total damages. Insurers routinely inflate victim fault percentages to cut payouts — it is one of their primary negotiation tactics. We build the factual and expert record that defeats those inflated assignments.`,
+  },
+  {
+    q: `What if a government vehicle caused my accident in ${city.name}?`,
+    a: `Government entity claims require a formal administrative tort claim within six months of the incident under Government Code § 911.2. This applies to municipal vehicles, transit buses and trains, and injuries caused by dangerous, poorly maintained public roads. The six-month deadline is absolute — courts cannot extend it. If a government vehicle or road condition caused your injury, call us immediately.`,
+  },
+  {
+    q: `How does a personal injury case work on contingency?`,
+    a: `You pay nothing upfront and nothing during the case. FLM Law advances every cost — accident reconstruction, medical experts, depositions, court filing fees. Our fee is a percentage of the recovery, paid only when we win. If there is no recovery, you owe us nothing, including our advanced costs. Our interests and yours are identical: the bigger we win for you, the better for us.`,
+  },
+];
+
+const pageTitle = `${city.name} Personal Injury Lawyer | FLM Law`;
+const pageDescription = `Injured in ${city.name}? FLM Law's personal injury attorneys take on every insurer and fight for full value. Free consultation, no fee unless we win. Call (213) 286-5834.`;
+const pageUrl = `https://gotrearended.com/personal-injury-lawyer-${city.slug}/`;
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'LegalService',
+  name: `FLM Law — Personal Injury Lawyers in ${city.name}`,
+  description: `Personal injury attorneys representing ${city.name} residents in car, truck, motorcycle, rideshare, pedestrian, and premises injury claims.`,
+  url: pageUrl,
+  telephone: '+12132865834',
+  email: 'hello@gotrearended.com',
+  provider: { '@id': 'https://gotrearended.com/#organization' },
+  areaServed: [
+    { '@type': 'City', name: city.name, containedInPlace: { '@type': 'State', name: 'California' } },
+  ],
+  geo: { '@type': 'GeoCoordinates', latitude: city.lat, longitude: city.lng },
+  priceRange: 'Contingency — no fee unless we win',
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(faq => ({
+    '@type': 'Question',
+    name: faq.q,
+    acceptedAnswer: { '@type': 'Answer', text: faq.a },
+  })),
+};
+---
+
+<PageLayout title={pageTitle} description={pageDescription} schemas={[serviceSchema, faqSchema]}>
+
+<!-- ══════ HERO ══════ -->
+<header class="ca-hero-bg">
+  <div class="ca-hero">
+    <nav class="ca-breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="bc-sep" aria-hidden="true">/</span>
+      <span class="bc-current" aria-current="page">Personal Injury · {city.name}</span>
+    </nav>
+    <h1 class="ca-headline">
+      Personal injury lawyers<br>
+      <span class="dim">in {city.name}. Every cent you're owed.</span>
+    </h1>
+    <p class="ca-sub">When an accident changes your life, our trial attorneys investigate every case, take on every insurer, and settle for nothing less than full value.</p>
+    <div class="ca-actions">
+      <a href="/get-started/" class="btn-primary">Free case review <span class="arrow">&rarr;</span></a>
+      <a href="tel:+12132865834" class="btn-secondary">Call (213) 286-5834</a>
+    </div>
+    <div class="ca-hero-meta">
+      <span>No fee unless we win</span>
+      <span>Free consultation, 24/7</span>
+      <span>Se habla espa&ntilde;ol</span>
+      <span>Serving {city.county} County</span>
+    </div>
+  </div>
+</header>
+
+<!-- ══════ INTRO + FACT CARD ══════ -->
+<section class="intro-section">
+  <div class="intro-copy">
+    <p class="section-eyebrow reveal">Personal injury in {city.name}</p>
+    <h2 class="reveal">California gives you two years. Insurers start working against you on day one.</h2>
+    <p class="reveal d1">
+      When a serious injury upends your life in {city.name}, the consequences are severe — and the insurance aftermath is complicated. The other party's insurer assigned an adjuster to your claim within 24 hours. That adjuster's only job is to close your case for as little as possible. They will call you, seem sympathetic, request a recorded statement, and make an offer that sounds fair but isn't. <strong>Do not speak with any insurer before speaking with us.</strong>
+    </p>
+    <p class="reveal d1">
+      FLM Law represents injured residents across {city.name} and all of {city.county} County. We work on pure contingency: no fee unless we win, no upfront costs, no risk to you. We advance every litigation cost — investigation, expert witnesses, medical record compilation, depositions — and collect only as a percentage of what we recover. Our interests and yours are identical: <strong>maximize your compensation.</strong>
+    </p>
+    <p class="reveal d1">
+      California's two-year statute of limitations under <a href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=335.1" target="_blank" rel="noopener noreferrer">CCP § 335.1</a> applies to most personal injury claims. Claims against a city, county, transit agency, or the state must be filed within just six months under <a href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=911.2" target="_blank" rel="noopener noreferrer">Government Code § 911.2</a>. <a href="/get-started/">Contact us today</a> — the earlier we start, the more evidence we preserve.
+    </p>
+  </div>
+
+  <aside class="fact-card reveal d2" aria-label="California legal facts">
+    <div class="fact-card-head"><h3>Know your rights</h3></div>
+    <div class="fact-row">
+      <div class="fact-label">Filing deadline</div>
+      <div class="fact-value">2 years from injury</div>
+      <div class="fact-note"><a href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=335.1" target="_blank" rel="noopener noreferrer">CA Code of Civil Procedure § 335.1</a></div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-label">Government entity involved?</div>
+      <div class="fact-value">6 months</div>
+      <div class="fact-note"><a href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=911.2" target="_blank" rel="noopener noreferrer">Gov. Code § 911.2</a> — file a tort claim within 6 months or lose your right to sue</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-label">Partly at fault?</div>
+      <div class="fact-value">Still recoverable</div>
+      <div class="fact-note">Pure comparative fault — recovery reduced by your %, not eliminated</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-label">Cost to you</div>
+      <div class="fact-value">$0 upfront</div>
+      <div class="fact-note">Contingency — our fee comes from the recovery, or nothing</div>
+    </div>
+    <a href="tel:+12132865834" class="fact-card-cta">Call (213) 286-5834</a>
+  </aside>
+</section>
+
+<!-- ══════ TYPES GRID ══════ -->
+<section class="types-section">
+  <div class="types-inner">
+    <div class="types-header">
+      <p class="section-eyebrow reveal">What we handle in {city.name}</p>
+      <h2 class="types-heading reveal">Every type of injury. One firm.</h2>
+      <p class="types-sub reveal d1">From freeway pile-ups to slip-and-falls — if someone else's negligence injured you in {city.name}, we handle it.</p>
+    </div>
+    <div class="types-grid">
+      {orderedPractices.map((p, i) => (
+        <a class:list={["type-card", "reveal", `d${(i % 3) + 1}`]} href={`/${p.slug}/${city.slug}/`}>
+          <span class="material-symbols-outlined type-card-icon" aria-hidden="true">{iconMap[p.slug]}</span>
+          <h3>{p.shortTitle}</h3>
+          <p>{blurbMap[p.slug]}</p>
+          <span class="type-card-link">{p.shortTitle} in {city.name} <span class="arrow">&rarr;</span></span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- ══════ STATS BAND ══════ -->
+<section class="stats-section">
+  <div class="stats-inner">
+    <div class="stats-header">
+      <p class="section-eyebrow reveal">{city.name} by the numbers</p>
+      <h2 class="stats-heading reveal">Why your case deserves a specialist.</h2>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <div class="stat-num">{city.population.toLocaleString()}</div>
+        <div class="stat-label">Residents in {city.name}</div>
+        <div class="stat-note">Injuries here are filed in {city.county} County Superior Court</div>
+      </div>
+      <div class="stat-item reveal d1">
+        <div class="stat-num">2 yrs</div>
+        <div class="stat-label">Standard statute of limitations</div>
+        <div class="stat-note">CCP § 335.1 — just six months if a government entity is involved</div>
+      </div>
+      <div class="stat-item reveal d2">
+        <div class="stat-num">6 mo</div>
+        <div class="stat-label">Government claim deadline</div>
+        <div class="stat-note">Gov. Code § 911.2 — the deadline is absolute and cannot be extended</div>
+      </div>
+      <div class="stat-item reveal d3">
+        <div class="stat-num">$0</div>
+        <div class="stat-label">Cost to start your case</div>
+        <div class="stat-note">Pure contingency — we advance every cost and collect only when you win</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ COURTS ══════ -->
+<section class="courts-section">
+  <div class="courts-inner">
+    <div class="courts-copy">
+      <p class="section-eyebrow reveal">Where your case is filed</p>
+      <h2 class="courts-heading reveal">{city.county} County Superior Court — we litigate in every venue.</h2>
+      <p class="reveal d1">Personal injury lawsuits arising in {city.name} are filed in {city.county} County Superior Court. Depending on where your injury occurred and the parties involved, your case may be venued at one of several courthouses across the county.</p>
+      <p class="reveal d1">We know the local judges, the jury pools, and the defense firms that handle insurance cases in each district. That familiarity is a strategic advantage.</p>
+      <a href="/get-started/" class="btn-primary reveal d2">Start your case <span class="arrow">&rarr;</span></a>
+    </div>
+    <aside class="court-card reveal d2">
+      <span class="material-symbols-outlined court-card-icon" aria-hidden="true">gavel</span>
+      <div class="court-card-label">Primary venue</div>
+      <div class="court-card-name">{city.courthouse}</div>
+      <div class="court-card-addr">{city.courthouse_address}</div>
+    </aside>
+  </div>
+</section>
+
+<!-- ══════ LOCAL KNOWLEDGE ══════ -->
+<section class="local-section">
+  <div class="local-inner">
+    <div class="local-header">
+      <p class="section-eyebrow reveal">We come to you</p>
+      <h2 class="local-heading reveal">We know {city.name}.</h2>
+      <p class="local-sub reveal d1">No client ever has to come to our office to start a case. We know the roads that put you here — and the hospitals treating you now.</p>
+    </div>
+    <div class="local-grid">
+      <div class="local-block reveal d1">
+        <div class="local-block-head"><span class="material-symbols-outlined" aria-hidden="true">warning</span> High-risk corridors</div>
+        <ul>
+          {city.dangerous_corridors.map(c => <li>{c}</li>)}
+        </ul>
+      </div>
+      <div class="local-block reveal d2">
+        <div class="local-block-head"><span class="material-symbols-outlined" aria-hidden="true">local_hospital</span> Trauma centers nearby</div>
+        <ul>
+          {city.trauma_centers.map(c => <li>{c}</li>)}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ FAQ ══════ -->
+<section class="faq-section">
+  <div class="faq-inner">
+    <div class="faq-header">
+      <p class="section-eyebrow reveal">Frequently asked questions</p>
+      <h2 class="faq-heading reveal">Honest answers to hard questions.</h2>
+      <p class="faq-sub reveal d1">California law. {city.name}-specific context.</p>
+    </div>
+    <ul class="faq-list reveal d2">
+      {faqs.map(faq => (
+        <li class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            <span>{faq.q}</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a"><p class="faq-a-inner">{faq.a}</p></div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<!-- ══════ NEARBY ══════ -->
+{siblingsInCounty.length > 0 && (
+  <section class="links-section">
+    <div class="links-inner">
+      <p class="section-eyebrow reveal">Also serving {city.county} County</p>
+      <div class="links-chips reveal d1">
+        {siblingsInCounty.map(c => (
+          <a class="link-chip" href={`/personal-injury-lawyer-${c.slug}/`}>{c.name}</a>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<!-- ══════ CTA ══════ -->
+<section class="cta-section">
+  <div class="cta-band reveal">
+    <div>
+      <h2 class="cta-h">Injured in {city.name}?</h2>
+      <p class="cta-sub">Don't face insurers alone. Free consultation, no obligation, no fee unless we win.</p>
+    </div>
+    <div class="cta-actions">
+      <a href="/get-started/" class="btn-primary" style="background:var(--white);color:var(--black);box-shadow:0 8px 26px rgba(3,40,28,.30);">Start your claim <span class="arrow">&rarr;</span></a>
+      <a href="tel:+12132865834" class="btn-secondary" style="color:var(--white);border-color:rgba(255,255,255,.4);">(213) 286-5834</a>
+    </div>
+  </div>
+</section>
+
+</PageLayout>
+
+<style>
+/* ── BUTTONS ── */
+.btn-primary { display: inline-flex; align-items: center; gap: 6px; background: var(--gradient); color: var(--black); font-family: var(--sans); font-size: 14px; font-weight: 700; padding: 14px 26px; border-radius: 9px; border: none; cursor: pointer; letter-spacing: -.025em; text-decoration: none; transition: filter .2s, transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .2s; }
+.btn-primary .arrow { display: inline-block; transition: transform .25s ease; }
+.btn-primary:hover { filter: brightness(1.08); transform: translateY(-2px); box-shadow: 0 8px 28px var(--accent-glow); }
+.btn-primary:hover .arrow { transform: translateX(4px); }
+.btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--gray-500); font-family: var(--sans); font-size: 14px; font-weight: 500; padding: 14px 22px; border-radius: 9px; border: 1px solid var(--gray-200); cursor: pointer; letter-spacing: -.02em; text-decoration: none; transition: all .2s cubic-bezier(.2,.8,.2,1); }
+.btn-secondary:hover { border-color: var(--gray-400); color: var(--black); transform: translateY(-2px); }
+
+/* ── SECTION ELEMENTS ── */
+.section-eyebrow { font-size: 11.5px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; background: var(--gradient); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.section-eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--gradient); display: block; flex-shrink: 0; }
+
+/* ── HERO ── */
+.ca-hero-bg {
+  background: var(--black);
+  background-image:
+    radial-gradient(ellipse at 100% 100%, rgba(18,161,80,.18) 0%, transparent 52%),
+    radial-gradient(ellipse at 0% 60%, rgba(14,159,110,.16) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 0%, rgba(255,255,255,.015) 0%, transparent 40%);
+  min-height: 76vh; display: flex; flex-direction: column; justify-content: flex-end;
+  position: relative; overflow: hidden;
+}
+.ca-hero-bg::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(-72deg, transparent 0px, transparent 120px, rgba(255,255,255,.012) 120px, rgba(255,255,255,.012) 121px);
+}
+.ca-hero { max-width: 1360px; margin: 0 auto; padding: 168px 52px 72px; width: 100%; position: relative; z-index: 1; }
+.ca-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 36px; }
+.ca-breadcrumb a { color: rgba(255,255,255,.4); text-decoration: none; transition: color .2s; }
+.ca-breadcrumb a:hover { color: rgba(255,255,255,.75); }
+.bc-sep { color: rgba(255,255,255,.18); }
+.bc-current { color: rgba(255,255,255,.68); }
+.ca-headline { font-size: clamp(40px,5.2vw,72px); line-height: .95; letter-spacing: -.038em; font-weight: 800; color: var(--white); margin-bottom: 32px; max-width: 18ch; }
+.ca-headline .dim { color: rgba(255,255,255,.38); }
+.ca-sub { font-size: 17px; color: rgba(255,255,255,.6); line-height: 1.65; letter-spacing: -.015em; max-width: 520px; margin-bottom: 44px; }
+.ca-actions { display: flex; align-items: center; gap: 14px; margin-bottom: 52px; flex-wrap: wrap; }
+.ca-actions .btn-secondary { color: rgba(255,255,255,.75); border-color: rgba(255,255,255,.22); }
+.ca-actions .btn-secondary:hover { color: var(--white); border-color: rgba(255,255,255,.5); }
+.ca-hero-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 28px; padding-top: 28px; border-top: 1px solid rgba(255,255,255,.09); }
+.ca-hero-meta span { font-size: 12px; font-weight: 600; letter-spacing: .02em; color: rgba(255,255,255,.5); display: flex; align-items: center; gap: 8px; }
+.ca-hero-meta span::before { content: ''; width: 5px; height: 5px; background: var(--gradient); border-radius: 50%; }
+
+/* ── INTRO + FACT CARD ── */
+.intro-section { max-width: 1360px; margin: 0 auto; padding: 100px 52px; display: grid; grid-template-columns: 1fr 380px; gap: 80px; align-items: start; }
+.intro-copy h2 { font-size: clamp(28px,3vw,42px); font-weight: 800; letter-spacing: -.034em; line-height: 1.04; margin-bottom: 28px; }
+.intro-copy p { font-size: 16px; color: var(--gray-700); line-height: 1.78; letter-spacing: -.012em; margin-bottom: 22px; max-width: 640px; }
+.intro-copy p strong { color: var(--black); font-weight: 700; }
+.intro-copy p a { color: var(--black); font-weight: 600; text-decoration-color: var(--gray-300); text-underline-offset: 3px; }
+.intro-copy p a:hover { text-decoration-color: var(--accent); }
+.fact-card { position: sticky; top: 96px; border: 1px solid var(--gray-200); border-radius: 16px; overflow: hidden; }
+.fact-card-head { padding: 22px 28px; background: var(--black); }
+.fact-card-head h3 { font-size: 13px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; background: var(--gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.fact-row { padding: 20px 28px; border-bottom: 1px solid var(--gray-100); }
+.fact-row:last-of-type { border-bottom: none; }
+.fact-label { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--gray-400); margin-bottom: 5px; }
+.fact-value { font-size: 15px; font-weight: 700; letter-spacing: -.02em; color: var(--black); line-height: 1.35; }
+.fact-note { font-size: 12px; color: var(--gray-500); line-height: 1.5; margin-top: 4px; }
+.fact-note a { color: var(--black); font-weight: 600; text-decoration-color: var(--gray-300); text-underline-offset: 2px; }
+.fact-note a:hover { text-decoration-color: var(--accent); }
+.fact-card-cta { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 8px 20px 20px; background: var(--gradient); color: var(--black); font-size: 14px; font-weight: 700; padding: 14px; border-radius: 10px; text-decoration: none; letter-spacing: -.015em; transition: filter .2s, transform .2s cubic-bezier(.2,.8,.2,1); }
+.fact-card-cta:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+/* ── TYPES GRID ── */
+.types-section { background: var(--off-white); border-top: 1px solid var(--gray-100); border-bottom: 1px solid var(--gray-100); }
+.types-inner { max-width: 1360px; margin: 0 auto; padding: 100px 52px; }
+.types-header { margin-bottom: 56px; max-width: 640px; }
+.types-heading { font-size: clamp(32px,4vw,52px); font-weight: 800; letter-spacing: -.038em; line-height: .98; margin-bottom: 16px; }
+.types-sub { font-size: 16px; color: var(--gray-500); line-height: 1.65; }
+.types-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.type-card { display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--gray-200); border-radius: 16px; padding: 28px; text-decoration: none; transition: border-color .2s, transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .2s; }
+.type-card:hover { border-color: transparent; transform: translateY(-3px); box-shadow: 0 14px 40px rgba(8,8,8,.09); }
+.type-card-icon { font-size: 30px; color: var(--accent); margin-bottom: 20px; font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+.type-card h3 { font-size: 19px; font-weight: 700; letter-spacing: -.03em; color: var(--black); margin-bottom: 10px; }
+.type-card p { font-size: 14px; color: var(--gray-500); line-height: 1.6; letter-spacing: -.01em; margin-bottom: 20px; flex-grow: 1; }
+.type-card-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; letter-spacing: -.01em; background: var(--gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.type-card-link .arrow { display: inline-block; transition: transform .25s ease; color: var(--accent); -webkit-text-fill-color: var(--accent); }
+.type-card:hover .type-card-link .arrow { transform: translateX(4px); }
+
+/* ── STATS ── */
+.stats-section { background: var(--black); }
+.stats-inner { max-width: 1360px; margin: 0 auto; padding: 100px 52px; }
+.stats-header { margin-bottom: 56px; }
+.stats-heading { font-size: clamp(30px,3.6vw,48px); font-weight: 800; letter-spacing: -.038em; line-height: 1.0; color: var(--white); }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid rgba(255,255,255,.1); border-radius: 16px; overflow: hidden; }
+.stat-item { padding: 36px 32px; border-right: 1px solid rgba(255,255,255,.08); }
+.stat-item:last-child { border-right: none; }
+.stat-num { font-size: clamp(36px,4vw,52px); font-weight: 800; letter-spacing: -.04em; line-height: 1; background: var(--gradient); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 16px; }
+.stat-label { font-size: 15px; font-weight: 700; letter-spacing: -.02em; color: var(--white); margin-bottom: 8px; }
+.stat-note { font-size: 12.5px; color: rgba(255,255,255,.5); line-height: 1.55; }
+
+/* ── COURTS ── */
+.courts-section { border-bottom: 1px solid var(--gray-100); }
+.courts-inner { max-width: 1360px; margin: 0 auto; padding: 100px 52px; display: grid; grid-template-columns: 1fr 380px; gap: 80px; align-items: center; }
+.courts-heading { font-size: clamp(28px,3vw,42px); font-weight: 800; letter-spacing: -.034em; line-height: 1.05; margin-bottom: 24px; }
+.courts-copy p { font-size: 16px; color: var(--gray-700); line-height: 1.75; margin-bottom: 20px; max-width: 620px; }
+.courts-copy .btn-primary { margin-top: 8px; }
+.court-card { background: var(--black); border-radius: 16px; padding: 36px 32px; }
+.court-card-icon { font-size: 28px; color: var(--accent); margin-bottom: 20px; font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+.court-card-label { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 10px; }
+.court-card-name { font-size: 22px; font-weight: 800; letter-spacing: -.03em; color: var(--white); line-height: 1.15; margin-bottom: 10px; }
+.court-card-addr { font-size: 14px; color: rgba(255,255,255,.55); line-height: 1.5; }
+
+/* ── LOCAL KNOWLEDGE ── */
+.local-section { border-bottom: 1px solid var(--gray-100); }
+.local-inner { max-width: 1360px; margin: 0 auto; padding: 100px 52px; }
+.local-header { margin-bottom: 48px; max-width: 620px; }
+.local-heading { font-size: clamp(28px,3vw,42px); font-weight: 800; letter-spacing: -.034em; line-height: 1.04; margin-bottom: 16px; }
+.local-sub { font-size: 16px; color: var(--gray-500); line-height: 1.65; }
+.local-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.local-block { border: 1px solid var(--gray-200); border-radius: 16px; padding: 32px; }
+.local-block-head { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--black); margin-bottom: 20px; }
+.local-block-head .material-symbols-outlined { font-size: 20px; color: var(--accent); font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+.local-block ul { list-style: none; }
+.local-block li { padding: 14px 0; border-top: 1px solid var(--gray-100); font-size: 15px; color: var(--gray-700); letter-spacing: -.01em; }
+.local-block li:first-child { border-top: none; }
+
+/* ── FAQ ── */
+.faq-section { border-bottom: 1px solid var(--gray-100); }
+.faq-inner { max-width: 1360px; margin: 0 auto; padding: 100px 52px; display: grid; grid-template-columns: 320px 1fr; gap: 80px; }
+.faq-heading { font-size: clamp(28px,3vw,42px); font-weight: 800; letter-spacing: -.034em; line-height: 1.04; margin-bottom: 12px; }
+.faq-sub { font-size: 15px; color: var(--gray-400); line-height: 1.6; }
+.faq-list { list-style: none; }
+.faq-item { border-top: 1px solid var(--gray-200); overflow: hidden; }
+.faq-q { width: 100%; background: none; border: none; text-align: left; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; font-family: inherit; font-size: 16px; font-weight: 600; letter-spacing: -.015em; color: var(--black); transition: color .2s; }
+.faq-q:hover { color: var(--accent); }
+.faq-chevron { width: 20px; height: 20px; flex-shrink: 0; color: var(--gray-400); transition: transform .3s ease; }
+.faq-item.open .faq-chevron { transform: rotate(180deg); color: var(--accent); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+.faq-a-inner { padding: 0 0 24px; font-size: 15px; line-height: 1.75; color: var(--gray-700); max-width: 720px; }
+.faq-item.open .faq-a { max-height: 600px; }
+
+/* ── LINKS ── */
+.links-section { border-bottom: 1px solid var(--gray-100); }
+.links-inner { max-width: 1360px; margin: 0 auto; padding: 80px 52px; }
+.links-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.link-chip { padding: 10px 20px; border-radius: 100px; border: 1px solid var(--gray-200); font-size: 13px; font-weight: 500; color: var(--gray-700); text-decoration: none; transition: all .2s cubic-bezier(.2,.8,.2,1); letter-spacing: -.01em; }
+.link-chip:hover { background: var(--black); color: var(--white); border-color: var(--black); }
+
+/* ── CTA ── */
+.cta-section { max-width: 1360px; margin: 0 auto; padding: 0 52px 100px; }
+.cta-band { border-radius: 20px; padding: 80px 72px; display: flex; align-items: center; justify-content: space-between; gap: 48px; flex-wrap: wrap;
+  background-color: #0a5f47;
+  background-image:
+    radial-gradient(60% 80% at 8% 100%, rgba(152,251,152,.95) 0%, rgba(152,251,152,0) 70%),
+    radial-gradient(46% 64% at 0% 60%, rgba(201,251,184,.80) 0%, rgba(201,251,184,0) 72%),
+    radial-gradient(54% 74% at 30% 82%, rgba(52,211,153,.85) 0%, rgba(52,211,153,0) 72%),
+    radial-gradient(70% 92% at 96% 6%, rgba(6,61,48,.95) 0%, rgba(6,61,48,0) 66%),
+    radial-gradient(64% 84% at 100% 100%, rgba(13,110,80,.60) 0%, rgba(13,110,80,0) 62%),
+    linear-gradient(135deg, #0f7d5a 0%, #0a5f47 55%, #063d30 100%);
+}
+.cta-h { font-size: clamp(32px,3.8vw,52px); font-weight: 800; letter-spacing: -.038em; line-height: 1.0; color: var(--white); }
+.cta-sub { font-size: 16px; color: rgba(255,255,255,.7); margin-top: 14px; max-width: 440px; line-height: 1.6; }
+.cta-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+/* ── MOBILE ── */
+@media (max-width: 980px) {
+  .types-grid { grid-template-columns: repeat(2, 1fr); }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .stat-item:nth-child(2) { border-right: none; }
+  .stat-item:nth-child(1), .stat-item:nth-child(2) { border-bottom: 1px solid rgba(255,255,255,.08); }
+  .intro-section, .courts-inner { grid-template-columns: 1fr; gap: 48px; }
+  .fact-card { position: static; }
+}
+@media (max-width: 900px) {
+  .ca-hero { padding: 130px 24px 56px; }
+  .ca-headline { font-size: clamp(36px,10vw,52px); }
+  .ca-actions { flex-direction: column; align-items: stretch; }
+  .ca-actions .btn-primary, .ca-actions .btn-secondary { width: 100%; justify-content: center; }
+  .ca-hero-meta { gap: 16px; }
+  .intro-section, .types-inner, .stats-inner, .courts-inner, .local-inner, .faq-inner, .links-inner { padding-left: 24px; padding-right: 24px; }
+  .intro-section { padding-top: 64px; padding-bottom: 64px; }
+  .types-inner, .stats-inner, .courts-inner, .local-inner, .faq-inner { padding-top: 64px; padding-bottom: 64px; }
+  .faq-inner { grid-template-columns: 1fr; gap: 32px; }
+  .local-grid { grid-template-columns: 1fr; }
+  .cta-section { padding: 0 24px 64px; }
+  .cta-band { padding: 56px 28px; flex-direction: column; text-align: center; }
+  .cta-sub { max-width: 100%; }
+  .cta-actions { width: 100%; }
+  .cta-actions .btn-primary, .cta-actions .btn-secondary { width: 100%; justify-content: center; }
+}
+@media (max-width: 560px) {
+  .types-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .stat-item { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .stat-item:last-child { border-bottom: none; }
+}
+</style>
+
+<script>
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item') as HTMLElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+</script>
