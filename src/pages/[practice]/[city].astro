@@ -14,20 +14,26 @@ export function getStaticPaths() {
 
 const { practice, city } = Astro.props;
 
-// Interpolate {city} tokens in strings
 const t = (s: string) => s.replace(/{city}/g, city.name);
 
-// Sibling cities for internal linking (same county, different city)
 const siblingsInCounty = cities
   .filter(c => c.county === city.county && c.slug !== city.slug)
   .slice(0, 6);
 
-// Other practice areas for cross-linking
 const otherPractices = practiceAreas.filter(p => p.slug !== practice.slug);
 
 const pageTitle = t(practice.metaTitle);
 const pageDescription = t(practice.metaDescription);
 const pageUrl = `https://gotrearended.com/${practice.slug}/${city.slug}/`;
+
+const solMatch = practice.statute_of_limitations.match(/\(([^)]+)\)/);
+const solValue = practice.statute_of_limitations.replace(/\s*\([^)]+\)/, '');
+const solNote = solMatch ? solMatch[1] : '';
+
+const processedFaqs = practice.faqs.map(faq => ({
+  q: t(faq.q),
+  a: t(faq.a),
+}));
 
 const serviceSchema = {
   '@context': 'https://schema.org',
@@ -35,6 +41,8 @@ const serviceSchema = {
   name: `FLM Law — ${practice.title} in ${city.name}`,
   description: t(practice.description),
   url: pageUrl,
+  telephone: '+12132865834',
+  email: 'hello@gotrearended.com',
   provider: { '@id': 'https://gotrearended.com/#organization' },
   areaServed: [
     {
@@ -51,17 +59,18 @@ const serviceSchema = {
     latitude: city.lat,
     longitude: city.lng,
   },
+  priceRange: 'Contingency — no fee unless we win',
 };
 
 const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: practice.faqs.map(faq => ({
+  mainEntity: processedFaqs.map(faq => ({
     '@type': 'Question',
-    name: t(faq.q),
+    name: faq.q,
     acceptedAnswer: {
       '@type': 'Answer',
-      text: t(faq.a),
+      text: faq.a,
     },
   })),
 };
@@ -73,365 +82,353 @@ const faqSchema = {
   schemas={[serviceSchema, faqSchema]}
 >
 
-  <!-- ── BREADCRUMB ─────────────────────────────────────────────── -->
-  <nav class="breadcrumb" aria-label="Breadcrumb">
-    <div class="wrap">
-      <ol>
-        <li><a href="/">FLM Law</a></li>
-        <li><a href={`/${practice.slug}/`}>{practice.shortTitle}</a></li>
-        <li aria-current="page">{city.name}</li>
-      </ol>
+<!-- ══════ HERO ══════ -->
+<header class="ca-hero-bg">
+  <div class="ca-hero">
+    <nav class="ca-breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="bc-sep" aria-hidden="true">/</span>
+      <a href={`/${practice.slug}/`}>{practice.shortTitle}</a>
+      <span class="bc-sep" aria-hidden="true">/</span>
+      <span class="bc-current" aria-current="page">{city.name}</span>
+    </nav>
+
+    <h1 class="ca-headline">
+      {practice.title}<br>
+      <span class="dim">in {city.name}.</span>
+    </h1>
+
+    <p class="ca-sub">{t(practice.heroLine)}</p>
+
+    <div class="ca-actions">
+      <a href="/get-started/" class="btn-primary">Free case review <span class="arrow">&rarr;</span></a>
+      <a href="tel:+12132865834" class="btn-secondary">Call (213) 286-5834</a>
     </div>
-  </nav>
 
-  <!-- ── HERO ──────────────────────────────────────────────────── -->
-  <section class="lp-hero">
-    <div class="wrap">
-      <p class="label">Serving {city.county} County</p>
-      <h1 class="lp-hero__h reveal">
-        {practice.title}<br>
-        <em>in {city.name}</em>
-      </h1>
-      <p class="lp-hero__sub reveal">
-        {t(practice.heroLine)}
-      </p>
-      <div class="lp-hero__actions reveal">
-        <a href="/get-started/" class="btn btn--primary">Free Case Evaluation</a>
-        <a href="tel:+12132865834" class="btn">(213) 286-5834</a>
-      </div>
+    <div class="ca-hero-meta">
+      <span>No fee unless we win</span>
+      <span>Free consultation, 24/7</span>
+      <span>Serving {city.county} County</span>
     </div>
-  </section>
+  </div>
+</header>
 
-  <!-- ── LOCAL CONTEXT ──────────────────────────────────────────── -->
-  <section class="lp-local">
-    <div class="wrap">
-      <div class="lp-local__grid">
+<!-- ══════ LOCAL CONTEXT + FACT CARD ══════ -->
+<section class="intro-section">
+  <div class="intro-copy">
+    <p class="section-eyebrow reveal">About {city.name}</p>
+    <h2 class="reveal">{practice.title} cases in {city.name}, California.</h2>
+    <p class="reveal d1">
+      {city.name} is home to {city.population.toLocaleString()} residents
+      in {city.county} County. {practice.type.charAt(0).toUpperCase() + practice.type.slice(1)} cases
+      in {city.name} are heard at the <strong>{city.courthouse}</strong>,
+      located at {city.courthouse_address}.
+    </p>
+    <p class="reveal d1">
+      Serious injuries from {practice.type}s are treated at local trauma centers
+      including {city.trauma_centers.slice(0, 2).join(' and ')}.
+      FLM Law represents {city.name} residents throughout every stage of the legal process —
+      from initial investigation to trial if needed.
+    </p>
+    <p class="reveal d1">
+      California's pure comparative fault rule (<a href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1431.2" target="_blank" rel="noopener noreferrer">Civil Code &sect; 1431.2</a>) means you can recover even if you were partly at fault. <a href="/get-started/">Contact us today</a> — the earlier we start, the more evidence we preserve.
+    </p>
+  </div>
 
-        <div class="lp-local__col">
-          <p class="label" style="margin-bottom:16px;">About {city.name}</p>
-          <p class="lp-local__intro">
-            {city.name} is home to {city.population.toLocaleString()} residents
-            in {city.county} County. {practice.type.charAt(0).toUpperCase() + practice.type.slice(1)} cases
-            in {city.name} are heard at the <strong>{city.courthouse}</strong>,
-            located at {city.courthouse_address}.
-          </p>
-          <p class="lp-local__intro" style="margin-top:14px;">
-            Serious injuries from {practice.type}s are treated at local trauma centers
-            including {city.trauma_centers.slice(0, 2).join(' and ')}.
-            FLM Law represents {city.name} residents throughout every stage of the legal process —
-            from initial investigation to trial if needed.
-          </p>
-        </div>
-
-        <div class="lp-local__facts">
-          <div class="lp-local__fact">
-            <span class="lp-local__fact-label label">Courthouse</span>
-            <span class="lp-local__fact-val">{city.courthouse}</span>
-          </div>
-          <div class="lp-local__fact">
-            <span class="lp-local__fact-label label">County</span>
-            <span class="lp-local__fact-val">{city.county} County</span>
-          </div>
-          <div class="lp-local__fact">
-            <span class="lp-local__fact-label label">Population</span>
-            <span class="lp-local__fact-val">{city.population.toLocaleString()}</span>
-          </div>
-          <div class="lp-local__fact">
-            <span class="lp-local__fact-label label">Statute of Limitations</span>
-            <span class="lp-local__fact-val">{practice.statute_of_limitations}</span>
-          </div>
-        </div>
-
-      </div>
+  <aside class="fact-card reveal d2" aria-label="California legal facts">
+    <div class="fact-card-head"><h3>Know your rights</h3></div>
+    <div class="fact-row">
+      <div class="fact-label">Filing deadline</div>
+      <div class="fact-value">{solValue}</div>
+      <div class="fact-note">{solNote}</div>
     </div>
-  </section>
-
-  <!-- ── DANGEROUS CORRIDORS ────────────────────────────────────── -->
-  {(practice.practice_code === 'PI-AUTO' || practice.practice_code === 'PI-TRUCK' || practice.practice_code === 'PI-MOTO' || practice.practice_code === 'PI-RIDESHARE') && (
-    <section class="lp-corridors">
-      <div class="wrap">
-        <div class="section-header">
-          <span class="section-header__label">High-Accident Areas in {city.name}</span>
-        </div>
-        <ul class="lp-corridors__list">
-          {city.dangerous_corridors.map(corridor => (
-            <li>
-              <span class="mono" style="color:var(--gray-400);font-size:9px;letter-spacing:.12em;">LOCATION</span>
-              <span>{corridor}</span>
-            </li>
-          ))}
-        </ul>
-        <p class="lp-corridors__note">
-          These corridors see disproportionate accident rates due to traffic volume, road design,
-          or intersection geometry. If you were injured near any of these areas, FLM Law can
-          investigate whether a third party — including a government entity — may share liability.
-        </p>
-      </div>
-    </section>
-  )}
-
-  <!-- ── TRAUMA CENTERS ─────────────────────────────────────────── -->
-  <section class="lp-trauma">
-    <div class="wrap">
-      <div class="section-header">
-        <span class="section-header__label">Trauma Centers Near {city.name}</span>
-      </div>
-      <ul class="lp-trauma__list">
-        {city.trauma_centers.map(center => (
-          <li>{center}</li>
-        ))}
-      </ul>
+    <div class="fact-row">
+      <div class="fact-label">Government entity involved?</div>
+      <div class="fact-value">6 months</div>
+      <div class="fact-note"><a href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=911.2" target="_blank" rel="noopener noreferrer">Gov. Code &sect; 911.2</a> — city, county, or state</div>
     </div>
-  </section>
-
-  <!-- ── FAQ ────────────────────────────────────────────────────── -->
-  <section class="lp-faq">
-    <div class="wrap">
-      <div class="lp-faq__grid">
-        <div class="lp-faq__aside">
-          <p class="label" style="margin-bottom:16px;">FAQ</p>
-          <h2 class="lp-faq__h">{practice.shortTitle} Questions<br>in {city.name}</h2>
-          <p style="font-size:14px;color:var(--gray-400);line-height:1.6;margin-top:12px;">
-            California law. {city.name}-specific context.
-          </p>
-        </div>
-        <ul class="faq__list">
-          {practice.faqs.map(faq => (
-            <li class="faq__item">
-              <button class="faq__q" aria-expanded="false">
-                <span>{t(faq.q)}</span>
-                <span class="faq__q-icon" aria-hidden="true">+</span>
-              </button>
-              <div class="faq__a">
-                <p class="faq__a-inner">{t(faq.a)}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div class="fact-row">
+      <div class="fact-label">Partly at fault?</div>
+      <div class="fact-value">Still recoverable</div>
+      <div class="fact-note">Pure comparative fault — recovery reduced, not eliminated</div>
     </div>
-  </section>
+    <div class="fact-row">
+      <div class="fact-label">Cost to you</div>
+      <div class="fact-value">$0 upfront</div>
+      <div class="fact-note">Contingency — our fee comes from the recovery, or nothing</div>
+    </div>
+    <a href="tel:+12132865834" class="fact-card-cta">Call (213) 286-5834</a>
+  </aside>
+</section>
 
-  <!-- ── NEARBY CITIES ──────────────────────────────────────────── -->
-  {siblingsInCounty.length > 0 && (
-    <section class="lp-nearby">
-      <div class="wrap">
-        <div class="section-header">
-          <span class="section-header__label">Also Serving {city.county} County</span>
-        </div>
-        <ul class="lp-nearby__list">
-          {siblingsInCounty.map(c => (
-            <li>
-              <a href={`/${practice.slug}/${c.slug}/`}>
-                {practice.title} in {c.name} →
-              </a>
-            </li>
-          ))}
-        </ul>
+<!-- ══════ DANGEROUS CORRIDORS ══════ -->
+{(practice.practice_code === 'PI-AUTO' || practice.practice_code === 'PI-TRUCK' || practice.practice_code === 'PI-MOTO' || practice.practice_code === 'PI-RIDESHARE') && (
+  <section class="corridors-section">
+    <div class="corridors-inner">
+      <div class="corridors-header">
+        <p class="section-eyebrow reveal">High-risk areas</p>
+        <h2 class="corridors-heading reveal">Dangerous corridors in {city.name}.</h2>
+        <p class="corridors-sub reveal d1">These corridors see disproportionate accident rates due to traffic volume, road design, or intersection geometry. If you were injured near any of these areas, FLM Law can investigate whether a third party — including a government entity — may share liability.</p>
       </div>
-    </section>
-  )}
-
-  <!-- ── OTHER PRACTICE AREAS ───────────────────────────────────── -->
-  <section class="lp-cross">
-    <div class="wrap">
-      <div class="section-header">
-        <span class="section-header__label">Other Cases We Handle in {city.name}</span>
-      </div>
-      <ul class="lp-cross__list">
-        {otherPractices.slice(0, 4).map(p => (
+      <ul class="corridors-list reveal d2">
+        {city.dangerous_corridors.map(corridor => (
           <li>
-            <a href={`/${p.slug}/${city.slug}/`}>
-              {p.title} in {city.name} →
-            </a>
+            <span class="material-symbols-outlined corridors-icon" aria-hidden="true">location_on</span>
+            <span>{corridor}</span>
           </li>
         ))}
       </ul>
     </div>
   </section>
+)}
 
-  <!-- ── CTA ────────────────────────────────────────────────────── -->
-  <section class="lp-cta">
-    <div class="wrap">
-      <div class="lp-cta__inner">
-        <div>
-          <h2 class="lp-cta__h reveal">
-            Injured in {city.name}?<br>
-            <em>We're ready.</em>
-          </h2>
-          <p class="lp-cta__sub">Free consultation. No fee unless we win.</p>
-        </div>
-        <div class="lp-cta__actions">
-          <a href="/get-started/" class="btn btn--primary">Get a Free Case Review</a>
-          <a href="tel:+12132865834" class="btn">(213) 286-5834</a>
+<!-- ══════ TRAUMA CENTERS ══════ -->
+<section class="trauma-section">
+  <div class="trauma-inner">
+    <p class="section-eyebrow reveal">Medical resources</p>
+    <h2 class="trauma-heading reveal">Trauma centers near {city.name}.</h2>
+    <ul class="trauma-list reveal d1">
+      {city.trauma_centers.map(center => (
+        <li>
+          <span class="material-symbols-outlined trauma-icon" aria-hidden="true">local_hospital</span>
+          <span>{center}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<!-- ══════ FAQ ══════ -->
+<section class="faq-section">
+  <div class="faq-inner">
+    <div class="faq-header">
+      <p class="section-eyebrow reveal">FAQ</p>
+      <h2 class="faq-heading reveal">{practice.shortTitle} questions in {city.name}.</h2>
+      <p class="faq-sub reveal d1">California law. {city.name}-specific context.</p>
+    </div>
+    <ul class="faq-list reveal d2">
+      {processedFaqs.map(faq => (
+        <li class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            <span>{faq.q}</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a">
+            <p class="faq-a-inner">{faq.a}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<!-- ══════ NEARBY + CROSS-LINKS ══════ -->
+<section class="links-section">
+  <div class="links-inner">
+    {siblingsInCounty.length > 0 && (
+      <div class="links-block">
+        <p class="section-eyebrow reveal">Also serving {city.county} County</p>
+        <div class="links-chips reveal d1">
+          {siblingsInCounty.map(c => (
+            <a class="link-chip" href={`/${practice.slug}/${c.slug}/`}>{c.name}</a>
+          ))}
         </div>
       </div>
+    )}
+    <div class="links-block">
+      <p class="section-eyebrow reveal">Other cases we handle in {city.name}</p>
+      <div class="links-chips reveal d1">
+        {otherPractices.slice(0, 6).map(p => (
+          <a class="link-chip" href={`/${p.slug}/${city.slug}/`}>{p.shortTitle}</a>
+        ))}
+      </div>
     </div>
-  </section>
+  </div>
+</section>
+
+<!-- ══════ CTA ══════ -->
+<section class="cta-section">
+  <div class="cta-band reveal">
+    <div>
+      <h2 class="cta-h">Injured in {city.name}?</h2>
+      <p class="cta-sub">Free consultation. No obligation. No fee unless we win.</p>
+    </div>
+    <div class="cta-actions">
+      <a href="/get-started/" class="btn-primary" style="background:var(--white);color:var(--black);box-shadow:0 8px 26px rgba(3,40,28,.30);">Start your claim <span class="arrow">&rarr;</span></a>
+      <a href="tel:+12132865834" class="btn-secondary" style="color:var(--white);border-color:rgba(255,255,255,.4);">(213) 286-5834</a>
+    </div>
+  </div>
+</section>
 
 </PageLayout>
 
 <style>
-.breadcrumb {
-  background: var(--gray-100);
-  border-bottom: var(--rule);
-  padding: 12px 0;
-}
-.breadcrumb ol {
-  list-style: none; display: flex; gap: 8px;
-font-size: 10px;
-  letter-spacing: .1em; text-transform: uppercase; color: var(--gray-400);
-}
-.breadcrumb li:not(:last-child)::after { content: '/'; margin-left: 8px; }
-.breadcrumb a { color: var(--gray-400); text-decoration: none; }
-.breadcrumb a:hover { color: var(--black); }
+/* ── BUTTONS ── */
+.btn-primary { display: inline-flex; align-items: center; gap: 6px; background: var(--gradient); color: var(--black); font-family: var(--sans); font-size: 14px; font-weight: 700; padding: 14px 26px; border-radius: 9px; border: none; cursor: pointer; letter-spacing: -.025em; text-decoration: none; transition: filter .2s, transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .2s; }
+.btn-primary .arrow { display: inline-block; transition: transform .25s ease; }
+.btn-primary:hover { filter: brightness(1.08); transform: translateY(-2px); box-shadow: 0 8px 28px var(--accent-glow); }
+.btn-primary:hover .arrow { transform: translateX(4px); }
+.btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--gray-500); font-family: var(--sans); font-size: 14px; font-weight: 500; padding: 14px 22px; border-radius: 9px; border: 1px solid var(--gray-200); cursor: pointer; letter-spacing: -.02em; text-decoration: none; transition: all .2s cubic-bezier(.2,.8,.2,1); }
+.btn-secondary:hover { border-color: var(--gray-400); color: var(--black); transform: translateY(-2px); }
 
-.lp-hero { padding: 80px 0; border-bottom: var(--rule-heavy); }
-.lp-hero__h {
-font-size: clamp(40px, 6.5vw, 80px);
-  font-weight: 900; letter-spacing: -.04em; line-height: .92;
-  margin: 16px 0 24px;
-}
-.lp-hero__h em { font-style: italic; color: var(--accent); }
-.lp-hero__sub {
-  font-size: 15px; color: var(--gray-400);
-letter-spacing: .04em;
-  max-width: 52ch; margin-bottom: 36px;
-}
-.lp-hero__actions { display: flex; gap: 16px; flex-wrap: wrap; }
+/* ── SECTION ELEMENTS ── */
+.section-eyebrow { font-size: 11.5px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; background: var(--gradient); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.section-eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--gradient); display: block; flex-shrink: 0; }
 
-.lp-local { padding: 60px 0; border-bottom: var(--rule-heavy); }
-.lp-local__grid { display: grid; grid-template-columns: 1fr 320px; gap: 60px; align-items: start; }
-.lp-local__intro { font-size: 15px; line-height: 1.75; color: var(--gray-700); }
-.lp-local__facts { display: flex; flex-direction: column; gap: 0; border: var(--rule-heavy); }
-.lp-local__fact { padding: 20px 24px; border-bottom: var(--rule-heavy); }
-.lp-local__fact:last-child { border-bottom: none; }
-.lp-local__fact-label { display: block; margin-bottom: 6px; }
-.lp-local__fact-val { font-size: 14px; font-weight: 600; }
+/* ── HERO ── */
+.ca-hero-bg {
+  background: var(--black);
+  background-image:
+    radial-gradient(ellipse at 100% 100%, rgba(18,161,80,.18) 0%, transparent 52%),
+    radial-gradient(ellipse at 0% 60%, rgba(14,159,110,.16) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 0%, rgba(255,255,255,.015) 0%, transparent 40%);
+  min-height: 72vh; display: flex; flex-direction: column; justify-content: flex-end;
+  position: relative; overflow: hidden;
+}
+.ca-hero-bg::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(-72deg, transparent 0px, transparent 120px, rgba(255,255,255,.012) 120px, rgba(255,255,255,.012) 121px);
+}
+.ca-hero { max-width: 1360px; margin: 0 auto; padding: 160px 52px 72px; width: 100%; position: relative; z-index: 1; }
+.ca-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 36px; }
+.ca-breadcrumb a { color: rgba(255,255,255,.4); text-decoration: none; transition: color .2s; }
+.ca-breadcrumb a:hover { color: rgba(255,255,255,.75); }
+.bc-sep { color: rgba(255,255,255,.18); }
+.bc-current { color: rgba(255,255,255,.68); }
+.ca-headline { font-size: clamp(40px,5.2vw,72px); line-height: .95; letter-spacing: -.038em; font-weight: 800; color: var(--white); margin-bottom: 32px; max-width: 16ch; }
+.ca-headline .dim { color: rgba(255,255,255,.38); }
+.ca-sub { font-size: 17px; color: rgba(255,255,255,.6); line-height: 1.65; letter-spacing: -.015em; max-width: 490px; margin-bottom: 44px; }
+.ca-actions { display: flex; align-items: center; gap: 14px; margin-bottom: 52px; flex-wrap: wrap; }
+.ca-actions .btn-secondary { color: rgba(255,255,255,.75); border-color: rgba(255,255,255,.22); }
+.ca-actions .btn-secondary:hover { color: var(--white); border-color: rgba(255,255,255,.5); }
+.ca-hero-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 28px; padding-top: 28px; border-top: 1px solid rgba(255,255,255,.09); }
+.ca-hero-meta span { font-size: 12px; font-weight: 600; letter-spacing: .02em; color: rgba(255,255,255,.5); display: flex; align-items: center; gap: 8px; }
+.ca-hero-meta span::before { content: ''; width: 5px; height: 5px; background: var(--gradient); border-radius: 50%; }
 
-.lp-corridors { padding: 60px 0; border-bottom: var(--rule-heavy); }
-.lp-corridors__list {
-  list-style: none; margin-top: 0; border: var(--rule-heavy); border-top: none;
-}
-.lp-corridors__list li {
-  display: flex; gap: 20px; align-items: baseline;
-  padding: 16px 24px; border-bottom: var(--rule);
-  font-size: 14px;
-}
-.lp-corridors__list li:last-child { border-bottom: none; }
-.lp-corridors__note {
-  margin-top: 20px; font-size: 12px; line-height: 1.65;
-  color: var(--gray-400); max-width: 72ch;
-}
+/* ── INTRO + FACT CARD ── */
+.intro-section { max-width: 1360px; margin: 0 auto; padding: 100px 52px; display: grid; grid-template-columns: 1fr 380px; gap: 80px; align-items: start; }
+.intro-copy h2 { font-size: clamp(28px,3vw,42px); font-weight: 800; letter-spacing: -.034em; line-height: 1.04; margin-bottom: 28px; }
+.intro-copy p { font-size: 16px; color: var(--gray-700); line-height: 1.78; letter-spacing: -.012em; margin-bottom: 22px; max-width: 640px; }
+.intro-copy p strong { color: var(--black); font-weight: 700; }
+.intro-copy p a { color: var(--black); font-weight: 600; text-decoration-color: var(--gray-300); text-underline-offset: 3px; }
+.intro-copy p a:hover { text-decoration-color: var(--accent); }
+.fact-card { position: sticky; top: 96px; border: 1px solid var(--gray-200); border-radius: 16px; overflow: hidden; }
+.fact-card-head { padding: 22px 28px; background: var(--black); }
+.fact-card-head h3 { font-size: 13px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; background: var(--gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.fact-row { padding: 20px 28px; border-bottom: 1px solid var(--gray-100); }
+.fact-row:last-of-type { border-bottom: none; }
+.fact-label { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--gray-400); margin-bottom: 5px; }
+.fact-value { font-size: 15px; font-weight: 700; letter-spacing: -.02em; color: var(--black); line-height: 1.35; }
+.fact-note { font-size: 12px; color: var(--gray-500); line-height: 1.5; margin-top: 4px; }
+.fact-note a { color: var(--black); font-weight: 600; text-decoration-color: var(--gray-300); text-underline-offset: 2px; }
+.fact-note a:hover { text-decoration-color: var(--accent); }
+.fact-card-cta { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 8px 20px 20px; background: var(--gradient); color: var(--black); font-size: 14px; font-weight: 700; padding: 14px; border-radius: 10px; text-decoration: none; letter-spacing: -.015em; transition: filter .2s, transform .2s cubic-bezier(.2,.8,.2,1); }
+.fact-card-cta:hover { filter: brightness(1.08); transform: translateY(-1px); }
 
-.lp-trauma { padding: 60px 0; border-bottom: var(--rule-heavy); }
-.lp-trauma__list {
-  list-style: none; border: var(--rule-heavy); border-top: none;
-}
-.lp-trauma__list li {
-  padding: 16px 24px; border-bottom: var(--rule);
-  font-size: 14px;
-}
-.lp-trauma__list li:last-child { border-bottom: none; }
+/* ── CORRIDORS ── */
+.corridors-section { background: var(--black); }
+.corridors-inner { max-width: 1360px; margin: 0 auto; padding: 100px 52px; }
+.corridors-heading { font-size: clamp(32px,4vw,52px); font-weight: 800; letter-spacing: -.038em; line-height: .96; color: var(--white); margin-bottom: 16px; }
+.corridors-sub { font-size: 16px; color: rgba(255,255,255,.55); line-height: 1.7; max-width: 640px; margin-bottom: 48px; }
+.corridors-list { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; border: 1px solid rgba(255,255,255,.1); border-radius: 12px; overflow: hidden; }
+.corridors-list li { display: flex; align-items: center; gap: 14px; padding: 20px 28px; border-bottom: 1px solid rgba(255,255,255,.06); font-size: 15px; color: rgba(255,255,255,.8); }
+.corridors-list li:nth-child(odd) { border-right: 1px solid rgba(255,255,255,.06); }
+.corridors-icon { font-size: 18px; color: var(--accent); font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
 
-.lp-faq { padding: 80px 0; border-bottom: var(--rule-heavy); }
-.lp-faq__grid { display: grid; grid-template-columns: 260px 1fr; gap: 60px; }
-.lp-faq__h {
-font-size: clamp(22px, 2.5vw, 30px);
-  font-weight: 900; letter-spacing: -.02em; line-height: 1.05;
-}
+/* ── TRAUMA ── */
+.trauma-section { border-bottom: 1px solid var(--gray-100); }
+.trauma-inner { max-width: 1360px; margin: 0 auto; padding: 100px 52px; }
+.trauma-heading { font-size: clamp(28px,3vw,42px); font-weight: 800; letter-spacing: -.034em; line-height: 1.04; margin-bottom: 36px; }
+.trauma-list { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden; }
+.trauma-list li { display: flex; align-items: center; gap: 14px; padding: 20px 28px; border-bottom: 1px solid var(--gray-100); font-size: 15px; color: var(--gray-700); }
+.trauma-list li:nth-child(odd) { border-right: 1px solid var(--gray-100); }
+.trauma-icon { font-size: 18px; color: var(--accent); font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
 
-/* Shared FAQ styles (duplicated for scoping) */
-.faq__list { list-style: none; }
-.faq__item { border-top: var(--rule); overflow: hidden; }
-.faq__q {
+/* ── FAQ ── */
+.faq-section { border-bottom: 1px solid var(--gray-100); }
+.faq-inner { max-width: 1360px; margin: 0 auto; padding: 100px 52px; display: grid; grid-template-columns: 320px 1fr; gap: 80px; }
+.faq-heading { font-size: clamp(28px,3vw,42px); font-weight: 800; letter-spacing: -.034em; line-height: 1.04; margin-bottom: 12px; }
+.faq-sub { font-size: 15px; color: var(--gray-400); line-height: 1.6; }
+.faq-list { list-style: none; }
+.faq-item { border-top: 1px solid var(--gray-200); overflow: hidden; }
+.faq-q {
   width: 100%; background: none; border: none; text-align: left; cursor: pointer;
-  display: grid; grid-template-columns: 1fr 28px; gap: 16px; align-items: center;
-  padding: 20px 0; font-family: inherit; font-size: 15px; font-weight: 600;
-  letter-spacing: -.01em; color: var(--black);
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 22px 0; font-family: inherit; font-size: 16px; font-weight: 600;
+  letter-spacing: -.015em; color: var(--black); transition: color .2s;
 }
-.faq__q-icon {
-  width: 28px; height: 28px; border: 1px solid var(--gray-200); border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; font-weight: 300; color: var(--gray-400); flex-shrink: 0;
-  transition: transform .3s, background .2s, color .2s;
-}
-.faq__q[aria-expanded="true"] .faq__q-icon {
-  transform: rotate(45deg); background: var(--black); color: var(--white); border-color: var(--black);
-}
-.faq__a { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
-.faq__a-inner { padding: 0 0 20px; font-size: 14px; line-height: 1.7; color: var(--gray-700); }
-.faq__item.open .faq__a { max-height: 500px; }
+.faq-q:hover { color: var(--accent); }
+.faq-chevron { width: 20px; height: 20px; flex-shrink: 0; color: var(--gray-400); transition: transform .3s ease; }
+.faq-item.open .faq-chevron { transform: rotate(180deg); color: var(--accent); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+.faq-a-inner { padding: 0 0 24px; font-size: 15px; line-height: 1.75; color: var(--gray-700); max-width: 640px; }
+.faq-item.open .faq-a { max-height: 600px; }
 
-.lp-nearby { padding: 48px 0; border-bottom: var(--rule-heavy); }
-.lp-nearby__list {
-  list-style: none; display: flex; flex-wrap: wrap; gap: 0;
-  border: var(--rule-heavy); border-top: none;
+/* ── LINKS ── */
+.links-section { border-bottom: 1px solid var(--gray-100); }
+.links-inner { max-width: 1360px; margin: 0 auto; padding: 80px 52px; }
+.links-block { margin-bottom: 48px; }
+.links-block:last-child { margin-bottom: 0; }
+.links-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.link-chip {
+  padding: 10px 20px; border-radius: 100px; border: 1px solid var(--gray-200);
+  font-size: 13px; font-weight: 500; color: var(--gray-700); text-decoration: none;
+  transition: all .2s cubic-bezier(.2,.8,.2,1); letter-spacing: -.01em;
 }
-.lp-nearby__list li {
-  flex: 0 0 33.333%; border-right: var(--rule-heavy); border-bottom: var(--rule);
-}
-.lp-nearby__list li:nth-child(3n) { border-right: none; }
-.lp-nearby__list a {
-  display: block; padding: 16px 24px;
-  font-size: 13px; color: var(--gray-700);
-  text-decoration: none; transition: background .15s;
-}
-.lp-nearby__list a:hover { background: var(--gray-100); color: var(--black); }
+.link-chip:hover { background: var(--black); color: var(--white); border-color: var(--black); }
 
-.lp-cross { padding: 48px 0; border-bottom: var(--rule-heavy); }
-.lp-cross__list {
-  list-style: none; display: grid; grid-template-columns: repeat(2, 1fr);
-  border: var(--rule-heavy); border-top: none;
+/* ── CTA ── */
+.cta-section { max-width: 1360px; margin: 0 auto; padding: 0 52px 100px; }
+.cta-band {
+  border-radius: 20px; padding: 80px 72px;
+  display: flex; align-items: center; justify-content: space-between; gap: 48px; flex-wrap: wrap;
+  background-color: #0a5f47;
+  background-image:
+    radial-gradient(60% 80% at 8% 100%, rgba(152,251,152,.95) 0%, rgba(152,251,152,0) 70%),
+    radial-gradient(46% 64% at 0% 60%, rgba(201,251,184,.80) 0%, rgba(201,251,184,0) 72%),
+    radial-gradient(54% 74% at 30% 82%, rgba(52,211,153,.85) 0%, rgba(52,211,153,0) 72%),
+    radial-gradient(70% 92% at 96% 6%, rgba(6,61,48,.95) 0%, rgba(6,61,48,0) 66%),
+    radial-gradient(64% 84% at 100% 100%, rgba(13,110,80,.60) 0%, rgba(13,110,80,0) 62%),
+    linear-gradient(135deg, #0f7d5a 0%, #0a5f47 55%, #063d30 100%);
 }
-.lp-cross__list li { border-right: var(--rule-heavy); border-bottom: var(--rule); }
-.lp-cross__list li:nth-child(2n) { border-right: none; }
-.lp-cross__list a {
-  display: block; padding: 16px 24px;
-  font-size: 13px; color: var(--gray-700);
-  text-decoration: none; transition: background .15s;
-}
-.lp-cross__list a:hover { background: var(--gray-100); color: var(--black); }
+.cta-h { font-size: clamp(32px,3.8vw,52px); font-weight: 800; letter-spacing: -.038em; line-height: 1.0; color: var(--white); }
+.cta-sub { font-size: 16px; color: rgba(255,255,255,.7); margin-top: 14px; max-width: 440px; line-height: 1.6; }
+.cta-actions { display: flex; gap: 14px; flex-wrap: wrap; }
 
-.lp-cta { padding: 100px 0; border-bottom: var(--rule-heavy); }
-.lp-cta__inner {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 40px; flex-wrap: wrap;
-}
-.lp-cta__h {
-font-size: clamp(32px, 4.5vw, 56px);
-  font-weight: 900; letter-spacing: -.03em; line-height: .95;
-}
-.lp-cta__h em { font-style: italic; color: var(--accent); }
-.lp-cta__sub {
-font-size: 11px;
-  letter-spacing: .14em; text-transform: uppercase;
-  color: var(--gray-400); margin-top: 12px;
-}
-.lp-cta__actions { display: flex; gap: 16px; flex-wrap: wrap; }
-
+/* ── MOBILE ── */
 @media (max-width: 900px) {
-  .lp-local__grid, .lp-faq__grid { grid-template-columns: 1fr; gap: 40px; }
-  .lp-nearby__list li { flex: 0 0 50%; }
-  .lp-nearby__list li:nth-child(3n) { border-right: var(--rule-heavy); }
-  .lp-nearby__list li:nth-child(2n) { border-right: none; }
-  .lp-cta__inner { flex-direction: column; align-items: flex-start; }
+  .ca-hero { padding: 130px 24px 56px; }
+  .ca-headline { font-size: clamp(36px,10vw,56px); }
+  .ca-actions { flex-direction: column; align-items: stretch; }
+  .ca-actions .btn-primary, .ca-actions .btn-secondary { width: 100%; justify-content: center; }
+  .ca-hero-meta { gap: 16px; }
+
+  .intro-section { grid-template-columns: 1fr; gap: 48px; padding: 64px 24px; }
+  .fact-card { position: static; }
+
+  .corridors-inner, .trauma-inner { padding: 64px 24px; }
+  .corridors-list, .trauma-list { grid-template-columns: 1fr; }
+  .corridors-list li:nth-child(odd), .trauma-list li:nth-child(odd) { border-right: none; }
+
+  .faq-inner { grid-template-columns: 1fr; gap: 32px; padding: 64px 24px; }
+
+  .links-inner { padding: 56px 24px; }
+
+  .cta-section { padding: 0 24px 64px; }
+  .cta-band { padding: 56px 28px; flex-direction: column; text-align: center; }
+  .cta-sub { max-width: 100%; }
+  .cta-actions { width: 100%; }
+  .cta-actions .btn-primary, .cta-actions .btn-secondary { width: 100%; justify-content: center; }
 }
 </style>
 
 <script>
-document.querySelectorAll('.faq__q').forEach(btn => {
+document.querySelectorAll('.faq-q').forEach(btn => {
   btn.addEventListener('click', () => {
-    const item = btn.closest('.faq__item') as HTMLElement;
+    const item = btn.closest('.faq-item') as HTMLElement;
     const isOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq__item').forEach(i => {
-      i.classList.remove('open');
-      (i.querySelector('.faq__q') as HTMLElement)?.setAttribute('aria-expanded', 'false');
-    });
-    if (!isOpen) {
-      item.classList.add('open');
-      btn.setAttribute('aria-expanded', 'true');
-    }
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
   });
 });
 </script>
