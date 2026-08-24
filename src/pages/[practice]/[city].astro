@@ -27,15 +27,15 @@ const otherPractices = practiceAreas.filter(p => p.slug !== practice.slug);
 
 const pageTitle = t(practice.metaTitle);
 const pageDescription = t(practice.metaDescription);
-const pageUrl = `https://lawdogla.com/${practice.slug}/${city.slug}/`;
+const pageUrl = `https://gotrearended.com/${practice.slug}/${city.slug}/`;
 
 const serviceSchema = {
   '@context': 'https://schema.org',
   '@type': 'LegalService',
-  name: `Law Dog — ${practice.title} in ${city.name}`,
+  name: `FLM Law — ${practice.title} in ${city.name}`,
   description: t(practice.description),
   url: pageUrl,
-  provider: { '@id': 'https://lawdogla.com/#organization' },
+  provider: { '@id': 'https://gotrearended.com/#organization' },
   areaServed: [
     {
       '@type': 'City',
@@ -77,7 +77,7 @@ const faqSchema = {
   <nav class="breadcrumb" aria-label="Breadcrumb">
     <div class="wrap">
       <ol>
-        <li><a href="/">Law Dog</a></li>
+        <li><a href="/">FLM Law</a></li>
         <li><a href={`/${practice.slug}/`}>{practice.shortTitle}</a></li>
         <li aria-current="page">{city.name}</li>
       </ol>
@@ -97,7 +97,7 @@ const faqSchema = {
       </p>
       <div class="lp-hero__actions reveal">
         <a href="/get-started/" class="btn btn--primary">Free Case Evaluation</a>
-        <a href="tel:+18334529364" class="btn">(833) 4LAWDOG</a>
+        <a href="tel:+12132865834" class="btn">(213) 286-5834</a>
       </div>
     </div>
   </section>
@@ -118,7 +118,7 @@ const faqSchema = {
           <p class="lp-local__intro" style="margin-top:14px;">
             Serious injuries from {practice.type}s are treated at local trauma centers
             including {city.trauma_centers.slice(0, 2).join(' and ')}.
-            Law Dog represents {city.name} residents throughout every stage of the legal process —
+            FLM Law represents {city.name} residents throughout every stage of the legal process —
             from initial investigation to trial if needed.
           </p>
         </div>
@@ -163,7 +163,7 @@ const faqSchema = {
         </ul>
         <p class="lp-corridors__note">
           These corridors see disproportionate accident rates due to traffic volume, road design,
-          or intersection geometry. If you were injured near any of these areas, Law Dog can
+          or intersection geometry. If you were injured near any of these areas, FLM Law can
           investigate whether a third party — including a government entity — may share liability.
         </p>
       </div>
@@ -263,7 +263,7 @@ const faqSchema = {
         </div>
         <div class="lp-cta__actions">
           <a href="/get-started/" class="btn btn--primary">Get a Free Case Review</a>
-          <a href="tel:+18334529364" class="btn">(833) 4LAWDOG</a>
+          <a href="tel:+12132865834" class="btn">(213) 286-5834</a>
         </div>
       </div>
     </div>
