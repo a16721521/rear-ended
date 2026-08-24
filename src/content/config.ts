@@ -26,8 +26,8 @@ const learnCollection = defineCollection({
       answer: z.string(),
     })).optional(),
     // E-E-A-T signals
-    authorName: z.string().default('Law Dog Editorial Team'),
-    authorTitle: z.string().default('Personal Injury & Employment Attorneys'),
+    authorName: z.string().default('FLM Law Editorial Team'),
+    authorTitle: z.string().default('Personal Injury Attorneys'),
     reviewedBy: z.string().optional(),
     // Schema hints
     legalCitation: z.string().optional(),

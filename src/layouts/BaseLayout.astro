@@ -24,8 +24,8 @@ const canonicalURL = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
 const siteOrigin = Astro.site?.origin ?? 'https://gotrearended.com';
 
 // Org schema present on every page.
-// TODO(NAP): telephone/address are placeholders — replace with the firm's real
-// contact details before launch. (555)-0199 is a reserved fictional number.
+// TODO(NAP): add the firm's real street address + postal code once available —
+// the PostalAddress below only has city/region/country. Phone/email are real.
 const orgSchema = {
   '@context': 'https://schema.org',
   '@type': ['LegalService', 'Organization'],

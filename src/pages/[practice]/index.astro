@@ -81,11 +81,17 @@ const processedFaqs = practice.faqs.map((faq: { q: string; a: string }) => ({
   q: faq.q.replace(cityRe, 'Los Angeles'),
   a: faq.a.replace(cityRe, 'Los Angeles'),
 }));
+
+// Hub page is the statewide/practice landing page — keep its title and meta
+// distinct from the per-city pages (e.g. /car-accident-lawyer/los-angeles/)
+// so the two don't collide as duplicate <title>/description in search.
+const metaTitle = `${practice.title} | FLM Law`;
+const metaDescription = practice.metaDescription.replace(cityRe, 'California');
 ---
 
 <PageLayout
-  title={`${practice.title} in Los Angeles | FLM Law`}
-  description={practice.description}
+  title={metaTitle}
+  description={metaDescription}
   schemas={[faqSchema, serviceSchema]}
 >
 
