@@ -594,8 +594,8 @@ const processedFaqs = practice.faqs.map((faq: { q: string; a: string }) => ({
 .step-item { display: grid; grid-template-columns: 64px 1fr; gap: 0; position: relative; }
 .step-item::before { content: ''; position: absolute; left: 19px; top: 52px; bottom: 4px; width: 2px; background: var(--gray-100); }
 .step-item:last-child::before { display: none; }
-.step-num { width: 40px; height: 40px; border: 1.5px solid var(--gray-200); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 12px; font-weight: 800; color: var(--gray-400); letter-spacing: -.02em; margin-top: 4px; background: var(--white); position: relative; z-index: 1; transition: border-color .3s, color .3s, background .3s; }
-.step-item.active .step-num { border-color: transparent; background: var(--gradient); color: var(--black); }
+.step-num { width: 40px; height: 40px; box-shadow: inset 0 0 0 1.5px var(--gray-200); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 12px; font-weight: 800; color: var(--gray-400); letter-spacing: -.02em; margin-top: 4px; background: var(--white); position: relative; z-index: 1; transition: box-shadow .3s, color .3s, background .3s; }
+.step-item.active .step-num { box-shadow: none; background: var(--gradient); color: var(--black); }
 .step-body { padding: 0 0 44px 20px; }
 .step-tag { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gray-400); margin-bottom: 8px; }
 .step-title { font-size: 17px; font-weight: 700; letter-spacing: -.03em; color: var(--black); margin-bottom: 10px; }
@@ -737,7 +737,7 @@ const processedFaqs = practice.faqs.map((faq: { q: string; a: string }) => ({
   .comp-grid { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .step-item .step-num { border-color: transparent; background: var(--gradient); color: var(--black); }
+  .step-item .step-num { box-shadow: none; background: var(--gradient); color: var(--black); }
 }
 </style>
 
