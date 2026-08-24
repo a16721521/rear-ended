@@ -16,3 +16,4 @@ run_worker_first = false
 
 [[send_email]]
 name = "EMAIL"
+destination_address = "a16721521@gmail.com"

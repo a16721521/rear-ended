@@ -345,8 +345,8 @@ const featuredCities = [...cities]
   max-width: 430px; margin-bottom: 48px;
 }
 .hero-actions { display: flex; align-items: center; gap: 14px; }
-.hero-actions .btn--primary { background: var(--gradient); }
-.hero-actions .btn--primary:hover { filter: brightness(1.08); box-shadow: 0 8px 28px var(--accent-glow); }
+.hero-actions .btn--primary { background: var(--white); color: var(--black); border-color: transparent; transition: background .25s ease, box-shadow .25s ease, transform .2s cubic-bezier(.2,.8,.2,1); }
+.hero-actions .btn--primary:hover { background: var(--gradient); filter: none; color: var(--black); box-shadow: 0 8px 28px var(--accent-glow); transform: translateY(-2px); }
 .hero-actions .btn {
   color: rgba(255,255,255,.85); border-color: rgba(255,255,255,.32); background: transparent;
 }
