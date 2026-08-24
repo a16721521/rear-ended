@@ -24,9 +24,9 @@ const articleSchema = {
     '@type': 'Person',
     name: post.data.authorName,
     jobTitle: post.data.authorTitle,
-    worksFor: { '@id': 'https://lawdogla.com/#organization' },
+    worksFor: { '@id': 'https://gotrearended.com/#organization' },
   },
-  publisher: { '@id': 'https://lawdogla.com/#organization' },
+  publisher: { '@id': 'https://gotrearended.com/#organization' },
 };
 
 const faqSchema = post.data.faq && post.data.faq.length > 0
@@ -45,16 +45,17 @@ const schemas = [articleSchema, ...(faqSchema ? [faqSchema] : [])];
 ---
 
 <PageLayout
-  title={`${post.data.title} | Law Dog`}
+  title={`${post.data.title} | FLM Law`}
   description={post.data.description}
   schemas={schemas}
+  noindex={true}
 >
   <article class="learn-article">
     <header class="learn-article__header">
       <div class="wrap">
         <nav class="breadcrumb" aria-label="Breadcrumb">
           <ol>
-            <li><a href="/">Law Dog</a></li>
+            <li><a href="/">FLM Law</a></li>
             <li><a href="/learn/">Learn</a></li>
             <li aria-current="page">{post.data.title}</li>
           </ol>
@@ -115,7 +116,7 @@ const schemas = [articleSchema, ...(faqSchema ? [faqSchema] : [])];
         <div>
           <p class="label" style="margin-bottom:12px;">Have a case?</p>
           <p style="font-size:18px;font-weight:700;letter-spacing:-.01em;">
-            Talk to a Law Dog attorney — free, no obligation.
+            Talk to an FLM Law attorney — free, no obligation.
           </p>
         </div>
         <a href="/get-started/" class="btn btn--primary">Free Consultation</a>

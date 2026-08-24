@@ -6,7 +6,10 @@ export default defineConfig({
   site: 'https://gotrearended.com',
   trailingSlash: 'always',
   integrations: [
-    sitemap(),
+    sitemap({
+      // /learn is a noindex stub until real articles exist — keep it out of the sitemap
+      filter: (page) => !page.includes('/learn'),
+    }),
     react(),
   ],
   output: 'static',
